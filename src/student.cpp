@@ -6,7 +6,8 @@ namespace Grades
 {
    /* Defualt Constructor */
    Student::Student()
-      : category("") , title("")
+      : category("")
+      , title("")
       , maxMark("")
       , mark("")
    { }
@@ -14,26 +15,40 @@ namespace Grades
    /* Getters and Setters */
    const std::string& Student::getCategory() const { return category; }
 
-   void Student::setCategory(const std::string& mCategory) {
+   void Student::setCategory(const std::string& mCategory)
+   {
       category = mCategory;
    }
 
    const std::string& Student::getTitle() const { return title; }
 
-   void Student::setTitle(const std::string& mTitle) {
+   void Student::setTitle(const std::string& mTitle)
+   {
       title = mTitle;
    }
 
    const std::string& Student::getMaxMark() const { return maxMark; }
 
-   void Student::setMaxMark(const std::string& mMaxMark) {
+   void Student::setMaxMark(const std::string& mMaxMark)
+   {
       maxMark = mMaxMark;
    }
 
    const std::string& Student::getMark() const { return mark; }
 
-   void Student::setMark(const std::string& mMark) {
+   void Student::setMark(const std::string& mMark)
+   {
       mark = mMark;
+   }
+   
+   void Student::printInformation() const
+   {
+      std::cout << "\n Information" << std::endl;
+      std::cout << "+============+" << std::endl;
+      std::cout << "Category: " << this->getCategory() << std::endl;
+      std::cout << "Title: " << this->getTitle() << std::endl;
+      std::cout << "Max Mark: " << this->getMaxMark() << std::endl;
+      std::cout << "Student Marks: : " << this->getMark() << std::endl;
    }
 };
 
@@ -43,7 +58,6 @@ using namespace Grades;
 int getGenericIntegerInput(const std::string&);
 std::string getGenericStringInput(const std::string);
 Student& getInformation(Student& stu);
-void printInformation(Student& stu);
 
 
 /* init main routine */
@@ -52,7 +66,7 @@ int main()
    Student student;
    
    getInformation(student);
-   printInformation(student);
+   student.printInformation();
    return 0;
 }
 
@@ -72,7 +86,6 @@ std::string getGenericStringInput(const std::string prompt)
    BUFFER input;
    std::cout << prompt;
    std::getline(std::cin, input);
-
    return input;
 }
 
@@ -89,17 +102,5 @@ Student& getInformation(Student& stu)
 
    std::string mark = getGenericStringInput("Enter Student Marks: ");
    stu.setMark(mark);
-
    return stu;
-}
-
-void printInformation(Student& stu)
-{
-   std::cout << "\n Information" << std::endl;
-   std::cout << "+============+" << std::endl;
-
-   std::cout << "Category: " << stu.getCategory() << std::endl;
-   std::cout << "Title: " << stu.getTitle() << std::endl;
-   std::cout << "Max Mark: " << stu.getMaxMark() << std::endl;
-   std::cout << "Student Marks: " << stu.getMark() << std::endl;
 }

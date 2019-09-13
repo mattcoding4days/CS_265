@@ -34,6 +34,7 @@ namespace Grades
       void setMark(const std::string&);
 
       /* TODO: Need to write some robust public methods for book keeping */
+      void printInformation() const;
    };
 };
 
