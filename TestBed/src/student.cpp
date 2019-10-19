@@ -4,26 +4,36 @@
 #include <sstream>
 
 
+/* XXX: Documentaion
+ * */
 StudentData::StudentData(void)
    : name ("")
    , gradesContainer({0})
 { }
 
+/* XXX: Documentaion
+ * */
 inline std::string StudentData::getName() const
 {
    return this->name;
 }
 
+/* XXX: Documentaion
+ * */
 inline void StudentData::setName(const std::string &_name)
 {
    this->name = _name;
 }
 
+/* XXX: Documentaion
+ * */
 inline float StudentData::getGrades(const int &itr) const
 {
    return this->gradesContainer[itr]; 
 }
 
+/* XXX: Documentaion
+ * */
 inline void StudentData::setGrades( const int& itr, const float& _grade)
 {
    if ( itr >= 0 ) { 
@@ -33,11 +43,15 @@ inline void StudentData::setGrades( const int& itr, const float& _grade)
    }
 }
 
+/* XXX: Documentaion
+ * */
 inline u_int StudentData::getContainerSize() const
 {
    return gradesContainer.size();
 }
 
+/* XXX: Documentaion
+ * */
 void StudentData::printStudentPair(const std::string &tempName,
                                    std::array <float, LEN> tempContainer ) const
 {
@@ -48,6 +62,8 @@ void StudentData::printStudentPair(const std::string &tempName,
    std::cout << std::endl;
 }
 
+/* XXX: Documentaion
+ * */
 void StudentData::printStudentObject() const
 {
    std::cout << this->getName() << " ";
@@ -57,6 +73,8 @@ void StudentData::printStudentObject() const
    std::cout << std::endl;
 }
 
+/* XXX: Documentaion
+ * */
 bool StudentData::loadDataFile(const std::string &file)
 {
    std::string line;
