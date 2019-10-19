@@ -26,10 +26,10 @@ inline float StudentData::getGrades(const int &itr) const
 
 inline void StudentData::setGrades( const int& itr, const float& _grade)
 {
-   if ( itr > -1 ) { 
+   if ( itr >= 0 ) { 
       this->gradesContainer[itr] = _grade;
    } else {
-      std::cerr << "Iterator must be greater than 0" << std::endl;
+      std::cerr << "Iterator can not be less than zero" << std::endl;
    }
 }
 
@@ -84,5 +84,6 @@ bool StudentData::loadDataFile(const std::string &file)
       std::cerr << "File does not exist: " << file << std::endl;
       return false;
    }
+   datafile.close();
    return true;
 }
