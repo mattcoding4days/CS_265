@@ -33,13 +33,12 @@ inline float StudentData::getGrades(const int &itr) const
 }
 
 /* XXX: Documentaion
- * */
-inline void StudentData::setGrades( const int& itr, const float& _grade)
+ * */ inline void StudentData::setGrades( const u_int &itr, const float &_grade)
 {
-   if ( itr >= 0 ) { 
+   if ( itr <= this->getContainerSize() ) { 
       this->gradesContainer[itr] = _grade;
    } else {
-      std::cerr << "Iterator can not be less than zero" << std::endl;
+      std::cerr << "Iterator is out of bounds" << std::endl;
    }
 }
 
@@ -52,12 +51,12 @@ inline u_int StudentData::getContainerSize() const
 
 /* XXX: Documentaion
  * */
-void StudentData::printStudentPair(const std::string &tempName,
-                                   std::array <float, LEN> tempContainer ) const
+void StudentData::printStudentPair(const std::string &theName,
+                                   std::array <float, LEN> &theContainer ) const
 {
-   std::cout << tempName << " : ";
-   for ( u_int i = 0; i < tempContainer.size(); ++i ) {
-      std::cout << tempContainer[i] << "  ";
+   std::cout << theName << " : ";
+   for ( u_int i = 0; i < theContainer.size(); ++i ) {
+      std::cout << theContainer[i] << "  ";
    }
    std::cout << std::endl;
 }
@@ -85,15 +84,15 @@ bool StudentData::loadDataFile(const std::string &file)
          if (! (line.empty()) ) {
             char firstC = '\0';
             firstC = line[0];
-            if (! (std::isupper(firstC)) && firstC != '#' && firstC != ' ') {
+            if ( (std::islower(firstC)) && firstC != COMM && firstC != WS ) {
                std::string sName("");
-               std::array<float, LEN> mark;
+               float mark = 0.0;
                std::stringstream ss(line);
                ss >> sName;
                this->setName(sName);
-               for (u_int i = 0; i < mark.size(); ++i) {
-                  ss >> mark[i];
-                  this->setGrades(i, mark[i]);
+               for (u_int i = 0; i < this->getContainerSize(); ++i) {
+                  ss >> mark;
+                  this->setGrades(i, mark);
                }
             }
          }

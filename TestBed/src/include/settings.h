@@ -4,7 +4,7 @@
 #include <string>
 
 /* XXX: Documentaion
- * Max line length expected 
+ * Max line length expected after the name postfix is read in. 
  * */
 const int LEN = 8;
 
@@ -25,7 +25,7 @@ const int NUM_STUDENT_ASSUMPTION = 30;
  * */
 enum Delim 
 {
-   WHITESPC = ' ',
+   WS = ' ',
    COMM = '#'
 };
 

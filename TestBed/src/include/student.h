@@ -30,7 +30,7 @@ public:
    
    /* XXX: Documentaion
     * */
-   inline void setGrades(const int &, const float&);
+   inline void setGrades(const u_int &, const float&);
    
    /* XXX: Documentaion
     * */
@@ -38,7 +38,7 @@ public:
 
    /* XXX: Documentaion
     * */
-   void printStudentPair(const std::string &, std::array <float, LEN>) const;
+   void printStudentPair(const std::string &, std::array <float, LEN> &) const;
    
    /* XXX: Documentaion
     * */
