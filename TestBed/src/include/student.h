@@ -1,11 +1,9 @@
 #ifndef STUDENT_H
 #define STUDENT_H
 
-#include <string>
+#include "settings.h"
 #include <array>
 
-
-const int LEN = 8;
 
 class StudentData
 {
