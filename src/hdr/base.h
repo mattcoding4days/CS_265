@@ -32,7 +32,7 @@ namespace GraderApplication
       /* XXX: Documentation
        * Accessor:  */
       inline std::string getTitleContainer(const int &) const;
-      inline void setTitleContainer(const u_int &, const float &);
+      inline void setTitleContainer(const u_int &, const std::string &);
 
 
       /* XXX: Documentation
