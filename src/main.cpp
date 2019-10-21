@@ -1,15 +1,28 @@
-#include "base.cpp"
+#include "student.cpp"
 #include <vector>
 
+using namespace GraderApplication;
+using stuContainer = std::vector<StudentData>;
 
 
-using namespace GraderProgram;
+const std::string DATA = "../resource/official.txt";
 
-int main ()
+
+int main()
 {
-   BaseSchema baseStructure;
-   std::vector<BaseSchema> baseContainer;
+   int amount = 4;
+   stuContainer s;
+   s.reserve(amount);
+   
+   for ( int i = 0; i < amount; ++i ) {
+      StudentData student;
+      student.loadDataFile(DATA);
+      s.emplace_back(student);
+   }
 
-
+   std::cout << "\n\n";
+   for ( const auto &itr: s ) {
+      itr.printStudentObject();
+   }
    return 0;
 }
