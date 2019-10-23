@@ -5,7 +5,6 @@
 
 namespace GraderApplication
 {
-
    /* XXX: Documentation
     * */
    BaseData::BaseData(void)

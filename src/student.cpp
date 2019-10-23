@@ -7,7 +7,6 @@ namespace GraderApplication
 {
    const std::string TEMP_FILE = "temp.txt";
 
-
    /* XXX: Documentaion
     * */
    StudentData::StudentData(void)
@@ -94,23 +93,17 @@ namespace GraderApplication
    bool StudentData::loadDataFile(const std::string &file)
    {
       std::ifstream datafile(file);
-      
       if ( datafile.good() ) {
          std::string line;
          while ( std::getline(datafile, line) )
          {
-            std::cout << "\nCurrent Line: " << line << "\n\n";
             char firstC = '\0';
             firstC = line[0];
-            std::cout << "Debug MSG: checking if lower" << std::endl;
             if ( (std::islower(firstC)) && firstC != COMM && firstC != WS )
             {
-               std::cout << "Debug MSG: Checking if: " << line << " is processed" << std::endl;
                if ( ! (this->isStudentProcessed(line)) )
                {
                   this->processStudent(line);
-                  std::cout << "Debug MSG: Finished Processing Student-->  "
-                            << line << std::endl;
                   std::string sName("");
                   float mark = 0.0;
                   std::stringstream ss(line);
@@ -125,9 +118,9 @@ namespace GraderApplication
                   datafile.close();
                   return true;
                }
-               else {
-                  std::cout << "Debug MSG: Student: " << line << " is NOT processed" << std::endl;
-               }
+               /* The line was found in the temp.txt file, and has already
+                * been processed, repeat the process
+                * */
             }
          }
       }
@@ -148,6 +141,7 @@ namespace GraderApplication
     * */
    bool StudentData::isStudentProcessed(const std::string &lineToCompare)
    {
+      bool isProcessed = false;
       std::string tempLine("");
       // test if the file exists
       if ( this->testForFileExistance(TEMP_FILE) )
@@ -157,13 +151,10 @@ namespace GraderApplication
          {
             if ( lineToCompare == tempLine )
             {
-               std::cout << "isStudentProcessed: Found in File " << lineToCompare << '\n';
                tempFile.close();
-               return true;
+               isProcessed = true;
+               return isProcessed;
             }
-            //else {
-            //   std::cout << "Debug MSG: Line: " << lineToCompare << " didnt match\n";
-            //}
          }
       }
       else {
@@ -171,7 +162,7 @@ namespace GraderApplication
          // this is the first student we are reading infile
          std::cout << "Debug MSG: File does not exist" << std::endl;
       }
-      return false;
+      return isProcessed;
    }
 
 
@@ -180,13 +171,15 @@ namespace GraderApplication
     * */
    bool StudentData::testForFileExistance(const std::string &file)
    {
+      bool doesExist = false;
       std::ifstream infile(file);
       if ( infile.good() )
       {
          infile.close();
-         return true;
+         doesExist = true;
+         return doesExist;
       }
-      return false;
+      return doesExist;
    }
 
 
@@ -199,7 +192,6 @@ namespace GraderApplication
       if ( outFile.good() )
       {
          outFile << process << std::endl;
-         std::cout << "processStudent(): Wrote: " << process << " to temp.txt" << std::endl;
          outFile.close();
       }
       else {
