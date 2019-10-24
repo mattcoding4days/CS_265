@@ -6,7 +6,7 @@ using namespace GraderApplication;
 using stuContainer = std::vector<StudentData>;
 
 
-const std::string DATA = "../resource/official.txt";
+const std::string DATA = "../test/official.txt";
 
 int main()
 {
