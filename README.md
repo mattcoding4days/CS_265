@@ -1,16 +1,26 @@
 # Test bed code for my Computer Science 265 project
 
+
+```
 .
-├── Make
+├── bin
+├── doc
+├── makefile
+├── man1
+├── obj
+├── objd
 ├── README.md
-├── resource
-│   └── test.txt
-└── src
-    ├── base.cpp
-    ├── grader.cpp
-    ├── hdrs
-    │   ├── base.h
-    │   ├── grader.h
-    │   └── student.h
-    ├── main.cpp
-    └── student.cpp
+├── src
+│   ├── base.cpp
+│   ├── grader.cpp
+│   ├── hdr
+│   │   ├── base.h
+│   │   ├── grader.h
+│   │   ├── settings.h
+│   │   └── student.h
+│   ├── main.cpp
+│   └── student.cpp
+└── test
+    ├── official.txt
+    └── simpleData.txt
+```
