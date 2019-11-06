@@ -27,49 +27,50 @@ namespace GraderApplication
 
       /* XXX: Documentation
        * Accessor:  */
-      inline std::string getTitle() const; 
-      inline void setTitle(const std::string &); 
+      std::string getTitle() const; 
+      void setTitle(const std::string &); 
 
 
       /* XXX: Documentation
        * Accessor:  */
-      inline std::string getTitleContainer(const int &) const;
-      inline void setTitleContainer(const u_int &, const std::string &);
+      std::string getTitleContainer(const int &) const;
+      void setTitleContainer(const int &, const std::string &);
 
 
       /* XXX: Documentation
        * Accessor:  */
-      inline std::string getCategory() const;
-      inline void setCategory(const std::string &);
+      std::string getCategory() const;
+      void setCategory(const std::string &);
 
 
       /* XXX: Documentation
        * Accessor:  */
-      inline std::string getCategoryContainer(const int &);
-      inline void setCategoryContainer(const u_int &, const std::string &);
+      std::string getCategoryContainer(const int &);
+      void setCategoryContainer(const int &, const std::string &);
 
 
       /* XXX: Documentation
        * Accessor:  */
-      inline std::string getMaxMark() const;
-      inline void setMaxMark(const std::string &);
+      std::string getMaxMark() const;
+      void setMaxMark(const std::string &);
 
       
       /* XXX: Documentation
        * Accessor:  */
-      inline float getMaxMarkContainer(const int &);
-      inline void setMaxMarkContainer(const u_int &, const float &);
+      float getMaxMarkContainer(const int &);
+      void setMaxMarkContainer(const int &, const float &);
 
 
       /* XXX: Documentation
        * Accessor:  */
-      inline std::string getWeight() const;
-      inline void setWeight(const std::string &);
+      std::string getWeight() const;
+      void setWeight(const std::string &);
 
       /* XXX: Documentation
        * Accessor:  */
-      inline float getWeightContainer(const int &);
-      inline void setWeightContainer(const u_int &, const float &);
+      float getWeightContainer(const int &);
+      void setWeightContainer(const int &, const float &);
+      
 
 
       /* XXX: Documentation

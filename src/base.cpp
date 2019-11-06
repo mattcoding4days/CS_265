@@ -18,14 +18,20 @@ namespace GraderApplication
       , weightContainer({0})
    { }
 
+   /* XXX: Documentation
+    * Accessor:  */
+   int BaseData::getBaseContainerSize() const
+   {
+      return this->baseContainerSize;
+   }
 
    /* XXX: Documentation
     * Accessor:  */
-   inline std::string BaseData::getTitle() const
+   std::string BaseData::getTitle() const
    { 
       return this->title;
    }
-   inline void BaseData::setTitle(const std::string &_title)
+   void BaseData::setTitle(const std::string &_title)
    { 
       this->title = _title;
    }
@@ -33,11 +39,11 @@ namespace GraderApplication
 
    /* XXX: Documentation
     * Accessor:  */
-   inline std::string BaseData::getTitleContainer(const int &itr) const 
+   std::string BaseData::getTitleContainer(const int &itr) const 
    { 
       return this->titleContainer[itr];
    }
-   inline void BaseData::setTitleContainer(const u_int &itr, const std::string &_sub)
+   void BaseData::setTitleContainer(const int &itr, const std::string &_sub)
    { 
       this->titleContainer[itr] = _sub;
    } 
@@ -45,11 +51,11 @@ namespace GraderApplication
 
    /* XXX: Documentation
     * Accessor:  */
-   inline std::string BaseData::getCategory() const
+   std::string BaseData::getCategory() const
    {
       return this->category;
    }
-   inline void BaseData::setCategory(const std::string &_category)
+   void BaseData::setCategory(const std::string &_category)
    {
       this->category = _category;
    }
@@ -57,11 +63,11 @@ namespace GraderApplication
 
    /* XXX: Documentation
     * Accessor:  */
-   inline std::string BaseData::getCategoryContainer(const int &itr)
+   std::string BaseData::getCategoryContainer(const int &itr)
    {
       return this->categoryContainer[itr];
    }
-   inline void BaseData::setCategoryContainer(const u_int &itr, const std::string &_sub)
+   void BaseData::setCategoryContainer(const int &itr, const std::string &_sub)
    {
       this->categoryContainer[itr] = _sub;
    }
@@ -69,11 +75,11 @@ namespace GraderApplication
 
    /* XXX: Documentation
     * Accessor:  */
-   inline std::string BaseData::getMaxMark() const
+   std::string BaseData::getMaxMark() const
    {
       return this->maxMark;
    }
-   inline void BaseData::setMaxMark(const std::string &_maxMark)
+   void BaseData::setMaxMark(const std::string &_maxMark)
    {
       this->maxMark = _maxMark;
    }
@@ -81,11 +87,11 @@ namespace GraderApplication
    
    /* XXX: Documentation
     * Accessor:  */
-   inline float BaseData::getMaxMarkContainer(const int &itr)
+   float BaseData::getMaxMarkContainer(const int &itr)
    {
       return this->maxMarkContainer[itr];
    }
-   inline void BaseData::setMaxMarkContainer(const u_int &itr, const float &_sub)
+   void BaseData::setMaxMarkContainer(const int &itr, const float &_sub)
    {
       this->maxMarkContainer[itr] = _sub;
    }
@@ -93,22 +99,22 @@ namespace GraderApplication
 
    /* XXX: Documentation
     * Accessor:  */
-   inline std::string BaseData::getWeight() const
+   std::string BaseData::getWeight() const
    {
       return this->weight;
    }
-   inline void BaseData::setWeight(const std::string &_weight)
+   void BaseData::setWeight(const std::string &_weight)
    {
       this->weight = _weight;
    }
 
    /* XXX: Documentation
     * Accessor:  */
-   inline float BaseData::getWeightContainer(const int &itr)
+   float BaseData::getWeightContainer(const int &itr)
    {
       return this->weightContainer[itr];
    }
-   inline void BaseData::setWeightContainer(const u_int &itr, const float &_sub)
+   void BaseData::setWeightContainer(const int &itr, const float &_sub)
    {
       this->weightContainer[itr] = _sub;
    }
@@ -116,10 +122,11 @@ namespace GraderApplication
 
    /* XXX: Documentation
     * */
-   void BaseData::printBaseStringPair(const std::string &fTemp, std::array<std::string, LEN> &sTemp)
+   void BaseData::printBaseStringPair(const std::string &fTemp,
+             std::array<std::string, baseContainerSize> &sTemp)
    {
       std::cout << fTemp << " : ";
-      for ( int i = 0; i < LEN; ++i )
+      for ( int i = 0; i < this->getBaseContainerSize(); ++i )
       {
          std::cout << sTemp[i] << " ";
       }
@@ -129,10 +136,11 @@ namespace GraderApplication
    
    /* XXX: Documentation
     * */
-   void BaseData::printBaseStringFloat(const std::string &fTemp, std::array<float, LEN> &sTemp)
+   void BaseData::printBaseStringFloat(const std::string &fTemp,
+             std::array<float, baseContainerSize> &sTemp)
    {
       std::cout << fTemp << " : ";
-      for ( int i = 0; i < LEN; ++i )
+      for ( int i = 0; i < this->getBaseContainerSize(); ++i )
       {
          std::cout << sTemp[i] << " ";
       }
@@ -161,7 +169,7 @@ namespace GraderApplication
                   case TITLE :
                   ss >> sTemp;
                   this->setTitle(sTemp);
-                  for (u_int i = 0; i < LEN; ++i)
+                  for (int i = 0; i < this->getBaseContainerSize(); ++i)
                   {
                      ss >> sTemp;
                      this->setTitleContainer(i, sTemp);
@@ -171,7 +179,7 @@ namespace GraderApplication
                   case CATEGORY :
                   ss >> sTemp;
                   this->setCategory(sTemp);
-                  for (u_int i = 0; i < LEN; ++i)
+                  for (int i = 0; i < this->getBaseContainerSize(); ++i)
                   {
                      ss >> sTemp;
                      this->setCategoryContainer(i, sTemp);
@@ -181,7 +189,7 @@ namespace GraderApplication
                   case MAXMARK :
                   ss >> sTemp;
                   this->setMaxMark(sTemp);
-                  for (u_int i = 0; i < LEN; ++i)
+                  for (int i = 0; i < this->getBaseContainerSize(); ++i)
                   {
                      ss >> fTemp;
                      this->setMaxMarkContainer(i, fTemp);
@@ -191,7 +199,7 @@ namespace GraderApplication
                   case WEIGHT :
                   ss >> sTemp;
                   this->setWeight(sTemp);
-                  for (u_int i = 0; i < LEN; ++i)
+                  for (int i = 0; i < this->getBaseContainerSize(); ++i)
                   {
                      ss >> fTemp;
                      this->setWeightContainer(i, fTemp);

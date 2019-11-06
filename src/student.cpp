@@ -143,10 +143,6 @@ namespace GraderApplication {
                return isProcessed;
             }
          }
-      } else {
-         // the file did not exist, which means
-         // this is the first student we are reading infile
-         std::cout << "Debug MSG: File does not exist" << std::endl;
       }
       return isProcessed;
    }
