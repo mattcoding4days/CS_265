@@ -9,19 +9,21 @@ namespace GraderApplication
    class BaseData
    {
    private:
+      static const int baseContainerSize = LEN;
       std::string title;
-      std::array <std::string, LEN> titleContainer;
+      std::array <std::string, baseContainerSize> titleContainer;
       std::string category;
-      std::array <std::string, LEN> categoryContainer;
+      std::array <std::string, baseContainerSize> categoryContainer;
       std::string maxMark;
-      std::array <float, LEN> maxMarkContainer;
+      std::array <float, baseContainerSize> maxMarkContainer;
       std::string weight;
-      std::array <float, LEN> weightContainer;
+      std::array <float, baseContainerSize> weightContainer;
    public:
       /* XXX: Documentation
        * */
       BaseData(void);
 
+      int getBaseContainerSize() const;
 
       /* XXX: Documentation
        * Accessor:  */

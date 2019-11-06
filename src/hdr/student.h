@@ -4,13 +4,12 @@
 #include "settings.h"
 #include <array>
 
-namespace GraderApplication
-{
-   class StudentData
-   {
+namespace GraderApplication {
+   class StudentData {
    private:
+      static const int stuContainerSize = LEN;
       std::string name;
-      std::array <float, LEN> gradesContainer;
+      std::array <float, stuContainerSize> gradesContainer;
 
    public:
       /* XXX: Documentation
@@ -20,19 +19,19 @@ namespace GraderApplication
 
       /* XXX: Documentation
        * */
-      inline std::string getName() const;
-      inline void setName(const std::string &);
+      std::string getName() const;
+      void setName(const std::string &);
        
 
       /* XXX: Documentation
        * */
-      inline float getGrades(const int &) const;
-      inline void setGrades(const u_int &, const float&);
+      float getGrades(const int &) const;
+      void setGrades(const int &, const float&);
       
 
       /* XXX: Documentation
        * */
-      inline u_int getContainerSize() const;
+      int getContainerSize() const;
 
 
       /* XXX: Documentation

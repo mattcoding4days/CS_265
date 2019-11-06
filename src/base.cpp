@@ -18,6 +18,7 @@ namespace GraderApplication
       , weightContainer({0})
    { }
 
+
    /* XXX: Documentation
     * Accessor:  */
    inline std::string BaseData::getTitle() const

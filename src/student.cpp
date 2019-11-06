@@ -3,10 +3,9 @@
 #include <fstream>
 #include <sstream>
 
-namespace GraderApplication
-{
-   const std::string TEMP_FILE = "temp.txt";
+namespace GraderApplication {
 
+   const std::string TEMP_FILE = "temp.txt"; 
    /* XXX: Documentaion
     * */
    StudentData::StudentData(void)
@@ -17,7 +16,7 @@ namespace GraderApplication
 
    /* XXX: Documentaion
     * */
-   inline std::string StudentData::getName() const
+   std::string StudentData::getName() const
    {
       return this->name;
    }
@@ -25,7 +24,7 @@ namespace GraderApplication
 
    /* XXX: Documentaion
     * */
-   inline void StudentData::setName(const std::string &_name)
+   void StudentData::setName(const std::string &_name)
    {
       this->name = _name;
    }
@@ -33,7 +32,7 @@ namespace GraderApplication
 
    /* XXX: Documentaion
     * */
-   inline float StudentData::getGrades(const int &itr) const
+   float StudentData::getGrades(const int &itr) const
    {
       return this->gradesContainer[itr]; 
    }
@@ -41,23 +40,21 @@ namespace GraderApplication
 
    /* XXX: Documentaion
     * */ 
-   inline void StudentData::setGrades( const u_int &itr, const float &_grade)
+   void StudentData::setGrades( const int &itr, const float &_grade)
    {
-      if ( itr <= this->getContainerSize() )
-      { 
-         this->gradesContainer[itr] = _grade;
-      }
-      else {
+      if ( itr > this->getContainerSize() || itr < 0 ) { 
          std::cerr << "Iterator is out of bounds" << std::endl;
+      } else {
+         this->gradesContainer[itr] = _grade;
       }
    }
 
 
    /* XXX: Documentaion
     * */
-   inline u_int StudentData::getContainerSize() const
+   int StudentData::getContainerSize() const
    {
-      return gradesContainer.size();
+      return this->stuContainerSize;
    }
 
 
@@ -67,8 +64,7 @@ namespace GraderApplication
                                       std::array <float, LEN> &theContainer ) const
    {
       std::cout << theName << " : ";
-      for ( u_int i = 0; i < theContainer.size(); ++i )
-      {
+      for ( int i = 0; i < this->getContainerSize(); ++i ) {
          std::cout << theContainer[i] << "  ";
       }
       std::cout << std::endl;
@@ -80,8 +76,7 @@ namespace GraderApplication
    void StudentData::printStudentObject() const
    {
       std::cout << this->getName() << " ";
-      for ( u_int i = 0; i < this->getContainerSize() ; ++i )
-      {
+      for ( int i = 0; i < this->getContainerSize() ; ++i ) {
          std::cout << this->getGrades(i) << " ";
       }
       std::cout << std::endl;
@@ -95,22 +90,18 @@ namespace GraderApplication
       std::ifstream datafile(file);
       if ( datafile.good() ) {
          std::string line;
-         while ( std::getline(datafile, line) )
-         {
+         while ( std::getline(datafile, line) ) {
             char firstC = '\0';
             firstC = line[0];
-            if ( (std::islower(firstC)) && firstC != COMM && firstC != WS )
-            {
-               if ( ! (this->isStudentProcessed(line)) )
-               {
+            if ( (std::islower(firstC)) && firstC != COMM && firstC != WS ) {
+               if ( ! (this->isStudentProcessed(line)) ) {
                   this->processStudent(line);
                   std::string sName("");
                   float mark = 0.0;
                   std::stringstream ss(line);
                   ss >> sName;
                   this->setName(sName);
-                  for (u_int i = 0; i < this->getContainerSize(); ++i)
-                  {
+                  for (int i = 0; i < this->getContainerSize(); ++i) {
                      ss >> mark;
                      this->setGrades(i, mark);
                   }
@@ -123,8 +114,7 @@ namespace GraderApplication
                 * */
             }
          }
-      }
-      else {
+      } else {
         std::cerr << "File does not exist: " << file << std::endl;
         return false;                                             
       }
@@ -144,20 +134,16 @@ namespace GraderApplication
       bool isProcessed = false;
       std::string tempLine("");
       // test if the file exists
-      if ( this->testForFileExistance(TEMP_FILE) )
-      {
+      if ( this->testForFileExistance(TEMP_FILE) ) {
          std::ifstream tempFile(TEMP_FILE);
-         while ( std::getline(tempFile, tempLine) )
-         {
-            if ( lineToCompare == tempLine )
-            {
+         while ( std::getline(tempFile, tempLine) ) {
+            if ( lineToCompare == tempLine ) {
                tempFile.close();
                isProcessed = true;
                return isProcessed;
             }
          }
-      }
-      else {
+      } else {
          // the file did not exist, which means
          // this is the first student we are reading infile
          std::cout << "Debug MSG: File does not exist" << std::endl;
@@ -173,8 +159,7 @@ namespace GraderApplication
    {
       bool doesExist = false;
       std::ifstream infile(file);
-      if ( infile.good() )
-      {
+      if ( infile.good() ) {
          infile.close();
          doesExist = true;
          return doesExist;
@@ -189,12 +174,10 @@ namespace GraderApplication
    {
       // only append to file
       std::fstream outFile(TEMP_FILE, std::fstream::in | std::fstream::out | std::fstream::app);
-      if ( outFile.good() )
-      {
+      if ( outFile.good() ) {
          outFile << process << std::endl;
          outFile.close();
-      }
-      else {
+      } else {
          std::cerr << "Debug MSG: Could not open file to process student" << std::endl;
       }
    }
