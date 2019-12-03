@@ -1,0 +1,37 @@
+GIT repository for csci265/project
+
+
+```
+.
+├── bin
+│   ├── grader
+│   └── readme
+├── doc
+│   └── readme
+├── Makefile
+├── man1
+│   └── grader
+├── obj
+│   └── readme
+├── objd
+│   └── readme
+├── README
+├── src
+│   ├── base.cpp
+│   ├── bash_test_programs
+│   ├── grader.cpp
+│   ├── hdr
+│   │   ├── base.h
+│   │   ├── grader.h
+│   │   ├── settings.h
+│   │   └── student.h
+│   ├── main.cpp
+│   ├── readme
+│   └── student.cpp
+└── test
+    ├── readme
+    ├── test.cpp
+    └── testdata.txt
+
+9 directories, 20 files
+```
