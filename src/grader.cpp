@@ -66,7 +66,7 @@ namespace GraderApplication
             /* first calculate singular grades (mark * weight) / maxmark
              * and store one at a time into vector
              * */
-            tempValue = subGradeComputation(i, j);
+            tempValue = this->subGradeComputation(i, j);
             tempGradeContainer.emplace_back(tempValue);
          }
          /* add all subgrades together for our final grade */

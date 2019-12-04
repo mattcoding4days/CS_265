@@ -1,5 +1,6 @@
 #include "../hdr/base.h"
 #include "../hdr/grader.h"
+#include "../hdr/fileparser.h"
 #include "../hdr/student.h"
 #include <chrono>
 #include <ctime>
@@ -10,9 +11,10 @@
 using namespace GraderApplication;
 
 /* sub routine prototypes */
-int countStudentLines( const std::string & );
+int countStudentLines(const std::string &);
 void manualFileInput(std::string &);
 void printUsage();
+int parseArguments(int argc, char **argv, std::string &inputFile, std::string &name);
 
 
 /* XXX: Documentation
@@ -21,47 +23,18 @@ int main(int argc, char **argv)
 {
    std::string inputFile("");
    std::string name("");
-   if (argc < 2) {
-      manualFileInput(inputFile);
-   } else {
-      int nFlag = 0;
-      const char *nameFlag = "-s";
-      for (int i = 1; i < argc; i++) {
-         const char *temp = argv[i];
-         if (strcmp(nameFlag, temp) == 0 && (!nFlag)) {
-            nFlag = i;
-            if (argv[i+1] != NULL) {
-               /* Evaluate seperately to give more accurate error msg */
-               temp = argv[i+1];
-               if (strcmp(nameFlag, temp) != 0) {
-                  name = argv[i+1];
-               } else {
-                  std::cerr << "\n\t\t-s flag used twice\n";
-                  printUsage();
-               }
-            } else {
-               std::cerr << "\n\t\tNo student name given\n";
-               printUsage();
-            }
-         }
-      }
-      /* -s was not passed */
-      if (!nFlag) { inputFile = argv[1]; }
-      /* -s was the first argument passed and there are enough arguments to assume a file*/
-      else if (nFlag && argc > 3) { inputFile = argv[nFlag + 2]; }
-      /*  */
-      else if (nFlag && argc == 3) { manualFileInput(inputFile); }
-      /* -s was the second argument, which means the first arg is filename */
-      else if (nFlag == 2) { inputFile = argv[nFlag - 1]; }
-   }
-   if (name.empty()) {
+   int numargsfilled = parseArguments(argc, argv, inputFile, name); 
+   
+   if (numargsfilled == 1) {
       std::cout << "File: " << inputFile << std::endl;
-
-   } else {
+   }
+   else if (numargsfilled == 2) {
       std::cout << "Name: " << name << std::endl;
       std::cout << "File: " << inputFile << std::endl;
+   } else {
+      std::cout << "numargsfilled: " << numargsfilled << std::endl;
+      std::cerr << "Something happened" << std::endl;
    }
-
 
    ///* Do a quick count of students in the file
    // * */
@@ -99,6 +72,84 @@ int main(int argc, char **argv)
    //return 0;
 }
 
+
+/* XXX: Documentation
+ *  Argument parser
+ *  return 1 = only file was passed
+ *  return 2 = file and name arguemnts fillfilled
+ *  other exceptions are failures, in which 
+ *  printUsage is called, which calls exit
+ *  with EXIT_FAILURE.
+ *
+ *  Domain for parseArguments [1, 3] anything > 3 will be ignored 
+ * */
+int parseArguments(int argc, char **argv,
+      std::string &inputFile, std::string &name)
+{
+   int retVal = 0;
+   if (argc < 2) {
+      manualFileInput(inputFile);
+      retVal = 1;
+   }
+   else {
+      int nFlag = 0;
+      const char *nameFlag = "-s";
+      for (int i = 1; i < argc; i++) {
+         if (strncmp(nameFlag, argv[i], 2) == 0) {
+            /* get the position of the -s flag */
+            nFlag = i;
+            break;
+         }
+      }
+      if (nFlag == 0) { 
+         /* No -s flag was given, the argument must be a filename */
+         inputFile = argv[nFlag+1];
+         return retVal = 1;
+      }
+      if (argv[nFlag+1] == NULL) {
+         /* Check to see if -s has corresponding name arg,
+          * if not show proper error msg, print usage and exit
+          * */
+         fprintf(stderr, "\n\t\tStudent name not supplied\n\n");
+         printUsage();
+      }
+      else if ((strncmp(nameFlag, argv[nFlag+1], 2) == 0)) {
+         /* Check to see if -s has been passed twice "-s -s",
+          * if so, show proper error msg, print usage and exit
+          * */
+         fprintf(stderr, "\n\t\tFlag found multiple times\n\n");
+         printUsage();
+      }
+      else {
+         /* If we make it to here we have a valid -s flag and a corresponding arg 
+          * Now we must figure out if we have a file name before -s or after,
+          * or not at all and handle appropriately
+          * */
+         if (nFlag == 1) {
+            if (argv[nFlag+2] != NULL) {
+               /* Check for 3rd arg which will be treated as filename*/
+               name = argv[nFlag+1];
+               inputFile = argv[nFlag+2];
+               return retVal = 2;
+            }
+            else {
+               /* name properly passed, but file arg is lacking */
+               name = argv[nFlag+1];
+               manualFileInput(inputFile);
+               retVal = 2;
+            }
+         }
+         else if (nFlag == 2) {
+            inputFile = argv[nFlag-1];
+            name = argv[nFlag+1];
+            return retVal = 2;
+         }
+      }
+   }
+   return retVal;
+}
+
+
 /* XXX: Documentation
  * Get userinput for file 
  * */
@@ -114,14 +165,14 @@ void manualFileInput(std::string &input)
  * */
 void printUsage()
 {
-   std::cout << "grader: Usage\n";
-   std::cout << "./grader                       [Prompted for filename]\n";
-   std::cout << "./grader -s name               [Prompted for filename, will return grade for the name passed]\n";
-   std::cout << "./grader filename              [Run with specified file]\n";
-   std::cout << "./grader filename -s sname     [Run specified file on just the specified student]\n";
-   std::cout << "./grader -s name1 name2        [Run with name2 as filename and name1 as student name]\n";
+   fprintf(stdout, "grader: Usage\n");
+   fprintf(stdout, "./grader                    [Prompted for filename]\n");
+   fprintf(stdout, "./grader -s name            [Prompted for filename, will return grade for the name passed]\n");
+   fprintf(stdout, "./grader filename           [Run with specified file]\n");
+   fprintf(stdout, "./grader filename -s sname  [Run specified file on just the specified student]\n");
+   fprintf(stdout, "./grader -s name1 name2     [Run with name2 as filename and name1 as student name]\n");
 
-   exit(2);
+   exit(EXIT_FAILURE);
 }
 
 /* XXX: Documentation
@@ -153,7 +204,7 @@ int countStudentLines( const std::string &fileDat )
       }
    } else {
       std::cerr << "Error opening " << fileDat 
-                << " to count number of students to be loaded into the program" << std::endl;
+         << " to count number of students to be loaded into the program" << std::endl;
       return -1;
    }
    inFile.close();

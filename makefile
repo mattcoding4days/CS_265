@@ -16,16 +16,20 @@ VERSION=2.0
 
 all: $(TARGET) $(TARGET_DEBUG)
 
-$(TARGET): obj/main.o obj/base.o obj/student.o obj/grader.o
+$(TARGET): obj/main.o obj/fileparser.o obj/base.o obj/student.o obj/grader.o
 	 $(RELEASE) bin/grader $(OBJFILES) 
 
-$(TARGET_DEBUG): objd/main.o objd/base.o objd/student.o objd/grader.o 
+$(TARGET_DEBUG): objd/main.o objd/fileparser.o objd/base.o objd/student.o objd/grader.o 
 	$(DEBUG) bin/graderdebug $(OBJFILESDEBUG) 
 
 # Release
-obj/main.o: src/main.cpp hdr/base.h hdr/student.h hdr/grader.h
-	@echo "\nBuilding Grader Release Version: $(VERSION)"
+obj/main.o: src/main.cpp hdr/fileparser.h hdr/base.h hdr/student.h hdr/grader.h
+	@echo
+	@echo "Building Grader Release Version: $(VERSION)"
 	@echo "===================================="
+	$(CXX) $(WARNINGS) $(BUILD_FLG) $< $(OUT_FLG) $@
+
+obj/fileparser.o: src/fileparser.cpp hdr/fileparser.h
 	$(CXX) $(WARNINGS) $(BUILD_FLG) $< $(OUT_FLG) $@
 
 obj/base.o: src/base.cpp hdr/base.h
@@ -38,10 +42,14 @@ obj/grader.o: src/grader.cpp hdr/grader.h
 	$(CXX) $(WARNINGS) $(BUILD_FLG) $< $(OUT_FLG) $@
 
 # Debug 
-objd/main.o: src/main.cpp hdr/base.h hdr/student.h hdr/grader.h
-	@echo "\nBuilding Grader Debug Version: $(VERSION)"
+objd/main.o: src/main.cpp hdr/fileparser.h hdr/base.h hdr/student.h hdr/grader.h
+	@echo
+	@echo "Building Grader Debug Version: $(VERSION)"
 	@echo "=================================="
 	$(CXX) $(WARNINGS) $(BUILD_FLG) $(DEBUG_FLG) $< $(OUT_FLG) $@
+
+objd/fileparser.o: src/fileparser.cpp hdr/fileparser.h
+	$(CXX) $(WARNINGS) $(BUILD_FLG) $< $(OUT_FLG) $@
 
 objd/base.o: src/base.cpp hdr/base.h
 	$(CXX) $(WARNINGS) $(BUILD_FLG) $(DEBUG_FLG) $< $(OUT_FLG) $@
