@@ -20,27 +20,7 @@ int parseArguments(int argc, char **argv, std::string &inputFile, std::string &n
  * */
 int main(/* int argc, char **argv */)
 {
-   std::string line = "This is a line with a #comment in it";
-   std::string line2 = "#This line begins with a comment";
-   std::string line3 = "No comment in this line";
-
    BaseData base;
-   base.setHeaderLength(8);
-   std::cout << base.getHeaderLength() << std::endl;
-   base.setTitleContainer("lab");
-   base.setTitleContainer("lab1");
-   base.setTitleContainer("lab2");
-   base.setTitleContainer("midterm");
-   base.setTitleContainer("assingment");
-   base.setTitleContainer("lab3");
-   base.setTitleContainer("lab4");
-   base.setTitleContainer("lab2");
-
-   for (int i = 0; i < base.getHeaderLength(); ++i) {
-      std::cout << base.getTitleContainer(i) << " ";
-   }
-   std::cout << std::endl;
-
 
 
    //base.stripComments(line);

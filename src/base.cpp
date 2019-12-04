@@ -3,8 +3,10 @@
  * */
 #include "../hdr/base.h"
 #include "../hdr/customExceptions.h"
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <iterator>
+#include <numeric>
 #include <sstream>
 
 namespace GraderApplication {
@@ -20,19 +22,13 @@ namespace GraderApplication {
       , weight("")
       , weightContainer({0})
 
-   {  }
+   { /* Not needed */  }
 
 
-   int BaseData::getTotalHeaderCount() const
-   {
-      return this->totalHeaderCount;
-   }
+   int BaseData::getTotalHeaderCount() const { return this->totalHeaderCount; }
 
 
-   int BaseData::getHeaderLength() const
-   {
-      return this->headerLength;
-   }
+   int BaseData::getHeaderLength() const { return this->headerLength; }
    
 
    void BaseData::setHeaderLength(const int _length)
@@ -46,10 +42,7 @@ namespace GraderApplication {
    }
 
 
-   int BaseData::getCurrentLineCount() const
-   {
-      return this->totalLineCount;
-   }
+   int BaseData::getCurrentLineCount() const { return this->totalLineCount; }
 
 
    void BaseData::setCurrentLineCount(const int _count)
@@ -63,22 +56,26 @@ namespace GraderApplication {
    }
 
 
-   std::string BaseData::getTitle() const
-   { 
-      return this->title;
-   }
+   std::string BaseData::getTitle() const { return this->title; }
 
 
-   void BaseData::setTitle(const std::string &_title)
+   void BaseData::setTitle(const std::string &_title) 
    {
-      this->title = _title;
+      try {
+         if ( this->getTitle().empty() ) { 
+            this->title = _title; 
+         }
+         else {
+            throw DuplicateFound();
+         }
+      } catch (DuplicateFound &e) {
+         std::cerr << e.what() << _title << " is already set" << std::endl;
+         exit (EXIT_FAILURE);
+      }
    }
 
 
-   std::string BaseData::getTitleContainer(int &itr) const 
-   { 
-      return this->titleContainer[itr];
-   }
+   std::string BaseData::getTitleContainer(int &itr) const { return this->titleContainer[itr]; }
 
 
    void BaseData::setTitleContainer(const std::string &_sub)
@@ -98,108 +95,105 @@ namespace GraderApplication {
    } 
 
 
-   std::string BaseData::getCategory() const
-   {
-      return this->category;
+   std::string BaseData::getCategory() const { return this->category; }
+
+
+   void BaseData::setCategory(const std::string &_category) 
+   { 
+      try {
+         if ( this->getCategory().empty() ) { 
+            this->category = _category; 
+         }
+         else {
+            throw DuplicateFound();
+         }
+      } catch (DuplicateFound &e) {
+         std::cerr << e.what() << _category << " is already set" << std::endl;
+         exit (EXIT_FAILURE);
+      }
    }
 
 
-   void BaseData::setCategory(const std::string &_category)
-   {
-      this->category = _category;
-   }
-
-
-   std::string BaseData::getCategoryContainer(int &itr)
-   {
-      return this->categoryContainer[itr];
-   }
+   std::string BaseData::getCategoryContainer(int &itr) { return this->categoryContainer[itr]; }
 
 
    void BaseData::setCategoryContainer(const std::string &_sub)
    {
-      try {
-         for (int i = 0; i < this->getHeaderLength(); ++i) {
-            if (this->categoryContainer[i] == _sub) {
-               throw DuplicateFound();
-            }
-         }
-      } catch(DuplicateFound &e) {
-         std::cerr << e.what() << _sub << " <- already in category container\n";
-         exit(EXIT_FAILURE);
-      }
-      /* if no exception is thrown insert the value */
       this->categoryContainer.emplace_back(_sub);
    }
 
 
-   std::string BaseData::getMaxMark() const
-   {
-      return this->maxMark;
-   }
+   std::string BaseData::getMaxMark() const { return this->maxMark; }
 
 
    void BaseData::setMaxMark(const std::string &_maxMark)
    {
-      this->maxMark = _maxMark;
+      try {
+         if ( this->getMaxMark().empty() ) { 
+            this->maxMark = _maxMark;
+         }
+         else {
+            throw DuplicateFound();
+         }
+      } catch (DuplicateFound &e) {
+         std::cerr << e.what() << _maxMark << " is already set" << std::endl;
+         exit (EXIT_FAILURE);
+      }
    }
 
 
-   float BaseData::getMaxMarkContainer(int &itr)
-   {
-      return this->maxMarkContainer[itr];
-   }
+   float BaseData::getMaxMarkContainer(int &itr) { return this->maxMarkContainer[itr]; }
 
 
    void BaseData::setMaxMarkContainer(const float &_sub)
    {
-      try {
-         for (int i = 0; i < this->getHeaderLength(); ++i) {
-            if (this->maxMarkContainer[i] == _sub) {
-               throw DuplicateFound();
-            }
-         }
-      } catch(DuplicateFound &e) {
-         std::cerr << e.what() << _sub << " <- already in max mark container\n";
-         exit(EXIT_FAILURE);
-      }
-      /* if no exception is thrown insert the value */
       this->maxMarkContainer.emplace_back(_sub);
    }
 
 
-   std::string BaseData::getWeight() const
-   {
-      return this->weight;
-   }
+   std::string BaseData::getWeight() const { return this->weight; }
 
 
    void BaseData::setWeight(const std::string &_weight)
    {
-      this->weight = _weight;
+      try {
+         if ( this->getWeight().empty() ) { 
+            this->weight = _weight;
+         }
+         else {
+            throw DuplicateFound();
+         }
+      } catch (DuplicateFound &e) {
+         std::cerr << e.what() << _weight << " is already set" << std::endl;
+         exit (EXIT_FAILURE);
+      }
    }
 
 
-   float BaseData::getWeightContainer(int &itr)
-   {
-      return this->weightContainer[itr];
-   }
+   float BaseData::getWeightContainer(int &itr) { return this->weightContainer[itr]; }
 
 
+   /*FIXME: Think of a better way to check for summation miscalculation */
    void BaseData::setWeightContainer(const float &_sub)
    {
       try {
-         for (int i = 0; i < this->getHeaderLength(); ++i) {
-            if (this->weightContainer[i] == _sub) {
-               throw DuplicateFound();
-            }
+         /* Make sure weights do not add up above 100 
+          * or are negative numbers going below 0
+          * */
+         float summation = 0;
+         accumulate(this->weightContainer.begin(),
+               this->weightContainer.end(), summation);
+
+         if ( (summation >= 100) || (summation < 0) || (summation + _sub > 100) ) {
+            throw WeightSummation();
          }
-      } catch(DuplicateFound &e) {
-         std::cerr << e.what() << _sub << " <- already in weight container\n";
-         exit(EXIT_FAILURE);
+         else {
+            this->weightContainer.emplace_back(_sub);
+         }
+      } catch(WeightSummation &e) {
+         std::cerr << e.what() << std::endl;
+         exit (EXIT_FAILURE);
       }
-      /* if no exception is thrown insert the value */
-      this->weightContainer.emplace_back(_sub);
    }
 
 
@@ -233,6 +227,7 @@ namespace GraderApplication {
       }
       std::cout << std::endl;
    }
+
 
    bool BaseData::loadBaseData(const std::string &file)
    {
@@ -276,9 +271,6 @@ namespace GraderApplication {
                      this->setWeightContainer(fTemp);
                   }
                } 
-               else {
-                  std::cerr << "KeyWord: " << keyword << " not found" << std::endl;
-               }
             }
          }
       }
