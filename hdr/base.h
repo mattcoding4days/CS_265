@@ -61,7 +61,7 @@ namespace GraderApplication {
        * Accessor: getter and setter for title container
        * */
       std::string getTitleContainer(int &) const;
-      void setTitleContainer(const int &, const std::string &);
+      void setTitleContainer(const std::string &);
 
       /* XXX: Documentation
        * Accessor: getter and setter for category
@@ -73,7 +73,7 @@ namespace GraderApplication {
        * Accessor: getter and setter for category container
        * */
       std::string getCategoryContainer(int &);
-      void setCategoryContainer(const int &, const std::string &);
+      void setCategoryContainer(const std::string &);
 
       /* XXX: Documentation
        * Accessor: getter and setter for maxmark 
@@ -85,7 +85,7 @@ namespace GraderApplication {
        * Accessor:  getter and setter for maxmark container
        * */
       float getMaxMarkContainer(int &);
-      void setMaxMarkContainer(const int &, const float &);
+      void setMaxMarkContainer(const float &);
 
       /* XXX: Documentation
        * Accessor: getter and setter for weight
@@ -97,7 +97,7 @@ namespace GraderApplication {
        * Accessor: getter and setter for weight container
        * */
       float getWeightContainer(int &);
-      void setWeightContainer(const int &, const float &);
+      void setWeightContainer(const float &);
       
       /* XXX: Documentation
        * Mainly for debugging and testing purposes,
@@ -112,6 +112,17 @@ namespace GraderApplication {
        * from a predefined enumerator in settings.h
        * */
       bool loadBaseData(const std::string &);
+      
+      /* XXX: Documentation
+       * Strip all comments from the line that is passed
+       * */
+      void stripComments(std::string &);
+
+      /* XXX: Documentation
+       * Find the length of the header data
+       * */
+      int findEvaluationLenth(std::string &);
+
    };
 };
 

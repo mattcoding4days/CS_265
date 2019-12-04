@@ -18,26 +18,65 @@ int parseArguments(int argc, char **argv, std::string &inputFile, std::string &n
 
 /* XXX: Documentation
  * */
-int main(int argc, char **argv)
+int main(/* int argc, char **argv */)
 {
-   std::string inputFile("");
-   std::string name("");
-   int numargsfilled = parseArguments(argc, argv, inputFile, name); 
+   std::string line = "This is a line with a #comment in it";
+   std::string line2 = "#This line begins with a comment";
+   std::string line3 = "No comment in this line";
 
-   if (numargsfilled == 1) {
-      std::cout << "File: " << inputFile << std::endl;
-      BaseData base;
-      base.loadBaseData(inputFile);
-      base.printBaseObject();
-   }
+   BaseData base;
+   base.setHeaderLength(8);
+   std::cout << base.getHeaderLength() << std::endl;
+   base.setTitleContainer("lab");
+   base.setTitleContainer("lab1");
+   base.setTitleContainer("lab2");
+   base.setTitleContainer("midterm");
+   base.setTitleContainer("assingment");
+   base.setTitleContainer("lab3");
+   base.setTitleContainer("lab4");
+   base.setTitleContainer("lab2");
 
-   else if (numargsfilled == 2) {
-      std::cout << "Name: " << name << std::endl;
-      std::cout << "File: " << inputFile << std::endl;
-   } else {
-      std::cout << "numargsfilled: " << numargsfilled << std::endl;
-      std::cerr << "Something happened" << std::endl;
+   for (int i = 0; i < base.getHeaderLength(); ++i) {
+      std::cout << base.getTitleContainer(i) << " ";
    }
+   std::cout << std::endl;
+
+
+
+   //base.stripComments(line);
+   //std::cout << "line after: " << line << std::endl;
+
+   //base.stripComments(line2);
+   //std::cout << "line2 after: " << line2 << std::endl;
+
+   //base.stripComments(line3);
+   //std::cout << "line3 after: " << line3 << std::endl;
+
+
+
+
+
+
+   //std::string inputFile("");
+   //std::string name("");
+   //int numargsfilled = parseArguments(argc, argv, inputFile, name); 
+
+   //if (numargsfilled == 1) {
+   //   std::cout << "File: " << inputFile << std::endl;
+   //   BaseData base;
+   //   base.loadBaseData(inputFile);
+   //   base.printBaseObject();
+   //}
+
+   //else if (numargsfilled == 2) {
+   //   std::cout << "Name: " << name << std::endl;
+   //   std::cout << "File: " << inputFile << std::endl;
+   //} else {
+   //   std::cout << "numargsfilled: " << numargsfilled << std::endl;
+   //   std::cerr << "Something happened" << std::endl;
+   //}
+
+
 
    ///* Do a quick count of students in the file
    // * */

@@ -2,12 +2,12 @@
  * for corresponding cpp files.
  * */
 #include "../hdr/base.h"
+#include "../hdr/customExceptions.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 
-namespace GraderApplication
-{
+namespace GraderApplication {
    BaseData::BaseData(void)
       : headerLength(0)
       , totalLineCount(0)
@@ -19,18 +19,22 @@ namespace GraderApplication
       , maxMarkContainer({0})
       , weight("")
       , weightContainer({0})
-   { }
+
+   {  }
+
 
    int BaseData::getTotalHeaderCount() const
    {
       return this->totalHeaderCount;
    }
 
+
    int BaseData::getHeaderLength() const
    {
       return this->headerLength;
    }
    
+
    void BaseData::setHeaderLength(const int _length)
    {
       /* set an acceptable inclusive bound */
@@ -41,10 +45,12 @@ namespace GraderApplication
       }
    }
 
+
    int BaseData::getCurrentLineCount() const
    {
       return this->totalLineCount;
    }
+
 
    void BaseData::setCurrentLineCount(const int _count)
    {
@@ -56,70 +62,117 @@ namespace GraderApplication
       }
    }
 
+
    std::string BaseData::getTitle() const
    { 
       return this->title;
    }
+
 
    void BaseData::setTitle(const std::string &_title)
    {
       this->title = _title;
    }
 
+
    std::string BaseData::getTitleContainer(int &itr) const 
    { 
       return this->titleContainer[itr];
    }
 
-   void BaseData::setTitleContainer(const int &itr, const std::string &_sub)
-   { 
-      this->titleContainer[itr] = _sub;
+
+   void BaseData::setTitleContainer(const std::string &_sub)
+   {
+      try {
+         for (int i = 0; i < this->getHeaderLength(); ++i) {
+            if (this->titleContainer[i] == _sub) {
+               throw DuplicateFound();
+            }
+         }
+      } catch(DuplicateFound &e) {
+         std::cerr << e.what() << _sub << " <- already in title container\n";
+         exit(EXIT_FAILURE);
+      }
+      /* if no exception is thrown insert the value */
+      this->titleContainer.emplace_back(_sub);
    } 
+
 
    std::string BaseData::getCategory() const
    {
       return this->category;
    }
 
+
    void BaseData::setCategory(const std::string &_category)
    {
       this->category = _category;
    }
+
 
    std::string BaseData::getCategoryContainer(int &itr)
    {
       return this->categoryContainer[itr];
    }
 
-   void BaseData::setCategoryContainer(const int &itr, const std::string &_sub)
+
+   void BaseData::setCategoryContainer(const std::string &_sub)
    {
-      this->categoryContainer[itr] = _sub;
+      try {
+         for (int i = 0; i < this->getHeaderLength(); ++i) {
+            if (this->categoryContainer[i] == _sub) {
+               throw DuplicateFound();
+            }
+         }
+      } catch(DuplicateFound &e) {
+         std::cerr << e.what() << _sub << " <- already in category container\n";
+         exit(EXIT_FAILURE);
+      }
+      /* if no exception is thrown insert the value */
+      this->categoryContainer.emplace_back(_sub);
    }
+
 
    std::string BaseData::getMaxMark() const
    {
       return this->maxMark;
    }
 
+
    void BaseData::setMaxMark(const std::string &_maxMark)
    {
       this->maxMark = _maxMark;
    }
+
 
    float BaseData::getMaxMarkContainer(int &itr)
    {
       return this->maxMarkContainer[itr];
    }
 
-   void BaseData::setMaxMarkContainer(const int &itr, const float &_sub)
+
+   void BaseData::setMaxMarkContainer(const float &_sub)
    {
-      this->maxMarkContainer[itr] = _sub;
+      try {
+         for (int i = 0; i < this->getHeaderLength(); ++i) {
+            if (this->maxMarkContainer[i] == _sub) {
+               throw DuplicateFound();
+            }
+         }
+      } catch(DuplicateFound &e) {
+         std::cerr << e.what() << _sub << " <- already in max mark container\n";
+         exit(EXIT_FAILURE);
+      }
+      /* if no exception is thrown insert the value */
+      this->maxMarkContainer.emplace_back(_sub);
    }
+
 
    std::string BaseData::getWeight() const
    {
       return this->weight;
    }
+
 
    void BaseData::setWeight(const std::string &_weight)
    {
@@ -132,10 +185,23 @@ namespace GraderApplication
       return this->weightContainer[itr];
    }
 
-   void BaseData::setWeightContainer(const int &itr, const float &_sub)
+
+   void BaseData::setWeightContainer(const float &_sub)
    {
-      this->weightContainer[itr] = _sub;
+      try {
+         for (int i = 0; i < this->getHeaderLength(); ++i) {
+            if (this->weightContainer[i] == _sub) {
+               throw DuplicateFound();
+            }
+         }
+      } catch(DuplicateFound &e) {
+         std::cerr << e.what() << _sub << " <- already in weight container\n";
+         exit(EXIT_FAILURE);
+      }
+      /* if no exception is thrown insert the value */
+      this->weightContainer.emplace_back(_sub);
    }
+
 
    void BaseData::printBaseObject(void)
    {
@@ -168,7 +234,6 @@ namespace GraderApplication
       std::cout << std::endl;
    }
 
-
    bool BaseData::loadBaseData(const std::string &file)
    {
       std::ifstream inFile(file);
@@ -178,7 +243,6 @@ namespace GraderApplication
             if (!(line.empty())) {
                std::string keyword("");
                std::string sTemp("");
-               float fTemp = 0;
                std::stringstream ss(line);
                ss >> keyword;
 
@@ -186,28 +250,30 @@ namespace GraderApplication
                   this->setTitle(keyword);
                   for (int i = 0; i < this->getHeaderLength(); ++i) {
                      ss >> sTemp;
-                     this->setTitleContainer(i, sTemp);
+                     this->setTitleContainer(sTemp);
                   }
                }
                else if (keyword == CATEGORY) {
                   this->setCategory(keyword);
                   for (int i = 0; i < this->getHeaderLength(); ++i) {
                      ss >> sTemp;
-                     this->setCategoryContainer(i, sTemp);
+                     this->setCategoryContainer(sTemp);
                   }
                }
                else if (keyword == MAXMARK) {
                   this->setMaxMark(keyword);
                   for (int i = 0; i < this->getHeaderLength(); ++i) {
+                     float fTemp = 0;
                      ss >> fTemp;
-                     this->setMaxMarkContainer(i, fTemp);
+                     this->setMaxMarkContainer(fTemp);
                   }
                }
                else if (keyword == WEIGHT) {
                   this->setWeight(keyword);
                   for (int i = 0; i < this->getHeaderLength(); ++i) {
+                     float fTemp = 0;
                      ss >> fTemp;
-                     this->setWeightContainer(i, fTemp);
+                     this->setWeightContainer(fTemp);
                   }
                } 
                else {
@@ -218,5 +284,20 @@ namespace GraderApplication
       }
       inFile.close();
       return true;
+   }
+   
+   void BaseData::stripComments(std::string &line)
+   {
+      std::size_t found = line.find(COMM);
+      if (found != std::string::npos) {
+         line.erase(found, std::string::npos);
+      } else {
+         std::cout << "No comment found in this line" << std::endl;
+      }
+   }
+
+   int BaseData::findEvaluationLenth(std::string &)
+   {
+      return 1;
    }
 };
