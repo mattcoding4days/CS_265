@@ -111,8 +111,8 @@ namespace GraderApplication
       else if (IS_C_PLUS(grade)) { return echelon.high_C; }
       else if (IS_C(grade)) { return echelon.mid_C; }
       else if (IS_C_MINUS(grade)) { return echelon.low_C; }
+      else if (IS_D(grade)) { return echelon.D; }
       else if (IS_F(grade)) { return echelon.F; }
-      else { return echelon.GOR; }
 
       // Enter debug state if we return this
       return "Grade went wrong";

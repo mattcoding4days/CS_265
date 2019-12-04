@@ -9,7 +9,9 @@
 namespace GraderApplication
 {
    BaseData::BaseData(void)
-      : title("")
+      : headerLength(0)
+      , totalLineCount(0)
+      , title("")
       , titleContainer({""})
       , category("")
       , categoryContainer({""})
@@ -19,11 +21,40 @@ namespace GraderApplication
       , weightContainer({0})
    { }
 
-   int BaseData::getMaxLength() const
+   int BaseData::getTotalHeaderCount() const
    {
-      return this->maxLength;
+      return this->totalHeaderCount;
    }
 
+   int BaseData::getHeaderLength() const
+   {
+      return this->headerLength;
+   }
+   
+   void BaseData::setHeaderLength(const int _length)
+   {
+      /* set an acceptable inclusive bound */
+      if (_length > 0 && _length < 20) {
+         this->headerLength = _length;
+      } else {
+         std::cerr << "Header length out of bounds\n"; 
+      }
+   }
+
+   int BaseData::getCurrentLineCount() const
+   {
+      return this->totalLineCount;
+   }
+
+   void BaseData::setCurrentLineCount(const int _count)
+   {
+      /* set an acceptable inclusive bound */
+      if (_count >= 0 && _count <= 200) {
+         this->totalLineCount += _count;
+      } else {
+         std::cerr << "File is too large\n"; 
+      }
+   }
 
    std::string BaseData::getTitle() const
    { 
@@ -31,10 +62,9 @@ namespace GraderApplication
    }
 
    void BaseData::setTitle(const std::string &_title)
-   { 
+   {
       this->title = _title;
    }
-
 
    std::string BaseData::getTitleContainer(int &itr) const 
    { 
@@ -46,7 +76,6 @@ namespace GraderApplication
       this->titleContainer[itr] = _sub;
    } 
 
-
    std::string BaseData::getCategory() const
    {
       return this->category;
@@ -56,7 +85,6 @@ namespace GraderApplication
    {
       this->category = _category;
    }
-
 
    std::string BaseData::getCategoryContainer(int &itr)
    {
@@ -68,7 +96,6 @@ namespace GraderApplication
       this->categoryContainer[itr] = _sub;
    }
 
-
    std::string BaseData::getMaxMark() const
    {
       return this->maxMark;
@@ -79,7 +106,6 @@ namespace GraderApplication
       this->maxMark = _maxMark;
    }
 
-   
    float BaseData::getMaxMarkContainer(int &itr)
    {
       return this->maxMarkContainer[itr];
@@ -89,7 +115,6 @@ namespace GraderApplication
    {
       this->maxMarkContainer[itr] = _sub;
    }
-
 
    std::string BaseData::getWeight() const
    {
@@ -112,37 +137,32 @@ namespace GraderApplication
       this->weightContainer[itr] = _sub;
    }
 
-   
    void BaseData::printBaseObject(void)
    {
       /* get the title */ 
       std::cout << this->getTitle() << " : ";
-      for (int i = 0; i < this->getMaxLength(); ++i)
-      {
+      for (int i = 0; i < this->getHeaderLength(); ++i) {
          std::cout << this->getTitleContainer(i) << " "; 
       }
       std::cout << std::endl;
 
       /* get the category */ 
       std::cout << this->getCategory() << " : ";
-      for (int i = 0; i < this->getMaxLength(); ++i)
-      {
+      for (int i = 0; i < this->getHeaderLength(); ++i) {
          std::cout << this->getCategoryContainer(i) << " "; 
       }
       std::cout << std::endl;
 
       /* get the maxMark */ 
       std::cout << this->getMaxMark() << " : ";
-      for (int i = 0; i < this->getMaxLength(); ++i)
-      {
+      for (int i = 0; i < this->getHeaderLength(); ++i) {
          std::cout << this->getMaxMarkContainer(i) << " "; 
       }
       std::cout << std::endl;
 
       /* get the weight */ 
       std::cout << this->getWeight() << " : ";
-      for (int i = 0; i < this->getMaxLength(); ++i)
-      {
+      for (int i = 0; i < this->getHeaderLength(); ++i) {
          std::cout << this->getWeightContainer(i) << " "; 
       }
       std::cout << std::endl;
@@ -153,65 +173,49 @@ namespace GraderApplication
    {
       std::ifstream inFile(file);
       std::string line("");
-      if (inFile.good())
-      {
-         while (std::getline(inFile, line))
-         {
-            if (!(line.empty()))
-            {
-               char firstC = line[0];
-               std::stringstream ss(line);
-               float fTemp = 0;
+      if (inFile.good()) {
+         while (std::getline(inFile, line)) {
+            if (!(line.empty())) {
+               std::string keyword("");
                std::string sTemp("");
-               switch(firstC)
-               {
-                  case TITLE :
-                  ss >> sTemp;
-                  this->setTitle(sTemp);
-                  for (int i = 0; i < this->getMaxLength(); ++i)
-                  {
+               float fTemp = 0;
+               std::stringstream ss(line);
+               ss >> keyword;
+
+               if (keyword == TITLE) {
+                  this->setTitle(keyword);
+                  for (int i = 0; i < this->getHeaderLength(); ++i) {
                      ss >> sTemp;
                      this->setTitleContainer(i, sTemp);
                   }
-                  break;
-
-                  case CATEGORY :
-                  ss >> sTemp;
-                  this->setCategory(sTemp);
-                  for (int i = 0; i < this->getMaxLength(); ++i)
-                  {
+               }
+               else if (keyword == CATEGORY) {
+                  this->setCategory(keyword);
+                  for (int i = 0; i < this->getHeaderLength(); ++i) {
                      ss >> sTemp;
                      this->setCategoryContainer(i, sTemp);
                   }
-                  break;
-
-                  case MAXMARK :
-                  ss >> sTemp;
-                  this->setMaxMark(sTemp);
-                  for (int i = 0; i < this->getMaxLength(); ++i)
-                  {
+               }
+               else if (keyword == MAXMARK) {
+                  this->setMaxMark(keyword);
+                  for (int i = 0; i < this->getHeaderLength(); ++i) {
                      ss >> fTemp;
                      this->setMaxMarkContainer(i, fTemp);
                   }
-                  break;
-
-                  case WEIGHT :
-                  ss >> sTemp;
-                  this->setWeight(sTemp);
-                  for (int i = 0; i < this->getMaxLength(); ++i)
-                  {
+               }
+               else if (keyword == WEIGHT) {
+                  this->setWeight(keyword);
+                  for (int i = 0; i < this->getHeaderLength(); ++i) {
                      ss >> fTemp;
                      this->setWeightContainer(i, fTemp);
                   }
-                  break;
+               } 
+               else {
+                  std::cerr << "KeyWord: " << keyword << " not found" << std::endl;
                }
             }
          }
       }
-      else {
-         std::cerr << "Error opening " << file << std::endl;
-      }
-
       inFile.close();
       return true;
    }

@@ -3,42 +3,53 @@
 
 #include "settings.h"
 #include <array>
+#include <vector>
 
-namespace GraderApplication
-{
+namespace GraderApplication {
    /* BaseData is responsible for all prelim data
     * found before the students themselves.
     * constisting of mainly getters and setters
     * so it is easy to access the private members
     * through the derived class Grader
     * */
-   class BaseData
-   {
+   class BaseData {
    private:
-      /* intitialzing an in class consant, so I wont have to
-       * change LEN in a bunch of different positions if I want
-       * want to modify it or use something else
-       * */
-      static const int maxLength = LEN;
+      static const int totalHeaderCount = HEADER_MAX;
+      int headerLength;
+      int totalLineCount;
       std::string title;
-      std::array <std::string, maxLength> titleContainer;
+      std::vector <std::string> titleContainer;
       std::string category;
-      std::array <std::string, maxLength> categoryContainer;
+      std::vector <std::string> categoryContainer;
       std::string maxMark;
-      std::array <float, maxLength> maxMarkContainer;
+      std::vector <float> maxMarkContainer;
       std::string weight;
-      std::array <float, maxLength> weightContainer;
+      std::vector <float> weightContainer;
+
    public:
       /* XXX: Documentation
-       * Simple default constructor
+       * Default constructor
        * */
       BaseData(void);
+      
+      /* XXX: Documentation
+       * Return the total header count of 4
+       * defined in settings.h
+       * */
+      int getTotalHeaderCount() const;
+      
+      /* XXX: Documentation
+       * Accessor: getter and setter for length of header data
+       * */
+      int getHeaderLength() const; 
+      void setHeaderLength(const int);
 
       /* XXX: Documentation
-       * Accessor: getter for max length
+       * Accessor: getter and setter for totalLineCount 
        * */
-      int getMaxLength() const; 
-
+      int getCurrentLineCount() const;
+      void setCurrentLineCount(const int);
+      
 
       /* XXX: Documentation
        * Accessor: getter and setter for title
@@ -46,13 +57,11 @@ namespace GraderApplication
       std::string getTitle() const; 
       void setTitle(const std::string &); 
 
-
       /* XXX: Documentation
        * Accessor: getter and setter for title container
        * */
       std::string getTitleContainer(int &) const;
       void setTitleContainer(const int &, const std::string &);
-
 
       /* XXX: Documentation
        * Accessor: getter and setter for category
@@ -60,13 +69,11 @@ namespace GraderApplication
       std::string getCategory() const;
       void setCategory(const std::string &);
 
-
       /* XXX: Documentation
        * Accessor: getter and setter for category container
        * */
       std::string getCategoryContainer(int &);
       void setCategoryContainer(const int &, const std::string &);
-
 
       /* XXX: Documentation
        * Accessor: getter and setter for maxmark 
@@ -74,13 +81,11 @@ namespace GraderApplication
       std::string getMaxMark() const;
       void setMaxMark(const std::string &);
 
-      
       /* XXX: Documentation
        * Accessor:  getter and setter for maxmark container
        * */
       float getMaxMarkContainer(int &);
       void setMaxMarkContainer(const int &, const float &);
-
 
       /* XXX: Documentation
        * Accessor: getter and setter for weight
@@ -94,7 +99,6 @@ namespace GraderApplication
       float getWeightContainer(int &);
       void setWeightContainer(const int &, const float &);
       
-      
       /* XXX: Documentation
        * Mainly for debugging and testing purposes,
        * prints the entire object after data is parsed
@@ -102,14 +106,12 @@ namespace GraderApplication
        * */
       void printBaseObject(void);
 
-
       /* XXX: Documentation
        * Load only preliminary data from file:
        * reads data based on first character matches
        * from a predefined enumerator in settings.h
        * */
       bool loadBaseData(const std::string &);
-      
    };
 };
 

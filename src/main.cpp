@@ -1,12 +1,11 @@
 #include "../hdr/base.h"
 #include "../hdr/grader.h"
-#include "../hdr/fileparser.h"
 #include "../hdr/student.h"
 #include <chrono>
 #include <ctime>
 #include <fstream>
 #include <iostream>
-#include <string.h>
+#include <cstring>
 
 using namespace GraderApplication;
 
@@ -24,10 +23,14 @@ int main(int argc, char **argv)
    std::string inputFile("");
    std::string name("");
    int numargsfilled = parseArguments(argc, argv, inputFile, name); 
-   
+
    if (numargsfilled == 1) {
       std::cout << "File: " << inputFile << std::endl;
+      BaseData base;
+      base.loadBaseData(inputFile);
+      base.printBaseObject();
    }
+
    else if (numargsfilled == 2) {
       std::cout << "Name: " << name << std::endl;
       std::cout << "File: " << inputFile << std::endl;
@@ -75,6 +78,7 @@ int main(int argc, char **argv)
 
 /* XXX: Documentation
  *  Argument parser
+ *  return range [1, 2]
  *  return 1 = only file was passed
  *  return 2 = file and name arguemnts fillfilled
  *  other exceptions are failures, in which 
@@ -86,7 +90,7 @@ int main(int argc, char **argv)
 int parseArguments(int argc, char **argv,
       std::string &inputFile, std::string &name)
 {
-   int retVal = 0;
+   int retVal = 0; // will never return 0
    if (argc < 2) {
       manualFileInput(inputFile);
       retVal = 1;
@@ -112,15 +116,13 @@ int parseArguments(int argc, char **argv,
           * */
          fprintf(stderr, "\n\t\tStudent name not supplied\n\n");
          printUsage();
-      }
-      else if ((strncmp(nameFlag, argv[nFlag+1], 2) == 0)) {
+      } else if ((strncmp(nameFlag, argv[nFlag+1], 2) == 0)) {
          /* Check to see if -s has been passed twice "-s -s",
           * if so, show proper error msg, print usage and exit
           * */
-         fprintf(stderr, "\n\t\tFlag found multiple times\n\n");
+         fprintf(stderr, "\n\t\tName flag found multiple times\n");
          printUsage();
-      }
-      else {
+      } else {
          /* If we make it to here we have a valid -s flag and a corresponding arg 
           * Now we must figure out if we have a file name before -s or after,
           * or not at all and handle appropriately
