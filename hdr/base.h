@@ -2,7 +2,7 @@
 #define BASE_H
 
 #include "settings.h"
-#include <array>
+#include <fstream>
 #include <vector>
 
 namespace GraderApplication {
@@ -14,9 +14,10 @@ namespace GraderApplication {
     * */
    class BaseData {
    private:
-      static const int totalHeaderCount = HEADER_MAX;
+      int totalHeaderCount;
       int headerLength;
       int totalLineCount;
+      std::streampos currentFilePos;
       std::string title;
       std::vector <std::string> titleContainer;
       std::string category;
@@ -33,23 +34,36 @@ namespace GraderApplication {
       BaseData(void);
       
       /* XXX: Documentation
-       * Return the total header count of 4
-       * defined in settings.h
+       * Return the total header count
+       * This will be used to compare against
+       * the HEADER_MAX macro of 4 so we know
+       * when the max has been read in
        * */
       int getTotalHeaderCount() const;
+      void incrementHeaderCount();
       
       /* XXX: Documentation
-       * Accessor: getter and setter for length of header data
+       * Accessor: getter and setter
+       * For the actual length of the evaluation data
        * */
       int getHeaderLength() const; 
       void setHeaderLength(int);
 
       /* XXX: Documentation
-       * Accessor: getter and setter for totalLineCount 
+       * Accessor: getter and setter
+       * This is to track line errors
        * */
-      int getCurrentLineCount() const;
-      void setCurrentLineCount(int);
-      
+      int getFileLineCount() const;
+      void incrementFileLineCount();
+
+      /* XXX: Documentation
+       * Accessor: getter and setter
+       * This is so the file position can be remembered
+       * so the file can be closed and reopended by different
+       * methods without have to read from the beginning of the file
+       * */
+      std::streampos getCurrentFilePosition() const;
+      void setCurrentFilePos(std::ifstream &);
 
       /* XXX: Documentation
        * Accessor: getter and setter for title
@@ -139,7 +153,7 @@ namespace GraderApplication {
       /* XXX: Documentation
        * Summ all elements in array
        * */
-      virtual float vecSummation(std::vector<float> &);
+      float vecSummation(std::vector<float> &);
    };
 };
 

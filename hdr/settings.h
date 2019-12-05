@@ -16,8 +16,7 @@
 
 
 
-namespace GraderApplication
-{
+namespace GraderApplication {
    /* Check what range the final grade matches */
    #define IS_A_PLUS(x) ((x) >= 89.5 && (x) <= 100 )
    #define IS_A(x) ((x) >= 84.5 && (x) < 89.5)
@@ -104,7 +103,6 @@ namespace GraderApplication
          , high_C("C+") , mid_C("C") , low_C("C-")
          , D("D")
          , F("F")
-         , INC("INC")
          , WDR("WDR")
          
       { /* Not needed */ }

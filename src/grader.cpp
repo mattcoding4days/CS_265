@@ -103,16 +103,16 @@ namespace GraderApplication
        * */
       Echelon echelon;
       if      ( IS_A_PLUS(grade)  )  { return echelon.high_A; }
-      else if ( IS_A(grade)       )  { return echelon.mid_A; }
-      else if ( IS_A_MINUS(grade) )  { return echelon.low_A; }
+      else if ( IS_A(grade)       )  { return echelon.mid_A;  }
+      else if ( IS_A_MINUS(grade) )  { return echelon.low_A;  }
       else if ( IS_B_PLUS(grade)  )  { return echelon.high_B; }
-      else if ( IS_B(grade)       )  { return echelon.mid_B; }
-      else if ( IS_B_MINUS(grade) )  { return echelon.low_B; }
+      else if ( IS_B(grade)       )  { return echelon.mid_B;  }
+      else if ( IS_B_MINUS(grade) )  { return echelon.low_B;  }
       else if ( IS_C_PLUS(grade)  )  { return echelon.high_C; }
-      else if ( IS_C(grade)       )  { return echelon.mid_C; }
-      else if ( IS_C_MINUS(grade) )  { return echelon.low_C; }
-      else if ( IS_D(grade)       )  { return echelon.D; }
-      else if ( IS_F(grade)       )  { return echelon.F; }
+      else if ( IS_C(grade)       )  { return echelon.mid_C;  }
+      else if ( IS_C_MINUS(grade) )  { return echelon.low_C;  }
+      else if ( IS_D(grade)       )  { return echelon.D;      }
+      else if ( IS_F(grade)       )  { return echelon.F;      }
 
       // Enter debug state if we return this
       return "Grade went wrong";

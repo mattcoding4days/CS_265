@@ -13,22 +13,27 @@ namespace GraderApplication {
    BaseData::BaseData(void)
       : headerLength(0)
       , totalLineCount(0)
+      , currentFilePos(0)
       , title("")
-      , titleContainer({""})
       , category("")
-      , categoryContainer({""})
       , maxMark("")
-      , maxMarkContainer({})
       , weight("")
-      , weightContainer({})
-   {  }
+   {
+      titleContainer.reserve(2);
+      categoryContainer.reserve(2);
+      maxMarkContainer.reserve(2);
+      weightContainer.reserve(2);
+   }
 
 
    int BaseData::getTotalHeaderCount() const { return this->totalHeaderCount; }
 
 
+   void BaseData::incrementHeaderCount() { (this->totalHeaderCount)++; }
+
+
    int BaseData::getHeaderLength() const { return this->headerLength; }
-   
+
 
    void BaseData::setHeaderLength(int _length)
    {
@@ -53,17 +58,18 @@ namespace GraderApplication {
    }
 
 
-   int BaseData::getCurrentLineCount() const { return this->totalLineCount; }
+   int BaseData::getFileLineCount() const { return this->totalLineCount; }
 
 
-   void BaseData::setCurrentLineCount(int _count)
-   {
-      /* set an acceptable inclusive bound */
-      if (_count >= 0 && _count <= 200) {
-         this->totalLineCount += _count;
-      } else {
-         std::cerr << "File is too large\n"; 
-      }
+   void BaseData::incrementFileLineCount() { (this->totalLineCount)++; }
+
+
+   std::streampos BaseData::getCurrentFilePosition() const { return this->currentFilePos; }
+
+
+   void BaseData::setCurrentFilePos(std::ifstream &f) 
+   { 
+      this->currentFilePos = f.tellg();
    }
 
 
@@ -256,46 +262,75 @@ namespace GraderApplication {
 
    bool BaseData::loadBaseData(const std::string &file)
    {
-      std::ifstream inFile(file);
-      std::string line("");
-      if (inFile.good()) {
-         while (std::getline(inFile, line)) {
-            std::string keyword("");
-            std::string sTemp("");
-            std::stringstream ss(line);
-            ss >> keyword;
+      try {
+         std::ifstream inFile(file);
+         std::string line("");
+         if (inFile.good()) {
+            while (std::getline(inFile, line)) {
+               /* we read a line so increment the count */
+               this->incrementFileLineCount();
+               this->stripComments(line);
+               /* If the line */
+               //if (line.empty()) { continue; }
+               if (this->getTotalHeaderCount() == HEADER_MAX) {
+                  this->setCurrentFilePos(inFile);
+                  inFile.close();
+                  return true;
+               }
+               std::string keyword("");
+               std::string sTemp("");
+               std::stringstream ss(line);
+               ss >> keyword;
 
-            if (keyword == TITLE) {
-               this->setTitle(keyword);
-               for (int i = 0; i < this->getHeaderLength(); ++i) {
-                  ss >> sTemp;
-                  this->setTitleContainer(sTemp);
+               if (keyword == TITLE) {
+                  this->setTitle(keyword);
+                  this->incrementHeaderCount();
+                  int i = 0;
+                  while(ss >> sTemp) {
+                     this->setTitleContainer(sTemp);
+                     i++;
+                  }
+                  this->setHeaderLength(i);
+               }
+
+               else if (keyword == CATEGORY) {
+                  this->setCategory(keyword);
+                  this->incrementHeaderCount();
+                  int i = 0;
+                  while(ss >> sTemp) {
+                     this->setCategoryContainer(sTemp);
+                     i++;
+                  }
+                  this->setHeaderLength(i);
+               }
+
+               else if (keyword == MAXMARK) {
+                  this->setMaxMark(keyword);
+                  this->incrementHeaderCount();
+                  int i = 0;
+                  while(ss >> sTemp) {
+                     this->setMaxMarkContainer(sTemp);
+                     i++;
+                  }
+                  this->setHeaderLength(i);
+               }
+
+               else if (keyword == WEIGHT) {
+                  this->setWeight(keyword);
+                  this->incrementHeaderCount();
+                  int i = 0;
+                  while(ss >> sTemp) {
+                     this->setWeightContainer(sTemp);
+                     i++;
+                  }
+                  this->setHeaderLength(i);
                }
             }
-            else if (keyword == CATEGORY) {
-               this->setCategory(keyword);
-               for (int i = 0; i < this->getHeaderLength(); ++i) {
-                  ss >> sTemp;
-                  this->setCategoryContainer(sTemp);
-               }
-            }
-            else if (keyword == MAXMARK) {
-               this->setMaxMark(keyword);
-               for (int i = 0; i < this->getHeaderLength(); ++i) {
-                  ss >> sTemp;
-                  this->setMaxMarkContainer(sTemp);
-               }
-            }
-            else if (keyword == WEIGHT) {
-               this->setWeight(keyword);
-               for (int i = 0; i < this->getHeaderLength(); ++i) {
-                  ss >> sTemp;
-                  this->setWeightContainer(sTemp);
-               }
-            }
-         }
+         } else { throw std::logic_error("\n\t*** Can't Open File: "); }
+      } catch (std::logic_error &e) {
+         std::cerr << e.what() << file << std::endl;
+         exit (EXIT_FAILURE);
       }
-      inFile.close();
       return true;
    }
    
@@ -305,8 +340,6 @@ namespace GraderApplication {
       std::size_t found = line.find(COMM);
       if (found != std::string::npos) {
          line.erase(found, std::string::npos);
-      } else {
-         std::cerr << "No comment found in this line" << std::endl;
       }
    }
 

@@ -3,7 +3,6 @@
 #include "../hdr/student.h"
 #include <chrono>
 #include <ctime>
-#include <fstream>
 #include <iostream>
 #include <cstring>
 
@@ -30,6 +29,13 @@ int main(int argc, char **argv)
       base.setHeaderLength(8);
       base.loadBaseData(inputFile);
       base.printBaseObject();
+   
+      std::string line;
+      std::ifstream newFile(inputFile);
+      newFile.seekg(base.getCurrentFilePosition());
+      std::getline(newFile, line);
+      std::cout << line << std::endl;
+
    }
 
    else if (numargsfilled == 2) {
