@@ -22,7 +22,21 @@ namespace GraderApplication {
    class DataLength : public std::exception {
       public:
       const char *what() const throw() {
-         return "Data entry length does not match";
+         return "Base evaluation data length does not match";
+      }
+   };
+
+   class FailStringFloatConversion : public std::exception {
+      public:
+      const char *what() const throw() {
+         return "Could not convert string to float due to corrupted data: ";
+      }
+   };
+
+   class StreamConversionFailure : public std::exception {
+      public:
+      const char *what() const throw() {
+         return "Stringstream failed to convert string to float: ";
       }
    };
 };

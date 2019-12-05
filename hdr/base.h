@@ -42,13 +42,13 @@ namespace GraderApplication {
        * Accessor: getter and setter for length of header data
        * */
       int getHeaderLength() const; 
-      void setHeaderLength(const int);
+      void setHeaderLength(int);
 
       /* XXX: Documentation
        * Accessor: getter and setter for totalLineCount 
        * */
       int getCurrentLineCount() const;
-      void setCurrentLineCount(const int);
+      void setCurrentLineCount(int);
       
 
       /* XXX: Documentation
@@ -85,7 +85,7 @@ namespace GraderApplication {
        * Accessor:  getter and setter for maxmark container
        * */
       float getMaxMarkContainer(int &);
-      void setMaxMarkContainer(const float &);
+      void setMaxMarkContainer(std::string &);
 
       /* XXX: Documentation
        * Accessor: getter and setter for weight
@@ -97,7 +97,7 @@ namespace GraderApplication {
        * Accessor: getter and setter for weight container
        * */
       float getWeightContainer(int &);
-      void setWeightContainer(const float &);
+      void setWeightContainer(std::string &);
       
       /* XXX: Documentation
        * Mainly for debugging and testing purposes,
@@ -122,7 +122,24 @@ namespace GraderApplication {
        * Find the length of the header data
        * */
       int findEvaluationLenth(std::string &);
+      
+      /* XXX: Documentation
+       * search whole or decimal string representation
+       * of a number, and return true if there is only
+       * digits
+       * */
+      bool isDigits(std::string &);
 
+      /* XXX: Documentation
+       * convert a string to a float with out the 
+       * truncating limitations of stof
+       * */
+      float stringTofloat(const std::string &);
+      
+      /* XXX: Documentation
+       * Summ all elements in array
+       * */
+      virtual float vecSummation(std::vector<float> &);
    };
 };
 

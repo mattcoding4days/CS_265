@@ -18,11 +18,10 @@ namespace GraderApplication {
       , category("")
       , categoryContainer({""})
       , maxMark("")
-      , maxMarkContainer({0})
+      , maxMarkContainer({})
       , weight("")
-      , weightContainer({0})
-
-   { /* Not needed */  }
+      , weightContainer({})
+   {  }
 
 
    int BaseData::getTotalHeaderCount() const { return this->totalHeaderCount; }
@@ -31,13 +30,25 @@ namespace GraderApplication {
    int BaseData::getHeaderLength() const { return this->headerLength; }
    
 
-   void BaseData::setHeaderLength(const int _length)
+   void BaseData::setHeaderLength(int _length)
    {
-      /* set an acceptable inclusive bound */
-      if (_length > 0 && _length < 20) {
-         this->headerLength = _length;
-      } else {
-         std::cerr << "Header length out of bounds\n"; 
+      try {
+         if (this->headerLength == 0) {
+            /* This is the first time we are setting the data */
+            this->headerLength = _length;
+         }
+         else if (this->headerLength == _length) {
+            /* Our lengths match, all is well, do nothing */
+         } else {
+            /* Our lengths do not match, cannot compute data correctly
+             * throw and end program
+             * */
+            throw DataLength();
+         }
+
+      } catch (DataLength &e) {
+         std::cerr << e.what() << std::endl;
+         exit (EXIT_FAILURE);
       }
    }
 
@@ -45,7 +56,7 @@ namespace GraderApplication {
    int BaseData::getCurrentLineCount() const { return this->totalLineCount; }
 
 
-   void BaseData::setCurrentLineCount(const int _count)
+   void BaseData::setCurrentLineCount(int _count)
    {
       /* set an acceptable inclusive bound */
       if (_count >= 0 && _count <= 200) {
@@ -62,7 +73,7 @@ namespace GraderApplication {
    void BaseData::setTitle(const std::string &_title) 
    {
       try {
-         if ( this->getTitle().empty() ) { 
+         if ( this->title.empty() ) { 
             this->title = _title; 
          }
          else {
@@ -86,12 +97,12 @@ namespace GraderApplication {
                throw DuplicateFound();
             }
          }
+         /* if no exception is thrown insert the value */
+         this->titleContainer.push_back(_sub);
       } catch(DuplicateFound &e) {
          std::cerr << e.what() << _sub << " <- already in title container\n";
          exit(EXIT_FAILURE);
       }
-      /* if no exception is thrown insert the value */
-      this->titleContainer.emplace_back(_sub);
    } 
 
 
@@ -101,7 +112,7 @@ namespace GraderApplication {
    void BaseData::setCategory(const std::string &_category) 
    { 
       try {
-         if ( this->getCategory().empty() ) { 
+         if ( this->category.empty() ) { 
             this->category = _category; 
          }
          else {
@@ -119,7 +130,7 @@ namespace GraderApplication {
 
    void BaseData::setCategoryContainer(const std::string &_sub)
    {
-      this->categoryContainer.emplace_back(_sub);
+      this->categoryContainer.push_back(_sub);
    }
 
 
@@ -129,7 +140,7 @@ namespace GraderApplication {
    void BaseData::setMaxMark(const std::string &_maxMark)
    {
       try {
-         if ( this->getMaxMark().empty() ) { 
+         if ( this->maxMark.empty() ) { 
             this->maxMark = _maxMark;
          }
          else {
@@ -145,9 +156,19 @@ namespace GraderApplication {
    float BaseData::getMaxMarkContainer(int &itr) { return this->maxMarkContainer[itr]; }
 
 
-   void BaseData::setMaxMarkContainer(const float &_sub)
+   void BaseData::setMaxMarkContainer(std::string &_sub)
    {
-      this->maxMarkContainer.emplace_back(_sub);
+      try {
+         if (isDigits(_sub)) {
+            float temp = stringTofloat(_sub);
+            this->maxMarkContainer.push_back(temp);
+         }
+         else { throw FailStringFloatConversion(); }
+
+      } catch (FailStringFloatConversion &e) {
+         std::cerr << e.what() << _sub << std::endl;
+         exit (EXIT_FAILURE);
+      }
    }
 
 
@@ -157,7 +178,7 @@ namespace GraderApplication {
    void BaseData::setWeight(const std::string &_weight)
    {
       try {
-         if ( this->getWeight().empty() ) { 
+         if ( this->weight.empty() ) { 
             this->weight = _weight;
          }
          else {
@@ -173,24 +194,28 @@ namespace GraderApplication {
    float BaseData::getWeightContainer(int &itr) { return this->weightContainer[itr]; }
 
 
-   /*FIXME: Think of a better way to check for summation miscalculation */
-   void BaseData::setWeightContainer(const float &_sub)
+   void BaseData::setWeightContainer(std::string &_sub)
    {
       try {
-         /* Make sure weights do not add up above 100 
-          * or are negative numbers going below 0
-          * */
-         float summation = 0;
-         accumulate(this->weightContainer.begin(),
-               this->weightContainer.end(), summation);
+         if (isDigits(_sub)) {
+            float temp = stringTofloat(_sub);
+            this->weightContainer.push_back(temp);
+         }
+         else { throw FailStringFloatConversion(); }
 
-         if ( (summation >= 100) || (summation < 0) || (summation + _sub > 100) ) {
-            throw WeightSummation();
+         size_t tempCompare = this->getHeaderLength();
+         if (this->weightContainer.size() == tempCompare) {
+            // if the container size is equal to the line length
+            std::vector<float> Fvec = this->weightContainer;
+            float total = vecSummation(Fvec);
+            if (total != 100) { 
+               throw WeightSummation();
+            }
          }
-         else {
-            this->weightContainer.emplace_back(_sub);
-         }
-      } catch(WeightSummation &e) {
+      } catch (FailStringFloatConversion &e) {
+         std::cerr << e.what() << _sub << std::endl;
+         exit (EXIT_FAILURE);
+      } catch (WeightSummation &e) {
          std::cerr << e.what() << std::endl;
          exit (EXIT_FAILURE);
       }
@@ -235,42 +260,38 @@ namespace GraderApplication {
       std::string line("");
       if (inFile.good()) {
          while (std::getline(inFile, line)) {
-            if (!(line.empty())) {
-               std::string keyword("");
-               std::string sTemp("");
-               std::stringstream ss(line);
-               ss >> keyword;
+            std::string keyword("");
+            std::string sTemp("");
+            std::stringstream ss(line);
+            ss >> keyword;
 
-               if (keyword == TITLE) {
-                  this->setTitle(keyword);
-                  for (int i = 0; i < this->getHeaderLength(); ++i) {
-                     ss >> sTemp;
-                     this->setTitleContainer(sTemp);
-                  }
+            if (keyword == TITLE) {
+               this->setTitle(keyword);
+               for (int i = 0; i < this->getHeaderLength(); ++i) {
+                  ss >> sTemp;
+                  this->setTitleContainer(sTemp);
                }
-               else if (keyword == CATEGORY) {
-                  this->setCategory(keyword);
-                  for (int i = 0; i < this->getHeaderLength(); ++i) {
-                     ss >> sTemp;
-                     this->setCategoryContainer(sTemp);
-                  }
+            }
+            else if (keyword == CATEGORY) {
+               this->setCategory(keyword);
+               for (int i = 0; i < this->getHeaderLength(); ++i) {
+                  ss >> sTemp;
+                  this->setCategoryContainer(sTemp);
                }
-               else if (keyword == MAXMARK) {
-                  this->setMaxMark(keyword);
-                  for (int i = 0; i < this->getHeaderLength(); ++i) {
-                     float fTemp = 0;
-                     ss >> fTemp;
-                     this->setMaxMarkContainer(fTemp);
-                  }
+            }
+            else if (keyword == MAXMARK) {
+               this->setMaxMark(keyword);
+               for (int i = 0; i < this->getHeaderLength(); ++i) {
+                  ss >> sTemp;
+                  this->setMaxMarkContainer(sTemp);
                }
-               else if (keyword == WEIGHT) {
-                  this->setWeight(keyword);
-                  for (int i = 0; i < this->getHeaderLength(); ++i) {
-                     float fTemp = 0;
-                     ss >> fTemp;
-                     this->setWeightContainer(fTemp);
-                  }
-               } 
+            }
+            else if (keyword == WEIGHT) {
+               this->setWeight(keyword);
+               for (int i = 0; i < this->getHeaderLength(); ++i) {
+                  ss >> sTemp;
+                  this->setWeightContainer(sTemp);
+               }
             }
          }
       }
@@ -278,18 +299,52 @@ namespace GraderApplication {
       return true;
    }
    
+
    void BaseData::stripComments(std::string &line)
    {
       std::size_t found = line.find(COMM);
       if (found != std::string::npos) {
          line.erase(found, std::string::npos);
       } else {
-         std::cout << "No comment found in this line" << std::endl;
+         std::cerr << "No comment found in this line" << std::endl;
       }
    }
 
-   int BaseData::findEvaluationLenth(std::string &)
+
+   int BaseData::findEvaluationLenth(std::string &datafile)
    {
+      datafile = "";
       return 1;
+   }
+
+
+   bool BaseData::isDigits(std::string &s)
+   {
+     return s.find_first_not_of("0123456789.") == std::string::npos; 
+   }
+
+
+   float BaseData::stringTofloat(const std::string &s)
+   {
+      float tempconvert = 0;
+      std::stringstream streamVar(s);
+      try {
+         streamVar >> tempconvert;
+         if (streamVar.fail()) {
+            throw StreamConversionFailure();
+         }
+      } catch (StreamConversionFailure &e) {
+         std::cerr << e.what() << &streamVar << std::endl;
+         exit (EXIT_FAILURE);
+      }
+      // will only return upon success
+      return tempconvert;
+   }
+
+
+   float BaseData::vecSummation(std::vector<float> &s)
+   {
+      float tempFinalGrade = 0;
+      return accumulate(s.begin(), s.end(), tempFinalGrade);
    }
 };
