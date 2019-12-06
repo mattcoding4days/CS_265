@@ -8,37 +8,38 @@ namespace GraderApplication {
 
    class DuplicateFound : public std::exception {
       public:
-      const char *what() const throw() {
-         return "\n\t*** Duplicate Found: ";
-      }
+         const char *what() const throw() {
+            return "*** Duplicate Found ***";
+         }
    };
 
    class WeightSummation : public std::exception {
       public:
-      const char *what() const throw() {
-         return "\n\t*** Weight summation is out of bounds";
-      }
+         const char *what() const throw() {
+            return "*** Weight summation is out of bounds ***";
+         }
    };
 
    class DataLength : public std::exception {
       public:
-      const char *what() const throw() {
-         return "\n\t*** Base evaluation data length does not match";
-      }
+         const char *what() const throw() {
+            return "*** Evaluation data length does not match *** [eg]: "
+               " corrupted or non-standardized data";
+         }
    };
 
    class FailStringFloatConversion : public std::exception {
       public:
-      const char *what() const throw() {
-         return "\n\t*** Could not convert string to float due to corrupted data: ";
-      }
+         const char *what() const throw() {
+            return "*** Could not convert string to float due to corrupted data ***";
+         }
    };
 
    class StreamConversionFailure : public std::exception {
       public:
-      const char *what() const throw() {
-         return "\n\t*** Stringstream failed to convert string to float: ";
-      }
+         const char *what() const throw() {
+            return "*** Stringstream failed to convert string to float ***";
+         }
    };
 };
 

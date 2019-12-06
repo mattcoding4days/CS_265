@@ -11,7 +11,7 @@ namespace GraderApplication
 {
    Grader::Grader(int _numberOfStudents, const std::string &_dataFile)
       : numberOfStudents(_numberOfStudents)
-      , dataFile(_dataFile)
+        , dataFile(_dataFile)
    {
       studentContainer.reserve(numberOfStudents);    
    }
@@ -59,9 +59,9 @@ namespace GraderApplication
           * and emplace_back for speed.
           * */
          std::vector<float> tempGradeContainer;
-         tempGradeContainer.reserve(this->getStudentLength());
+         tempGradeContainer.reserve(this->getDataLength());
          float tempValue = 0.0;
-         for ( int j = 0; j < this->getStudentLength(); ++j )
+         for ( int j = 0; j < this->getDataLength(); ++j )
          {
             /* first calculate singular grades (mark * weight) / maxmark
              * and store one at a time into vector
@@ -86,7 +86,7 @@ namespace GraderApplication
    float Grader::subGradeComputation(int i, int j)
    {
       return ( studentContainer[i].getGrades(j) 
-         * this->getWeightContainer(j) ) / this->getMaxMarkContainer(j);
+            * this->getWeightContainer(j) ) / this->getMaxMarkContainer(j);
    }
 
 
@@ -127,9 +127,9 @@ namespace GraderApplication
             i != studentContainer.end(); ++i)
       {
          std::cout << std::setw(15) << std::left << i->getName()
-                   << std::setw(10) << std::left << i->getFinalGrade()
-                   << std::setw(5)  << std::left << i->getLetterGrade()
-                   << std::endl;
+            << std::setw(10) << std::left << i->getFinalGrade()
+            << std::setw(5)  << std::left << i->getLetterGrade()
+            << std::endl;
       }
    }
 };

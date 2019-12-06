@@ -1,13 +1,13 @@
 /* All  main documentaion is in header files
  * for corresponding cpp files.
  * */
+#include "../hdr/customExceptions.h"
 #include "../hdr/student.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 
-namespace GraderApplication
-{
+namespace GraderApplication {
    /* temp file for storing students that have already
     * been processed
     * */
@@ -15,46 +15,28 @@ namespace GraderApplication
 
    StudentData::StudentData(void)
       : name ("")
-      , gradesContainer({0})
-      , finalGrade(0.0)
-      , letterGrade("")
-   { }
+        , gradesContainer({0})
+        , finalGrade(0.0)
+        , letterGrade("")
 
-   
-   void StudentData::sanitize(void) const
-   {
-      std::system("rm temp.txt");
-   }
+        { }
 
 
-   int StudentData::getStudentLength(void) const
-   {
-      return this->maxStudentLength;
-   }
+   void StudentData::sanitize(void) const { std::system("rm temp.txt"); }
 
 
-   std::string StudentData::getName() const
-   {
-      return this->name;
-   }
+   std::string StudentData::getName() const { return this->name; }
 
 
-   void StudentData::setName(const std::string &_name)
-   {
-      this->name = _name;
-   }
+   void StudentData::setName(const std::string &_name) { this->name = _name; }
 
 
-   float StudentData::getGrades(int &itr)
-   {
-      return this->gradesContainer[itr]; 
-   }
+   float StudentData::getGrades(int &itr) { return this->gradesContainer[itr]; }
 
 
    void StudentData::setGrades( const int &itr, const float &_grade)
    {
-      if ( itr <= this->getStudentLength() )
-      { 
+      if ( itr <= this->getDataLength() ) { 
          this->gradesContainer[itr] = _grade;
       }
       else {
@@ -63,24 +45,18 @@ namespace GraderApplication
    }
 
 
-   float StudentData::getFinalGrade() const
-   {
-      return this->finalGrade;
-   }
+   float StudentData::getFinalGrade() const { return this->finalGrade; }
 
    void StudentData::setFinalGrade(const float &_finalGrade)
-   {
-      this->finalGrade = _finalGrade;
+   { 
+      this->finalGrade = _finalGrade; 
    }
 
 
-   std::string StudentData::getLetterGrade() const
-   {
-      return this->letterGrade;
-   }
+   std::string StudentData::getLetterGrade() const { return this->letterGrade; }
 
-   void StudentData::setLetterGrade(const std::string &_letterGrade)
-   {
+   void StudentData::setLetterGrade(const std::string &_letterGrade) 
+   { 
       this->letterGrade = _letterGrade;
    }
 
@@ -89,8 +65,7 @@ namespace GraderApplication
    {
       /* method used mainly for debugging purposes */
       std::cout << this->getName() << " ";
-      for ( int i = 0; i < this->getStudentLength(); ++i )
-      {
+      for ( int i = 0; i < this->getDataLength(); ++i ) {
          std::cout << this->getGrades(i) << " ";
       }
       std::cout << std::endl;
@@ -102,22 +77,18 @@ namespace GraderApplication
       std::ifstream datafile(file);
       if ( datafile.good() ) {
          std::string line;
-         while ( std::getline(datafile, line) )
-         {
+         while ( std::getline(datafile, line) ) {
             char firstC = '\0';
             firstC = line[0];
-            if ( (std::islower(firstC)) && firstC != COMM && firstC != WS )
-            {
-               if ( ! (this->isStudentProcessed(line)) )
-               {
+            if ( (std::islower(firstC)) && firstC != COMM && firstC != WS ) {
+               if ( ! (this->isStudentProcessed(line)) ) {
                   this->processStudent(line);
                   std::string sName("");
                   float mark = 0.0;
                   std::stringstream ss(line);
                   ss >> sName;
                   this->setName(sName);
-                  for (int i = 0; i < this->getStudentLength(); ++i)
-                  {
+                  for (int i = 0; i < this->getDataLength(); ++i) {
                      ss >> mark;
                      this->setGrades(i, mark);
                   }
@@ -132,8 +103,8 @@ namespace GraderApplication
          }
       }
       else {
-        std::cerr << "File does not exist: " << file << std::endl;
-        return false;                                             
+         std::cerr << "File does not exist: " << file << std::endl;
+         return false;                                             
       }
       datafile.close();
       return true;
@@ -145,13 +116,10 @@ namespace GraderApplication
       bool isProcessed = false;
       std::string tempLine("");
       // test if the file exists
-      if ( this->testForFileExistance(TEMP_FILE) )
-      {
+      if ( this->testForFileExistance(TEMP_FILE) ) {
          std::ifstream tempFile(TEMP_FILE);
-         while ( std::getline(tempFile, tempLine) )
-         {
-            if ( lineToCompare == tempLine )
-            {
+         while ( std::getline(tempFile, tempLine) ) {
+            if ( lineToCompare == tempLine ) {
                tempFile.close();
                isProcessed = true;
                return isProcessed;
@@ -169,8 +137,7 @@ namespace GraderApplication
       /* Test if grader has already created or temp file */
       bool doesExist = false;
       std::ifstream infile(file);
-      if ( infile.good() )
-      {
+      if ( infile.good() ) {
          infile.close();
          doesExist = true;
          return doesExist;
@@ -183,10 +150,9 @@ namespace GraderApplication
    {
       /* only append to the file, dont trample over old data */
       std::fstream outFile(TEMP_FILE, std::fstream::in
-                                    | std::fstream::out
-                                    | std::fstream::app);
-      if ( outFile.good() )
-      {
+            | std::fstream::out
+            | std::fstream::app);
+      if ( outFile.good() ) {
          outFile << process << std::endl;
          outFile.close();
       }

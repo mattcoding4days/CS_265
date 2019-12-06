@@ -3,48 +3,31 @@
 #include <string>
 
 
-//const Grade GradeInfo[NumIDs] = {
-//        { "WDR", 0 },
-//        { "INC", 0 },
-//        { "F", 0 },
-//        { "D", 49.5 },
-//        { "C-", 54.5 }, { "C", 59.5 }, { "C+", 63.5 },
-//        { "B-", 67.5 }, { "B", 71.5 }, { "B+", 75.5 },
-//        { "A-", 79.5 }, { "A", 84.5 }, { "A+", 89.5 },
-//        { "A+", 100 } // used to provide upper bound for A+
-//    };
-
-
-
 namespace GraderApplication {
    /* Check what range the final grade matches */
-   #define IS_A_PLUS(x) ((x) >= 89.5 && (x) <= 100 )
-   #define IS_A(x) ((x) >= 84.5 && (x) < 89.5)
-   #define IS_A_MINUS(x) ((x) >= 79.5 && (x) < 84.5)
-   #define IS_B_PLUS(x) ((x) >= 75.5 && (x) < 79.5)
-   #define IS_B(x) ((x) >= 71.5 && (x) < 75.5)
-   #define IS_B_MINUS(x) ((x) >= 67.5 && (x) < 71.5)
-   #define IS_C_PLUS(x) ((x) >= 63.5 && (x) < 67.5)
-   #define IS_C(x) ((x) >= 59.5 && (x) < 63.5)
-   #define IS_C_MINUS(x) ((x) >= 54.5 && (x) < 59.5)
-   #define IS_D(x) ((x) >= 49.5 && (x) < 54.5)
-   #define IS_F(x) ((x) >= 0 && (x) < 49.5)
-   
-   /* Max amount of evaluation lines we can have */
-   #define HEADER_MAX 4
+#define IS_A_PLUS(x) ((x) >= 89.5 && (x) <= 100 )
+#define IS_A(x) ((x) >= 84.5 && (x) < 89.5)
+#define IS_A_MINUS(x) ((x) >= 79.5 && (x) < 84.5)
+#define IS_B_PLUS(x) ((x) >= 75.5 && (x) < 79.5)
+#define IS_B(x) ((x) >= 71.5 && (x) < 75.5)
+#define IS_B_MINUS(x) ((x) >= 67.5 && (x) < 71.5)
+#define IS_C_PLUS(x) ((x) >= 63.5 && (x) < 67.5)
+#define IS_C(x) ((x) >= 59.5 && (x) < 63.5)
+#define IS_C_MINUS(x) ((x) >= 54.5 && (x) < 59.5)
+#define IS_D(x) ((x) >= 49.5 && (x) < 54.5)
+#define IS_F(x) ((x) >= 0 && (x) < 49.5)
 
-   /* Define Header Keywords here. The text file surely should have
-    * some standardization
-    * */
-   #define TITLE "TITLE" 
-   #define CATEGORY "CATEGORY"
-   #define MAXMARK "MAXMARK"
-   #define WEIGHT "WEIGHT"
+/* Max amount of evaluation lines we can have */
+#define HEADER_MAX 4
 
-   /* XXX: Documentaion
-    * Max line length expected after the name postfix is read in. 
-    * */
-   const int LEN = 8;
+/* Define Header Keywords here. The text file surely should have
+ * some standardization
+ * */
+#define TITLE "TITLE" 
+#define CATEGORY "CATEGORY"
+#define MAXMARK "MAXMARK"
+#define WEIGHT "WEIGHT"
+
 
    /* XXX: Documentaion
     * File delimiters, or characters we want to ignore, or look for 
@@ -67,14 +50,14 @@ namespace GraderApplication {
       std::string YELLOW;
       std::string BLUE;
       std::string RESET;
-      
+
       /* Fill in with ANSI color codes later */
       Colors(void)
          : RED("")
-         , GREEN("")
-         , YELLOW("")
-         , BLUE("")
-         , RESET("")
+           , GREEN("")
+           , YELLOW("")
+           , BLUE("")
+           , RESET("")
       { }
    };
 
@@ -99,12 +82,12 @@ namespace GraderApplication {
 
       Echelon()
          : high_A("A+") , mid_A("A") , low_A("A-")
-         , high_B("B+") , mid_B("B") , low_B("B-")
-         , high_C("C+") , mid_C("C") , low_C("C-")
-         , D("D")
-         , F("F")
-         , WDR("WDR")
-         
+           , high_B("B+") , mid_B("B") , low_B("B-")
+           , high_C("C+") , mid_C("C") , low_C("C-")
+           , D("D")
+           , F("F")
+           , WDR("WDR")
+
       { /* Not needed */ }
    };
 };

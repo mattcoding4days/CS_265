@@ -24,18 +24,15 @@ int main(int argc, char **argv)
    int numargsfilled = parseArguments(argc, argv, inputFile, name); 
 
    if (numargsfilled == 1) {
-      std::cout << "File: " << inputFile << std::endl;
-      BaseData base;
-      base.setHeaderLength(8);
+      StudentData base;
       base.loadBaseData(inputFile);
       base.printBaseObject();
-   
+
       std::string line;
       std::ifstream newFile(inputFile);
       newFile.seekg(base.getCurrentFilePosition());
       std::getline(newFile, line);
       std::cout << line << std::endl;
-
    }
 
    else if (numargsfilled == 2) {
@@ -175,12 +172,12 @@ void manualFileInput(std::string &input)
  * */
 void printUsage()
 {
-   fprintf(stdout, "grader: Usage\n");
-   fprintf(stdout, "./grader                    [Prompted for filename]\n");
-   fprintf(stdout, "./grader -s name            [Prompted for filename, will return grade for the name passed]\n");
-   fprintf(stdout, "./grader filename           [Run with specified file]\n");
-   fprintf(stdout, "./grader filename -s sname  [Run specified file on just the specified student]\n");
-   fprintf(stdout, "./grader -s name1 name2     [Run with name2 as filename and name1 as student name]\n");
+   fprintf(stderr, "grader: Usage\n");
+   fprintf(stderr, "./grader                    [Prompted for filename]\n");
+   fprintf(stderr, "./grader -s name            [Prompted for filename, will return grade for the name passed]\n");
+   fprintf(stderr, "./grader filename           [Run with specified file]\n");
+   fprintf(stderr, "./grader filename -s sname  [Run specified file on just the specified student]\n");
+   fprintf(stderr, "./grader -s name1 name2     [Run with name2 as filename and name1 as student name]\n");
 
    exit(EXIT_FAILURE);
 }

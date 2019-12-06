@@ -11,20 +11,33 @@
 
 namespace GraderApplication {
    BaseData::BaseData(void)
-      : headerLength(0)
-      , totalLineCount(0)
-      , currentFilePos(0)
-      , title("")
-      , category("")
-      , maxMark("")
-      , weight("")
+      : dataLineLength(0)
+        , totalLineCount(0)
+        , currentLine("")
+        , currentFilePos(0)
+        , title("")
+        , category("")
+        , maxMark("")
+        , weight("")
+
    {
-      titleContainer.reserve(2);
-      categoryContainer.reserve(2);
-      maxMarkContainer.reserve(2);
-      weightContainer.reserve(2);
+      /* Init vectors */
+      titleContainer.reserve(1);
+      categoryContainer.reserve(1);
+      maxMarkContainer.reserve(1);
+      weightContainer.reserve(1);
    }
 
+   void BaseData::errorPrint(const char *a)
+   {
+      std::cerr << "\nERROR: " << a << std::endl;
+      std::cerr << "\nOffending line number: "
+         << this->getFileLineCount() << std::endl;
+      std::cerr << "Offending content: " 
+         << this->getCurrentLine() << std::endl;
+
+      exit (EXIT_FAILURE);
+   }
 
    int BaseData::getTotalHeaderCount() const { return this->totalHeaderCount; }
 
@@ -32,18 +45,18 @@ namespace GraderApplication {
    void BaseData::incrementHeaderCount() { (this->totalHeaderCount)++; }
 
 
-   int BaseData::getHeaderLength() const { return this->headerLength; }
+   int BaseData::getDataLength() const { return this->dataLineLength; }
 
 
-   void BaseData::setHeaderLength(int _length)
+   void BaseData::setDataLength(int _length)
    {
       try {
-         if (this->headerLength == 0) {
+         if (this->dataLineLength == 0) {
             /* This is the first time we are setting the data */
-            this->headerLength = _length;
+            this->dataLineLength = _length;
          }
-         else if (this->headerLength == _length) {
-            /* Our lengths match, all is well, do nothing */
+         else if (this->dataLineLength == _length) {
+            /* Our lengths match, all is well in the galaxy, do nothing */
          } else {
             /* Our lengths do not match, cannot compute data correctly
              * throw and end program
@@ -52,8 +65,18 @@ namespace GraderApplication {
          }
 
       } catch (DataLength &e) {
-         std::cerr << e.what() << std::endl;
-         exit (EXIT_FAILURE);
+         errorPrint(e.what());
+      }
+   }
+
+
+   std::string BaseData::getCurrentLine() const { return this->currentLine; }
+
+
+   void BaseData::setCurrentLine(const std::string _currentLine)
+   {
+      if (!(_currentLine.empty())) {
+         this->currentLine = _currentLine;
       }
    }
 
@@ -67,10 +90,7 @@ namespace GraderApplication {
    std::streampos BaseData::getCurrentFilePosition() const { return this->currentFilePos; }
 
 
-   void BaseData::setCurrentFilePos(std::ifstream &f) 
-   { 
-      this->currentFilePos = f.tellg();
-   }
+   void BaseData::setCurrentFilePos(std::ifstream &f) { this->currentFilePos = f.tellg(); }
 
 
    std::string BaseData::getTitle() const { return this->title; }
@@ -86,8 +106,7 @@ namespace GraderApplication {
             throw DuplicateFound();
          }
       } catch (DuplicateFound &e) {
-         std::cerr << e.what() << _title << " is already set" << std::endl;
-         exit (EXIT_FAILURE);
+         errorPrint(e.what());
       }
    }
 
@@ -98,16 +117,15 @@ namespace GraderApplication {
    void BaseData::setTitleContainer(const std::string &_sub)
    {
       try {
-         for (int i = 0; i < this->getHeaderLength(); ++i) {
+         for (int i = 0; i < this->getDataLength(); ++i) {
             if (this->titleContainer[i] == _sub) {
                throw DuplicateFound();
             }
          }
          /* if no exception is thrown insert the value */
-         this->titleContainer.push_back(_sub);
+         this->titleContainer.emplace_back(_sub);
       } catch(DuplicateFound &e) {
-         std::cerr << e.what() << _sub << " <- already in title container\n";
-         exit(EXIT_FAILURE);
+         errorPrint(e.what());
       }
    } 
 
@@ -125,8 +143,7 @@ namespace GraderApplication {
             throw DuplicateFound();
          }
       } catch (DuplicateFound &e) {
-         std::cerr << e.what() << _category << " is already set" << std::endl;
-         exit (EXIT_FAILURE);
+         errorPrint(e.what());
       }
    }
 
@@ -136,7 +153,7 @@ namespace GraderApplication {
 
    void BaseData::setCategoryContainer(const std::string &_sub)
    {
-      this->categoryContainer.push_back(_sub);
+      this->categoryContainer.emplace_back(_sub);
    }
 
 
@@ -153,8 +170,7 @@ namespace GraderApplication {
             throw DuplicateFound();
          }
       } catch (DuplicateFound &e) {
-         std::cerr << e.what() << _maxMark << " is already set" << std::endl;
-         exit (EXIT_FAILURE);
+         errorPrint(e.what());
       }
    }
 
@@ -167,13 +183,12 @@ namespace GraderApplication {
       try {
          if (isDigits(_sub)) {
             float temp = stringTofloat(_sub);
-            this->maxMarkContainer.push_back(temp);
+            this->maxMarkContainer.emplace_back(temp);
          }
          else { throw FailStringFloatConversion(); }
 
       } catch (FailStringFloatConversion &e) {
-         std::cerr << e.what() << _sub << std::endl;
-         exit (EXIT_FAILURE);
+         errorPrint(e.what());
       }
    }
 
@@ -191,8 +206,7 @@ namespace GraderApplication {
             throw DuplicateFound();
          }
       } catch (DuplicateFound &e) {
-         std::cerr << e.what() << _weight << " is already set" << std::endl;
-         exit (EXIT_FAILURE);
+         errorPrint(e.what());
       }
    }
 
@@ -202,28 +216,30 @@ namespace GraderApplication {
 
    void BaseData::setWeightContainer(std::string &_sub)
    {
+      float total;
       try {
          if (isDigits(_sub)) {
             float temp = stringTofloat(_sub);
-            this->weightContainer.push_back(temp);
+            this->weightContainer.emplace_back(temp);
          }
          else { throw FailStringFloatConversion(); }
 
-         size_t tempCompare = this->getHeaderLength();
+         std::size_t tempCompare = this->getDataLength();
          if (this->weightContainer.size() == tempCompare) {
-            // if the container size is equal to the line length
+            /* if the container size is equal to the line length
+             * we know all grades have been read in, which means
+             * it is safe to sum them all up and test the total
+             * */
             std::vector<float> Fvec = this->weightContainer;
-            float total = vecSummation(Fvec);
+            total = vecSummation(Fvec);
             if (total != 100) { 
                throw WeightSummation();
             }
          }
       } catch (FailStringFloatConversion &e) {
-         std::cerr << e.what() << _sub << std::endl;
-         exit (EXIT_FAILURE);
+         errorPrint(e.what());
       } catch (WeightSummation &e) {
-         std::cerr << e.what() << std::endl;
-         exit (EXIT_FAILURE);
+         errorPrint(e.what());
       }
    }
 
@@ -232,28 +248,28 @@ namespace GraderApplication {
    {
       /* get the title */ 
       std::cout << this->getTitle() << " : ";
-      for (int i = 0; i < this->getHeaderLength(); ++i) {
+      for (int i = 0; i < this->getDataLength(); ++i) {
          std::cout << this->getTitleContainer(i) << " "; 
       }
       std::cout << std::endl;
 
       /* get the category */ 
       std::cout << this->getCategory() << " : ";
-      for (int i = 0; i < this->getHeaderLength(); ++i) {
+      for (int i = 0; i < this->getDataLength(); ++i) {
          std::cout << this->getCategoryContainer(i) << " "; 
       }
       std::cout << std::endl;
 
       /* get the maxMark */ 
       std::cout << this->getMaxMark() << " : ";
-      for (int i = 0; i < this->getHeaderLength(); ++i) {
+      for (int i = 0; i < this->getDataLength(); ++i) {
          std::cout << this->getMaxMarkContainer(i) << " "; 
       }
       std::cout << std::endl;
 
       /* get the weight */ 
       std::cout << this->getWeight() << " : ";
-      for (int i = 0; i < this->getHeaderLength(); ++i) {
+      for (int i = 0; i < this->getDataLength(); ++i) {
          std::cout << this->getWeightContainer(i) << " "; 
       }
       std::cout << std::endl;
@@ -267,21 +283,15 @@ namespace GraderApplication {
          std::string line("");
          if (inFile.good()) {
             while (std::getline(inFile, line)) {
-               /* we read a line so increment the count */
-               this->incrementFileLineCount();
+               /* record the current line for error purposes */
+               this->setCurrentLine(line);
                this->stripComments(line);
-               /* If the line */
-               //if (line.empty()) { continue; }
-               if (this->getTotalHeaderCount() == HEADER_MAX) {
-                  this->setCurrentFilePos(inFile);
-                  inFile.close();
-                  return true;
-               }
+
                std::string keyword("");
                std::string sTemp("");
                std::stringstream ss(line);
-               ss >> keyword;
 
+               ss >> keyword;
                if (keyword == TITLE) {
                   this->setTitle(keyword);
                   this->incrementHeaderCount();
@@ -290,7 +300,8 @@ namespace GraderApplication {
                      this->setTitleContainer(sTemp);
                      i++;
                   }
-                  this->setHeaderLength(i);
+                  /* set our evaluation data length */
+                  this->setDataLength(i);
                }
 
                else if (keyword == CATEGORY) {
@@ -301,7 +312,8 @@ namespace GraderApplication {
                      this->setCategoryContainer(sTemp);
                      i++;
                   }
-                  this->setHeaderLength(i);
+                  /* set our evaluation data length */
+                  this->setDataLength(i);
                }
 
                else if (keyword == MAXMARK) {
@@ -312,7 +324,8 @@ namespace GraderApplication {
                      this->setMaxMarkContainer(sTemp);
                      i++;
                   }
-                  this->setHeaderLength(i);
+                  /* set our evaluation data length */
+                  this->setDataLength(i);
                }
 
                else if (keyword == WEIGHT) {
@@ -323,17 +336,30 @@ namespace GraderApplication {
                      this->setWeightContainer(sTemp);
                      i++;
                   }
-                  this->setHeaderLength(i);
+                  /* set our evaluation data length */
+                  this->setDataLength(i);
+               }
+               /* we read a line so increment the count */
+               this->incrementFileLineCount();
+
+               /* HEADER_MAX is the only defined constant, and only variable
+                * that would be called "hard-coded", but as files should have
+                * some standardization, I figured it would be alright to have
+                * this comparison to be 
+                * */
+               if (this->getTotalHeaderCount() == HEADER_MAX) {
+                  this->setCurrentFilePos(inFile);
+                  inFile.close();
+                  return true;
                }
             }
-         } else { throw std::logic_error("\n\t*** Can't Open File: "); }
+         } else { throw std::logic_error("*** Can't Open File: "); }
       } catch (std::logic_error &e) {
-         std::cerr << e.what() << file << std::endl;
-         exit (EXIT_FAILURE);
+         std::cerr << e.what() << file << std::endl;;
       }
       return true;
    }
-   
+
 
    void BaseData::stripComments(std::string &line)
    {
@@ -344,16 +370,9 @@ namespace GraderApplication {
    }
 
 
-   int BaseData::findEvaluationLenth(std::string &datafile)
-   {
-      datafile = "";
-      return 1;
-   }
-
-
    bool BaseData::isDigits(std::string &s)
    {
-     return s.find_first_not_of("0123456789.") == std::string::npos; 
+      return s.find_first_not_of("0123456789.") == std::string::npos; 
    }
 
 
@@ -367,8 +386,7 @@ namespace GraderApplication {
             throw StreamConversionFailure();
          }
       } catch (StreamConversionFailure &e) {
-         std::cerr << e.what() << &streamVar << std::endl;
-         exit (EXIT_FAILURE);
+         errorPrint(e.what());
       }
       // will only return upon success
       return tempconvert;
