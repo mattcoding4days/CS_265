@@ -19,30 +19,82 @@ int parseArguments(int argc, char **argv, std::string &inputFile, std::string &n
  * */
 int main(int argc, char **argv)
 {
+   /* 
+      First the student object which derives from BaseHeader, calls 
+      loadBaseData, which is a method of BaseData (base.cpp), it loads and
+      does all error checking for the evaluation data only
+      EG: TITLE CATEGORY etc. it loads vectors with that data and saves
+      the exit file position with setCurrentFilePos, which is then retrieved
+      with getCurrentFilepos, in the method of loadStudentFile, which is in the
+      dervied class of StudentData. So I can start loading student data, with out
+      reading through the file from the beginning. Then when I want to do checks against the 
+      evaluation data since StudentData derives from BaseData, I should be fine. Wrong, I seem to 
+      be having issues calling on the BaseData vectors such as maxMarkContainer from inside the StudentData class.
+
+      EG: in student.cpp on line 73 where the gradesContainer is being compared the the maxmark container,
+      the exception keeps getting thrown, because the maxMarkContainer is registering 0's, even though in the code below
+      student.loadBaseData fills that array, and it can be accessed with student.printBaseObject, but when it is
+      being accessed from inside the student class its un initialized, which means there are two of the same vector?
+
+      And if I do multi level inheritance with class grader [EG]: Grader inherits from StudentData, student from BaseData
+      the Grader object is even WORSE. the file position and all kinds of other data is uninitalized. But only from accessing
+      it in the class definitions, why is this? 
+   */
    std::string inputFile("");
    std::string name("");
    int numargsfilled = parseArguments(argc, argv, inputFile, name); 
    using studentVector = std::vector<StudentData>;
    studentVector sVec;
 
+
    if (numargsfilled == 1) {
-      int numberOfStudentsToBeLoaded = countStudentLines(inputFile);
+
+      /* This code works good, passes all tests I have thrown at it */
+
+      //BaseData b;
+      //b.loadBaseData(inputFile);
+      //b.printBaseObject();
+      //// show file position after execution, should be the blank line after weight
+      //std::cout << b.getCurrentFilePosition() << std::endl;
+
+      //************ End Base example *******************
+
+      /* using inheritance class , any BaseData methods for vectors not persisting
+         when called from inside StudentData class
+       */
+
+      //int numberOfStudentsToBeLoaded = countStudentLines(inputFile);
+      //StudentData student;
+      //student.loadBaseData(inputFile);
+      //student.printBaseObject();
+
+
+      //for (int i = 0; i < numberOfStudentsToBeLoaded; ++i) {
+      //   
+      //   student.loadStudentFile(inputFile);
+      //   sVec.emplace_back(student);
+      //}
+
+      //for (auto &itr: sVec) {
+      //   itr.printStudentObject();
+      //}
       
-      StudentData *student;
-      student->loadBaseData(inputFile);
-      student->printBaseObject();
-
-      for (int i = 0; i < numberOfStudentsToBeLoaded; ++i) {
-         student->loadStudentFile(inputFile);
-         sVec.emplace_back(*student);
-      }
-
-      for (auto &itr: sVec) {
-         itr.printStudentObject();
-      }
+      // ***********************  End student example ****************
 
 
 
+      /* Grader is 3rd level inheritance, with even more variable values
+         not persisting from BaseData and StudentData classes.
+         The main one being the file pos, where it will now read 0
+         so the file will be read from the very beginning.
+       */
+
+      //int numberOfStudentsToBeLoaded = countStudentLines(inputFile);
+      //Grader grader(numberOfStudentsToBeLoaded, inputFile);
+      //grader.loadBaseData(inputFile);
+      //grader.loadVector();
+
+      // ***********************  End grader example
    }
 
    else if (numargsfilled == 2) {

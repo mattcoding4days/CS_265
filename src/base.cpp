@@ -156,7 +156,9 @@ namespace GraderApplication {
 
    void BaseData::setCategoryContainer(const std::string &_sub)
    {
+      /* Nothing much to check here */
       this->categoryContainer.emplace_back(_sub);
+
    }
 
 

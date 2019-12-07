@@ -71,7 +71,7 @@ namespace GraderApplication {
             /* Check only the entered grades to see if max mark is exceeded */
             for (std::size_t i = 0; i < this->gradesContainer.size(); ++i) {
                if (this->gradesContainer[i] > this->getMaxMarkContainer(i)) {
-                  std::cout << "\nStudent mark: " << this->gradesContainer[i]
+                  std::cout << "\nDEBUG::> Student mark: " << this->gradesContainer[i]
                      << " :: Max Mark: " << this->getMaxMarkContainer(i) << std::endl; 
                   throw StudentMarkExceedsMaxMark();
                }
@@ -95,18 +95,15 @@ namespace GraderApplication {
 
    float StudentData::getFinalGrade() const { return this->finalGrade; }
 
-   void StudentData::setFinalGrade(const float &_finalGrade)
-   { 
-      this->finalGrade = _finalGrade; 
-   }
+
+   void StudentData::setFinalGrade(const float &_finalGrade) { this->finalGrade = _finalGrade; }
 
 
    std::string StudentData::getLetterGrade() const { return this->letterGrade; }
 
-   void StudentData::setLetterGrade(const std::string &_letterGrade) 
-   { 
-      this->letterGrade = _letterGrade;
-   }
+
+   void StudentData::setLetterGrade(const std::string &_letterGrade) { this->letterGrade = _letterGrade; }
+
 
    bool StudentData::getIsStudentWDR() const { return this->isWDR; }
 
