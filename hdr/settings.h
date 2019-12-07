@@ -27,7 +27,7 @@ namespace GraderApplication {
 #define CATEGORY "CATEGORY"
 #define MAXMARK "MAXMARK"
 #define WEIGHT "WEIGHT"
-
+#define WDRN "WDR"
 
    /* XXX: Documentaion
     * File delimiters, or characters we want to ignore, or look for 

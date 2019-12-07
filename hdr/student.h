@@ -21,6 +21,7 @@ namespace GraderApplication {
          std::vector <float> gradesContainer;
          float finalGrade;
          std::string letterGrade;
+         bool isWDR;
 
       public:
          /* XXX: Documentation
@@ -29,17 +30,23 @@ namespace GraderApplication {
          StudentData(void);
 
          /* XXX: Documentation
+          * error print will in all output from 
+         */
+         virtual void errorPrint (const char *);
+
+
+         /* XXX: Documentation
           * getters and setters for name
           * TODO: rename to studentId
           * */
          std::string getName() const;
-         void setName(const std::string &);
+         void setName(std::string &);
 
          /* XXX: Documentation
           * getters and setters for grades container
           * */
          float getGrades(int &);
-         void setGrades(const int &, const float&);
+         void setGrades(std::string &);
 
          /* XXX: Documentation
           * getter and setter for the final grade
@@ -47,13 +54,20 @@ namespace GraderApplication {
           * */
          float getFinalGrade() const;
          void setFinalGrade(const float &);
-
+         
          /* XXX: Documentation
           * getters and setters for the Letter
           * grader obtained by the student
           * */
          std::string getLetterGrade() const;
          void setLetterGrade(const std::string &);
+
+         /* XXX: Documentation
+          * getters and setters to switch 
+          * WDR to true
+          * */
+         bool getIsStudentWDR() const;
+         void setIsStudentWDR(bool);
 
          /* XXX: Documentation
           * A debug and testing method, prints a
@@ -72,21 +86,20 @@ namespace GraderApplication {
          void sanitize(void) const;
 
          /* XXX: Documentation
-          * Main load method, does the majority of the
-          * simple parsing, checks only the first character
-          * of each line, will disregaurd, whitespace, comments
-          * and uppercase characters, since this method is only
-          * concerned with grabbing students. the basedata, countstudents,
-          * methods are based off this one.
+          * Main method for Student Class, it uses the
+          * file position set from BaseHeader class, 
+          * to skip right to where the students section is.
           *
-          * Since this file loads onlu ONE line at a time, every time it is
-          * reopened from a for loop, the reading begins at the beginning of the file
-          * every time, I solved this issue by creating a temp file, and saving the 
-          * previous student read in to the studentvector, if the student is found in 
-          * temp.text, we dont read it in and skip to the next.
-          * This method depends on a few helper functions to help in that task
+          * The method its self is very similar to how loadBaseData
+          * works in the BaseHeader Class
           * */
-         bool loadDataFile(const std::string &);
+         bool loadStudentFile(const std::string &);
+
+         /* XXX: Documentation
+          * Overloaded method to search for just one stutent and 
+          * compute the grade if the -s flag is given
+          * */
+         bool loadStudentFile(const std::string &, const std::string &);
 
          /* XXX: Documentation
           * Helper method for loadDataFile, checks if student is found
@@ -109,6 +122,18 @@ namespace GraderApplication {
           * written data.
           * */
          void processStudent(const std::string &);
+
+         /* XXX: Documentation
+          * check if string is only alpha numeric
+          * */
+         bool isAlphaNumeric(std::string &);
+         
+         /* XXX: Documentation
+          * Convert a string to upper case 
+          * using transform, code comes from 
+          * cpp preference transform Documentation
+          */
+         std::string convert_toupper(std::string);
    };
 };
 #endif

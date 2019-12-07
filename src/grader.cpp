@@ -34,13 +34,13 @@ namespace GraderApplication
       for ( int i = 0; i < this->getNumOfStudents(); ++i )
       {
          StudentData student;
-         student.loadDataFile(this->getDataFile());
+         student.loadStudentFile(this->getDataFile());
          studentContainer.emplace_back(student);
       }
    }
 
 
-   void Grader::showStudentVector() 
+   void Grader::showStudentVector(void) 
    {
       std::cout << "\nStudent Data Before Processing\n";
       for ( auto &itr: studentContainer)
@@ -70,7 +70,7 @@ namespace GraderApplication
             tempGradeContainer.emplace_back(tempValue);
          }
          /* add all subgrades together for our final grade */
-         float finalGrade = this->gradeSummation(tempGradeContainer);
+         float finalGrade = this->vecSummation(tempGradeContainer);
          /* use precision stream to round to hundreths place after summation
           * to retain as much accuracy as possible
           * */
@@ -89,12 +89,6 @@ namespace GraderApplication
             * this->getWeightContainer(j) ) / this->getMaxMarkContainer(j);
    }
 
-
-   float Grader::gradeSummation(std::vector<float> &s)
-   {
-      float tempFinalGrade = 0;
-      return accumulate(s.begin(), s.end(), tempFinalGrade);
-   }
 
    std::string Grader::assignLetterGrade(float grade)
    {

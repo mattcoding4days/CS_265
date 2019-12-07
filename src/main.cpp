@@ -22,17 +22,27 @@ int main(int argc, char **argv)
    std::string inputFile("");
    std::string name("");
    int numargsfilled = parseArguments(argc, argv, inputFile, name); 
+   using studentVector = std::vector<StudentData>;
+   studentVector sVec;
 
    if (numargsfilled == 1) {
-      StudentData base;
-      base.loadBaseData(inputFile);
-      base.printBaseObject();
+      int numberOfStudentsToBeLoaded = countStudentLines(inputFile);
+      
+      StudentData *student;
+      student->loadBaseData(inputFile);
+      student->printBaseObject();
 
-      std::string line;
-      std::ifstream newFile(inputFile);
-      newFile.seekg(base.getCurrentFilePosition());
-      std::getline(newFile, line);
-      std::cout << line << std::endl;
+      for (int i = 0; i < numberOfStudentsToBeLoaded; ++i) {
+         student->loadStudentFile(inputFile);
+         sVec.emplace_back(*student);
+      }
+
+      for (auto &itr: sVec) {
+         itr.printStudentObject();
+      }
+
+
+
    }
 
    else if (numargsfilled == 2) {

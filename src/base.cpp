@@ -11,7 +11,9 @@
 
 namespace GraderApplication {
    BaseData::BaseData(void)
-      : dataLineLength(0)
+      : dataFile("")
+        , totalHeaderCount(0)
+        , dataLineLength(0)
         , totalLineCount(0)
         , currentLine("")
         , currentFilePos(0)
@@ -38,6 +40,7 @@ namespace GraderApplication {
 
       exit (EXIT_FAILURE);
    }
+
 
    int BaseData::getTotalHeaderCount() const { return this->totalHeaderCount; }
 
@@ -175,7 +178,7 @@ namespace GraderApplication {
    }
 
 
-   float BaseData::getMaxMarkContainer(int &itr) { return this->maxMarkContainer[itr]; }
+   float BaseData::getMaxMarkContainer(std::size_t itr) { return this->maxMarkContainer[itr]; }
 
 
    void BaseData::setMaxMarkContainer(std::string &_sub)
@@ -284,6 +287,7 @@ namespace GraderApplication {
          if (inFile.good()) {
             while (std::getline(inFile, line)) {
                /* record the current line for error purposes */
+               std::cout << "Current Line: " << line << std::endl;
                this->setCurrentLine(line);
                this->stripComments(line);
 
@@ -339,23 +343,20 @@ namespace GraderApplication {
                   /* set our evaluation data length */
                   this->setDataLength(i);
                }
+
                /* we read a line so increment the count */
                this->incrementFileLineCount();
 
-               /* HEADER_MAX is the only defined constant, and only variable
-                * that would be called "hard-coded", but as files should have
-                * some standardization, I figured it would be alright to have
-                * this comparison to be 
-                * */
                if (this->getTotalHeaderCount() == HEADER_MAX) {
                   this->setCurrentFilePos(inFile);
+                  std::cout << "Header count EQUAL" << std::endl;
                   inFile.close();
                   return true;
                }
             }
-         } else { throw std::logic_error("*** Can't Open File: "); }
+         } else { throw std::logic_error("*** File Not Found: "); }
       } catch (std::logic_error &e) {
-         std::cerr << e.what() << file << std::endl;;
+         std::cerr << e.what() << file << std::endl;
       }
       return true;
    }

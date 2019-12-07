@@ -41,6 +41,27 @@ namespace GraderApplication {
             return "*** Stringstream failed to convert string to float ***";
          }
    };
+
+   class StudentIDNonAlphaNumeric : public std::exception {
+      public:
+         const char *what() const throw() {
+            return "*** Student-id is non alphanumeric ::: Line discarded ***";
+         }
+   };
+
+   class StudentNotFound : public std::exception {
+      public:
+         const char *what() const throw() {
+            return "*** Student-id was not found: ";
+         }
+   };
+
+   class StudentMarkExceedsMaxMark : public std::exception {
+      public:
+         const char *what() const throw() {
+            return "*** The Students Mark exceeds the maximum possible mark ***";
+         }
+   };
 };
 
 #endif

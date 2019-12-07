@@ -70,14 +70,6 @@ namespace GraderApplication {
          float subGradeComputation(int , int );
 
          /* XXX: Documentation
-          * after all sub grades have been calcluated,
-          * gradeSummation adds them all up, one student at a time
-          *
-          * called from makeGrades outer for loop
-          * */
-         float gradeSummation(std::vector<float> &);
-
-         /* XXX: Documentation
           * makes a call to macro routines in settings.h
           * to decide the range of the grade to match it to
           * a lettergrade representation held in the Echelon

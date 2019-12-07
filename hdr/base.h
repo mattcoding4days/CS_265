@@ -14,6 +14,7 @@ namespace GraderApplication {
     * */
    class BaseData {
       private:
+         std::string dataFile;
          int totalHeaderCount;
          int dataLineLength;
          int totalLineCount;
@@ -38,7 +39,7 @@ namespace GraderApplication {
           * error print will in all output from 
           * exceptions
           * */
-         void errorPrint (const char *);
+         virtual void errorPrint (const char *);
 
          /* XXX: Documentation
           * Return the total header count
@@ -115,7 +116,7 @@ namespace GraderApplication {
          /* XXX: Documentation
           * Accessor:  getter and setter for maxmark container
           * */
-         float getMaxMarkContainer(int &);
+         float getMaxMarkContainer(std::size_t);
          void setMaxMarkContainer(std::string &);
 
          /* XXX: Documentation
@@ -154,7 +155,7 @@ namespace GraderApplication {
           * of a number, and return true if there is only
           * digits
           * */
-         bool isDigits(std::string &);
+         virtual bool isDigits(std::string &);
 
          /* XXX: Documentation
           * convert a string to a float with out the 
