@@ -14,28 +14,26 @@ namespace GraderApplication {
     * */
 
    StudentData::StudentData(void)
-        : name ("")
+      : name ("")
         , finalGrade(0.0)
         , letterGrade("")
         , isWDR(false)
         , isError(false)
         , errorDefinition("")
 
-      {
-         gradesContainer.reserve(1); 
-      }
-
-
-   void StudentData::errorPrint(std::string &a)
    {
-      this->setIsError(true);
-      std::cerr << "\nERROR: " << a << std::endl;
-      std::cerr << "\nOffending line number: "
-         << this->getFileLineCount() << std::endl;
-      std::cerr << "Offending content: " 
-         << this->getCurrentLine() << '\n' << std::endl;
+      gradesContainer.reserve(1); 
    }
-   
+
+   void StudentData::errorPreserve(std::string &e)
+   {
+      /* The offending line data will have already been set 
+       * in the loadStudent method with currentLine
+       * */
+      this->setIsError(true);
+      this->setErrorDefinition(e);
+   }
+
 
    std::string StudentData::getName() const { return this->name; }
 
@@ -47,14 +45,33 @@ namespace GraderApplication {
             this->name = _name; 
          }
          else {
-            std::cout << "Name: " << _name << " is not alphanumeric" << std::endl;
-            this->name = "";
             throw StudentIDNonAlphaNumeric();
          }
-
       } catch (StudentIDNonAlphaNumeric &e) {
          std::string onError(e.what());
-         errorPrint(onError);
+         this->errorPreserve(onError);
+      } 
+   }
+
+   int StudentData::getStudentDataLen() const { return this->studentDataLength; }
+
+
+   void StudentData::setStudentDataLen(int _length, int eval)
+   {
+      try {
+         if (_length == eval) {
+            this->studentDataLength = _length;
+         }
+         else {
+            /* Our lengths do not match, cannot compute data correctly
+             * throw and end program
+             * */
+            throw StudentDataLengthError();
+         }
+
+      } catch (StudentDataLengthError &e) {
+         std::string onError(e.what());
+         this->errorPreserve(onError);
       }
    }
 
@@ -81,8 +98,11 @@ namespace GraderApplication {
          }
       } catch (FailStringFloatConversion &e) {
          std::string onError(e.what());
-         errorPrint(onError);
-      } 
+         errorPreserve(onError);
+      } catch (StudentMarkExceedsMaxMark &e) {
+         std::string onError(e.what());
+         errorPreserve(onError);
+      }
    }
 
 
@@ -122,6 +142,7 @@ namespace GraderApplication {
       }
    } 
 
+
    void StudentData::printStudentObject()
    {
       /* method used mainly for debugging purposes */
@@ -134,70 +155,86 @@ namespace GraderApplication {
 
 
    bool StudentData::loadStudentFile(const std::string &file,
-      const std::streampos &updatedFilePosition, int updateLinePosition)
+         const std::streampos &updatedFilePosition,
+            int updateLinePosition, int evalLength)
    {
       try {
          std::ifstream datafile(file);
          if ( datafile.is_open() ) {
             datafile.seekg(updatedFilePosition);
             this->incrementFileLineCount(updateLinePosition);
-            std::string line;
-            while ( std::getline(datafile, line) ) {
-               if (!line.empty()) {
-                  this->setCurrentLine(line);
-                  this->stripComments(line);
+            std::string line("");
+            while ( std::getline(datafile, line)) {
+               this->incrementFileLineCount(1);
+               /* if the line is empty skip it,
+                * by immediatley restarting the 
+                * control loop with the continue keyword
+                * */
+               if (line.empty()) { continue; }
+               this->setCurrentLine(line);
+               this->stripComments(line);
 
-                  if ( ! (this->isStudentProcessed(line)) ) {
-                     this->processStudent(line);
+               if ( ! (this->isStudentProcessed(line)) ) {
+                  this->processStudent(line);
 
-                     std::string sId("");
-                     std::string sMarks("");
+                  std::string sId("");
+                  std::string sMarks("");
 
-                     std::stringstream ss(line);
-                     ss >> sId;
-                     this->setName(sId);
-                     /* After trying to set the name, if it fails
-                      * due to nonNumeric, we need to test that here
-                      * so we can end this function and not read in the
-                      * grades for the failed id. 
-                      * if the name is still empty after trying to 
-                      * set it, we know it failed. end and update file position
-                      * and total line count
-                      * */
+                  std::stringstream ss(line);
+                  ss >> sId;
+                  this->setName(sId);
+                  /* After trying to set the name, if it fails
+                   * due to nonNumeric, we need to test that here
+                   * so we can end this function and not read in the
+                   * grades for the failed id. 
+                   * if the name is still empty after trying to 
+                   * set it, we know it failed. end and update file position
+                   * and total line count
+                   * */
 
-                     if (this->getName().empty()) {
-                        std::cout << "Name is empty" << std::endl;
-                        this->setCurrentFilePos(datafile);
-                        this->incrementFileLineCount(1);
-                        return false;
-                        
-                     } else {
-                        std::cout << "Setting grades" << std::endl;
-                        int i = 0;
-                        while (ss >> sMarks) {
-                           this->setGrades(sMarks);
+                  if (this->getIsError()) {
+                     this->setCurrentFilePos(datafile);
+                     datafile.close();
+                     return true;
+                  } else {
+                     int i = 0;
+                     while (ss >> sMarks) {
+                        this->setGrades(sMarks);
+                        if (!(this->getIsError())) {
                            i++;
+                        } else {
+                           /* Setting the grades failed */
+                           this->setCurrentFilePos(datafile);
+                           this->incrementFileLineCount(1);
+                           datafile.close();
+                           return true;
                         }
-                        /* Set datalength checks if the length is the
-                         * same as the evaluation data length */
-                        this->setDataLength(i);
                      }
-                     std::cout << "Did not close after if " << std::endl;
+
+                     /* Set datalength checks if the length is the
+                      * same as the evaluation data length */
+                     this->setStudentDataLen(i, evalLength);
                      // only process one line at a time, update file position
                      this->setCurrentFilePos(datafile);
                      this->incrementFileLineCount(1);
                      datafile.close();
                      return true;
                   }
-                  /* The line was found in the temp.txt file, and has already
-                   * been processed, repeat the process
-                   * */
                }
+                  /* A duplicate student was found, 
+                   * throw for error preserving purposes
+                   * */
+                  this->setCurrentFilePos(datafile);
+                  throw DuplicateFound();
+ 
             }
          } else { throw std::logic_error("*** File Not Found: "); }
       } catch (std::logic_error &e) {
          std::cerr << e.what() << file << std::endl;
          exit(EXIT_FAILURE);
+      } catch (DuplicateFound &e) {
+         std::string onError(e.what());
+         this->errorPreserve(onError);
       }
       return false;
    }
@@ -215,6 +252,7 @@ namespace GraderApplication {
                tempFile.close();
                isProcessed = true;
                return isProcessed;
+
             }
          }
       }

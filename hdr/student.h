@@ -19,6 +19,7 @@ namespace GraderApplication {
       private:
          std::string name;
          std::vector <float> gradesContainer;
+         int studentDataLength;
          float finalGrade;
          std::string letterGrade;
          bool isWDR;
@@ -27,21 +28,34 @@ namespace GraderApplication {
 
       public:
          /* XXX: Documentation
-          * Explicit Constructor
+          * Default Constuctor
           * */
          StudentData(void);
 
          /* XXX: Documentation
-          * error print will in all output from 
-         */
-         virtual void errorPrint (std::string &);
+          * Error preserve will be called whenever something
+          * fails for any StudentData evaluations.
+          * Instead of printing out and closing the program,
+          * we will simply preserve all relevent errors for
+          * the particular student line, to be printed out
+          * when the program finishes running
+          */
+         void errorPreserve(std::string &);
 
          /* XXX: Documentation
           * getters and setters for name
-          * TODO: rename to studentId
           * */
          std::string getName() const;
          void setName(std::string &);
+
+         /* XXX: Documentation
+          * getters and setters for length of student
+          * data, wich also takes the length from 
+          * the evaluation data for comparison
+          * purposes
+          * */
+         int getStudentDataLen() const;
+         void setStudentDataLen(int, int);
 
          /* XXX: Documentation
           * getters and setters for grades container
@@ -55,7 +69,7 @@ namespace GraderApplication {
           * */
          float getFinalGrade() const;
          void setFinalGrade(const float &);
-         
+
          /* XXX: Documentation
           * getters and setters for the Letter
           * grader obtained by the student
@@ -105,7 +119,7 @@ namespace GraderApplication {
           * The method its self is very similar to how loadBaseData
           * works in the BaseHeader Class
           * */
-         bool loadStudentFile(const std::string &, const std::streampos &, int);
+         bool loadStudentFile(const std::string &, const std::streampos &, int, int);
 
          /* XXX: Documentation
           * method to search for just one stutent and 
@@ -139,7 +153,7 @@ namespace GraderApplication {
           * check if string is only alpha numeric
           * */
          bool isAlphaNumeric(std::string &);
-         
+
          /* XXX: Documentation
           * Convert a string to upper case 
           * using transform, code comes from 

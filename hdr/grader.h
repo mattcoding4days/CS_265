@@ -85,6 +85,11 @@ namespace GraderApplication {
           * */
          void outputFinal(void);
 
+         /* XXX: Documentation
+          * Output all the student error lines that were 
+          * perserved allong the way
+          * */
+         void outputError(void);
 
          /* XXX: Documentation
           * Clean up the temp file

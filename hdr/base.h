@@ -37,9 +37,9 @@ namespace GraderApplication {
 
          /* XXX: Documentation
           * error print will in all output from 
-          * exceptions
+          * exceptions for BaseData class only
           * */
-         virtual void errorPrint (const char *);
+         void errorPrint (const char *);
 
          /* XXX: Documentation
           * Return the total header count

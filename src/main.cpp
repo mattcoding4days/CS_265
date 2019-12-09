@@ -36,6 +36,7 @@ int main(int argc, char **argv)
       std::cout << std::ctime(&end_time) << std::endl;
       grader.makeGrades();
       grader.outputFinal();
+      grader.outputError();
       grader.sanitize();
    }
 

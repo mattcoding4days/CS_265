@@ -62,6 +62,20 @@ namespace GraderApplication {
             return "*** The Students Mark exceeds the maximum possible mark ***";
          }
    };
+
+   class StudentDataLengthError : public std::exception {
+      public:
+         const char *what() const throw() {
+            return "*** The amount of student grades does not match the evaluation length ***";
+         }
+   };
+
+   class StudentIDEmpty : public std::exception {
+      public:
+         const char *what() const throw() {
+            return "*** Student id field empty ***";
+         }
+   };
 };
 
 #endif

@@ -28,11 +28,13 @@ namespace GraderApplication
       std::string file = this->getDataFile();
       std::streampos currpos = this->getCurrentFilePosition();
       int lineCount = this->getFileLineCount();
+      int evalDataLength = this->getDataLength();
 
       for ( int i = 0; i < this->getNumOfStudents(); ++i ) {
          StudentData student;
-         student.loadStudentFile(file, currpos, (lineCount + i));
-         // Update currpos before student goes out of scope and is destoyed
+         student.loadStudentFile(file, currpos, (lineCount + i), evalDataLength);
+         // Update currpos before student gets store in vector and
+         // a new one is created
          currpos = student.getCurrentFilePosition();               
 
          studentContainer.emplace_back(student);
@@ -53,6 +55,12 @@ namespace GraderApplication
    void Grader::makeGrades(void)
    {
       for ( int i = 0; i < this->getNumOfStudents(); ++i ) {  
+         /* If a students isError flag is true, skip that student
+          * with continue, 'skip remaing code and jump to the top 
+          * of the control loop'
+          * */
+         if (studentContainer[i].getIsError()) { continue; }
+
          /* create temp vector to hold only the grades
           * so we can work with them easier, use reserve
           * and emplace_back for speed.
@@ -74,9 +82,13 @@ namespace GraderApplication
           * */
          std::cout << std::fixed << std::setprecision(2);
          /* Use our wonderful getters and setters */
-         studentContainer[i].setFinalGrade(finalGrade);
-         std::string letter = assignLetterGrade(finalGrade);
-         studentContainer[i].setLetterGrade(letter);
+         if (studentContainer[i].getIsStudentWDR()) {
+            studentContainer[i].setLetterGrade("WITHDRAWN");
+         } else {
+            studentContainer[i].setFinalGrade(finalGrade);
+            std::string letter = assignLetterGrade(finalGrade);
+            studentContainer[i].setLetterGrade(letter);
+         }
       }
    }
 
@@ -124,6 +136,21 @@ namespace GraderApplication
                << std::setw(10) << std::left << i->getFinalGrade()
                << std::setw(5)  << std::left << i->getLetterGrade()
                << std::endl;
+         }
+      }
+   }
+
+
+   void Grader::outputError(void)
+   {
+      for (StudentVector::iterator i = studentContainer.begin();
+            i != studentContainer.end(); ++i) {
+         /* Print out only the errors that were caught */
+         if (i->getIsError()) {
+            std::cerr << "\n\nOffending line: " << i->getFileLineCount()
+               << "\nOffending content: " << i->getCurrentLine()
+                  << "\nError message: " << i->getErrorDefinition()
+                     << std::endl;
          }
       }
    }
