@@ -1,6 +1,5 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
-#include <string>
 
 
 namespace GraderApplication {
@@ -23,6 +22,8 @@ namespace GraderApplication {
 /* Define Header Keywords here. The text file surely should have
  * some standardization
  * */
+#define TEMPFILE ".temp"
+#define SANITIZE "rm .temp"
 #define TITLE "TITLE" 
 #define CATEGORY "CATEGORY"
 #define MAXMARK "MAXMARK"
@@ -45,11 +46,11 @@ namespace GraderApplication {
     * */
    struct Colors
    {
-      std::string RED;
-      std::string GREEN;
-      std::string YELLOW;
-      std::string BLUE;
-      std::string RESET;
+      const char *RED;
+      const char *GREEN;
+      const char *YELLOW;
+      const char *BLUE;
+      const char *RESET;
 
       /* Fill in with ANSI color codes later */
       Colors(void)
@@ -66,19 +67,19 @@ namespace GraderApplication {
     * */
    struct Echelon
    {
-      std::string high_A;
-      std::string mid_A;
-      std::string low_A;
-      std::string high_B;
-      std::string mid_B;
-      std::string low_B;
-      std::string high_C;
-      std::string mid_C;
-      std::string low_C;
-      std::string D;
-      std::string F;
-      std::string INC;
-      std::string WDR;
+      const char *high_A;
+      const char *mid_A;
+      const char *low_A;
+      const char *high_B;
+      const char *mid_B;
+      const char *low_B;
+      const char *high_C;
+      const char *mid_C;
+      const char *low_C;
+      const char *D;
+      const char *F;
+      const char *INC;
+      const char *WDR;
 
       Echelon()
          : high_A("A+") , mid_A("A") , low_A("A-")

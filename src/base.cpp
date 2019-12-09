@@ -87,7 +87,10 @@ namespace GraderApplication {
    int BaseData::getFileLineCount() const { return this->totalLineCount; }
 
 
-   void BaseData::incrementFileLineCount() { (this->totalLineCount)++; }
+   void BaseData::incrementFileLineCount(int _x)
+   {
+      this->totalLineCount += _x;
+   }
 
 
    std::streampos BaseData::getCurrentFilePosition() const { return this->currentFilePos; }
@@ -281,7 +284,7 @@ namespace GraderApplication {
    }
 
 
-   bool BaseData::loadBaseData(const std::string &file)
+   void BaseData::loadBaseData(const std::string &file)
    {
       try {
          std::ifstream inFile(file);
@@ -289,7 +292,6 @@ namespace GraderApplication {
          if (inFile.good()) {
             while (std::getline(inFile, line)) {
                /* record the current line for error purposes */
-               std::cout << "Current Line: " << line << std::endl;
                this->setCurrentLine(line);
                this->stripComments(line);
 
@@ -347,20 +349,17 @@ namespace GraderApplication {
                }
 
                /* we read a line so increment the count */
-               this->incrementFileLineCount();
+               this->incrementFileLineCount(1);
 
                if (this->getTotalHeaderCount() == HEADER_MAX) {
                   this->setCurrentFilePos(inFile);
-                  std::cout << "Header count EQUAL" << std::endl;
                   inFile.close();
-                  return true;
                }
             }
          } else { throw std::logic_error("*** File Not Found: "); }
       } catch (std::logic_error &e) {
          std::cerr << e.what() << file << std::endl;
       }
-      return true;
    }
 
 

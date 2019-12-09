@@ -15,7 +15,7 @@ namespace GraderApplication {
     * Utilizes the vector of objects approach rather
     * then a map or 2d array
     * */
-   class Grader : public StudentData {
+   class Grader : public BaseData {
       private:
          int numberOfStudents;
          std::string dataFile;
@@ -48,7 +48,7 @@ namespace GraderApplication {
 
          /* XXX: Documentation
           * A debug method, just shows the students
-          * id and intial scores read in from the data file
+          * id and intialize scores read in from the data file
           * */
          void showStudentVector(void);
 
@@ -84,6 +84,13 @@ namespace GraderApplication {
           * rounded, and stored in StudentContainer Vector
           * */
          void outputFinal(void);
+
+
+         /* XXX: Documentation
+          * Clean up the temp file
+          * we have been operating on
+          */
+         void sanitize(void) const; 
    };
 };
 

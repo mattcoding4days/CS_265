@@ -22,18 +22,19 @@ namespace GraderApplication {
          float finalGrade;
          std::string letterGrade;
          bool isWDR;
+         bool isError;
+         std::string errorDefinition;
 
       public:
          /* XXX: Documentation
-          * default constructor
+          * Explicit Constructor
           * */
          StudentData(void);
 
          /* XXX: Documentation
           * error print will in all output from 
          */
-         virtual void errorPrint (const char *);
-
+         virtual void errorPrint (std::string &);
 
          /* XXX: Documentation
           * getters and setters for name
@@ -70,20 +71,31 @@ namespace GraderApplication {
          void setIsStudentWDR(bool);
 
          /* XXX: Documentation
+          * getters and setters to record
+          * whether something went wrong with
+          * parsing a certain student.
+          * This flag will be set to true if
+          * any reading errorsa occur, and will be
+          * used went computing the final grades and 
+          * printing to stdout
+          * */
+         bool getIsError() const;
+         void setIsError(bool);
+
+         /* XXX: Documentation
+          * Store the error definition
+          * from out custom exceptions 
+          * */
+         std::string getErrorDefinition(void) const;
+         void setErrorDefinition(const std::string &);
+
+         /* XXX: Documentation
           * A debug and testing method, prints a
           * raw student object, meant to be used by
           * a ranged for loop
           * */
          void printStudentObject();
 
-         /* XXX: Documentation
-          * Deletes the temp.txt file created
-          * after all data is read in, currently
-          * uses std::system to spawn a new shell
-          * and run the rm command. Quick way for now
-          * TODO: Learn how to delete files using only C++
-          * */
-         void sanitize(void) const;
 
          /* XXX: Documentation
           * Main method for Student Class, it uses the
@@ -93,13 +105,13 @@ namespace GraderApplication {
           * The method its self is very similar to how loadBaseData
           * works in the BaseHeader Class
           * */
-         bool loadStudentFile(const std::string &);
+         bool loadStudentFile(const std::string &, const std::streampos &, int);
 
          /* XXX: Documentation
-          * Overloaded method to search for just one stutent and 
+          * method to search for just one stutent and 
           * compute the grade if the -s flag is given
           * */
-         bool loadStudentFile(const std::string &, const std::string &);
+         bool loadStudent(const std::string &, std::string &);
 
          /* XXX: Documentation
           * Helper method for loadDataFile, checks if student is found
@@ -109,10 +121,10 @@ namespace GraderApplication {
 
 
          /* XXX: Documentation
-          * first test for tempfile existance, if it doesnt we havnt
+          * first test for tempfile existence, if it doesnt we havnt
           * read the file at all yet
           * */
-         bool testForFileExistance(const std::string &);
+         bool testForFileExistence(const std::string &);
 
          /* XXX: Documentation
           * after a student is read in to the studentvector, this

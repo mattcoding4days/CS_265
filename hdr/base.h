@@ -72,7 +72,7 @@ namespace GraderApplication {
           * This is to track line errors
           * */
          int getFileLineCount() const;
-         void incrementFileLineCount();
+         void incrementFileLineCount(int);
 
          /* XXX: Documentation
           * Accessor: getter and setter
@@ -143,7 +143,7 @@ namespace GraderApplication {
           * reads data based on first character matches
           * from a predefined enumerator in settings.h
           * */
-         bool loadBaseData(const std::string &);
+         void loadBaseData(const std::string &);
 
          /* XXX: Documentation
           * Strip all comments from the line that is passed

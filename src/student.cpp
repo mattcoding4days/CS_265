@@ -12,21 +12,23 @@ namespace GraderApplication {
    /* temp file for storing students that have already
     * been processed
     * */
-   static const std::string TEMP_FILE = "temp.txt";
 
    StudentData::StudentData(void)
-      : name ("")
+        : name ("")
         , finalGrade(0.0)
         , letterGrade("")
         , isWDR(false)
+        , isError(false)
+        , errorDefinition("")
 
       {
          gradesContainer.reserve(1); 
       }
 
 
-   void StudentData::errorPrint(const char *a)
+   void StudentData::errorPrint(std::string &a)
    {
+      this->setIsError(true);
       std::cerr << "\nERROR: " << a << std::endl;
       std::cerr << "\nOffending line number: "
          << this->getFileLineCount() << std::endl;
@@ -35,9 +37,6 @@ namespace GraderApplication {
    }
    
 
-   void StudentData::sanitize(void) const { std::system("rm temp.txt"); }
-
-
    std::string StudentData::getName() const { return this->name; }
 
 
@@ -45,16 +44,17 @@ namespace GraderApplication {
    {
       try {
          if (isAlphaNumeric(_name)) {
-            std::cout << "Name is alphanumeric" << std::endl;
             this->name = _name; 
          }
          else {
+            std::cout << "Name: " << _name << " is not alphanumeric" << std::endl;
             this->name = "";
             throw StudentIDNonAlphaNumeric();
          }
 
       } catch (StudentIDNonAlphaNumeric &e) {
-         errorPrint(e.what());
+         std::string onError(e.what());
+         errorPrint(onError);
       }
    }
 
@@ -68,14 +68,8 @@ namespace GraderApplication {
          if (isDigits(_grade)) {
             float temp = stringTofloat(_grade);
             this->gradesContainer.emplace_back(temp);
-            /* Check only the entered grades to see if max mark is exceeded */
-            for (std::size_t i = 0; i < this->gradesContainer.size(); ++i) {
-               if (this->gradesContainer[i] > this->getMaxMarkContainer(i)) {
-                  std::cout << "\nDEBUG::> Student mark: " << this->gradesContainer[i]
-                     << " :: Max Mark: " << this->getMaxMarkContainer(i) << std::endl; 
-                  throw StudentMarkExceedsMaxMark();
-               }
-            }
+            /* Check if a mark is larger than max mark */
+
          }
          else { 
             std::string n_grade = convert_toupper(_grade);
@@ -86,10 +80,9 @@ namespace GraderApplication {
             }
          }
       } catch (FailStringFloatConversion &e) {
-         errorPrint(e.what());
-      } catch (StudentMarkExceedsMaxMark &e) {
-         errorPrint(e.what());
-      }
+         std::string onError(e.what());
+         errorPrint(onError);
+      } 
    }
 
 
@@ -111,6 +104,24 @@ namespace GraderApplication {
    void StudentData::setIsStudentWDR(bool _isWDR) { this->isWDR = _isWDR; }
 
 
+   bool StudentData::getIsError() const { return this->isError; }
+
+
+   void StudentData::setIsError(bool _isError) { this->isError = _isError; }
+
+
+   std::string StudentData::getErrorDefinition(void) const { return this->errorDefinition; }
+
+
+   void StudentData::setErrorDefinition(const std::string &e)
+   {
+      if (!e.empty()) {
+         this->errorDefinition = e;
+      } else {
+         std::cerr << "\nError Definition is empty!\n" << std::endl;
+      }
+   } 
+
    void StudentData::printStudentObject()
    {
       /* method used mainly for debugging purposes */
@@ -122,17 +133,17 @@ namespace GraderApplication {
    }
 
 
-   bool StudentData::loadStudentFile(const std::string &file)
+   bool StudentData::loadStudentFile(const std::string &file,
+      const std::streampos &updatedFilePosition, int updateLinePosition)
    {
       try {
          std::ifstream datafile(file);
          if ( datafile.is_open() ) {
-            datafile.seekg(this->getCurrentFilePosition());
+            datafile.seekg(updatedFilePosition);
+            this->incrementFileLineCount(updateLinePosition);
             std::string line;
             while ( std::getline(datafile, line) ) {
                if (!line.empty()) {
-                  std::cout << "Current Line: " << line << std::endl;
-                  std::cout << "Current file pos: " << this->getCurrentFilePosition() << std::endl;
                   this->setCurrentLine(line);
                   this->stripComments(line);
 
@@ -155,11 +166,13 @@ namespace GraderApplication {
                       * */
 
                      if (this->getName().empty()) {
+                        std::cout << "Name is empty" << std::endl;
                         this->setCurrentFilePos(datafile);
-                        this->incrementFileLineCount();
-                        datafile.close();
-                        return true;
+                        this->incrementFileLineCount(1);
+                        return false;
+                        
                      } else {
+                        std::cout << "Setting grades" << std::endl;
                         int i = 0;
                         while (ss >> sMarks) {
                            this->setGrades(sMarks);
@@ -169,23 +182,22 @@ namespace GraderApplication {
                          * same as the evaluation data length */
                         this->setDataLength(i);
                      }
-
+                     std::cout << "Did not close after if " << std::endl;
                      // only process one line at a time, update file position
                      this->setCurrentFilePos(datafile);
-                     this->incrementFileLineCount();
+                     this->incrementFileLineCount(1);
                      datafile.close();
-                     std::cout << "Closing file" << std::endl;
                      return true;
                   }
                   /* The line was found in the temp.txt file, and has already
                    * been processed, repeat the process
                    * */
                }
-               std::cout << "Line is empty" << std::endl;
             }
          } else { throw std::logic_error("*** File Not Found: "); }
       } catch (std::logic_error &e) {
          std::cerr << e.what() << file << std::endl;
+         exit(EXIT_FAILURE);
       }
       return false;
    }
@@ -196,8 +208,8 @@ namespace GraderApplication {
       bool isProcessed = false;
       std::string tempLine("");
       // test if the file exists
-      if ( this->testForFileExistance(TEMP_FILE) ) {
-         std::ifstream tempFile(TEMP_FILE);
+      if ( this->testForFileExistence(TEMPFILE) ) {
+         std::ifstream tempFile(TEMPFILE);
          while ( std::getline(tempFile, tempLine) ) {
             if ( lineToCompare == tempLine ) {
                tempFile.close();
@@ -212,7 +224,7 @@ namespace GraderApplication {
    }
 
 
-   bool StudentData::testForFileExistance(const std::string &file)
+   bool StudentData::testForFileExistence(const std::string &file)
    {
       /* Test if grader has already created or temp file */
       bool doesExist = false;
@@ -229,11 +241,11 @@ namespace GraderApplication {
    void StudentData::processStudent(const std::string &process)
    {
       /* only append to the file, dont trample over old data */
-      std::ofstream outFile(TEMP_FILE, std::fstream::app);
+      std::ofstream outFile(TEMPFILE, std::fstream::app);
       if ( outFile.good() ) {
          // write only the student id, which should be the first
          // index of the line
-         outFile << process[0] << std::endl;
+         outFile << process << std::endl;
          outFile.close();
       }
       else {
@@ -258,8 +270,8 @@ namespace GraderApplication {
    std::string StudentData::convert_toupper(std::string s)
    {
       std::transform(s.begin(), s.end(), s.begin(),
-            [](unsigned char c) {return std::toupper(c);}
+            [](unsigned char c) { return std::toupper(c); }
             );
-      return s; // shouldnt reach here
+      return s;
    }
 };

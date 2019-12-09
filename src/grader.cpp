@@ -17,24 +17,24 @@ namespace GraderApplication
    }
 
 
-   int Grader::getNumOfStudents(void) const
-   {
-      return this->numberOfStudents;
-   }
+   int Grader::getNumOfStudents(void) const { return this->numberOfStudents; }
 
 
-   std::string Grader::getDataFile() const
-   {
-      return this->dataFile;   
-   }
+   std::string Grader::getDataFile() const { return this->dataFile; }
 
 
    void Grader::loadVector(void)
    {
-      for ( int i = 0; i < this->getNumOfStudents(); ++i )
-      {
+      std::string file = this->getDataFile();
+      std::streampos currpos = this->getCurrentFilePosition();
+      int lineCount = this->getFileLineCount();
+
+      for ( int i = 0; i < this->getNumOfStudents(); ++i ) {
          StudentData student;
-         student.loadStudentFile(this->getDataFile());
+         student.loadStudentFile(file, currpos, (lineCount + i));
+         // Update currpos before student goes out of scope and is destoyed
+         currpos = student.getCurrentFilePosition();               
+
          studentContainer.emplace_back(student);
       }
    }
@@ -52,8 +52,7 @@ namespace GraderApplication
 
    void Grader::makeGrades(void)
    {
-      for ( int i = 0; i < this->getNumOfStudents(); ++i )
-      {  
+      for ( int i = 0; i < this->getNumOfStudents(); ++i ) {  
          /* create temp vector to hold only the grades
           * so we can work with them easier, use reserve
           * and emplace_back for speed.
@@ -61,8 +60,7 @@ namespace GraderApplication
          std::vector<float> tempGradeContainer;
          tempGradeContainer.reserve(this->getDataLength());
          float tempValue = 0.0;
-         for ( int j = 0; j < this->getDataLength(); ++j )
-         {
+         for ( int j = 0; j < this->getDataLength(); ++j ) {
             /* first calculate singular grades (mark * weight) / maxmark
              * and store one at a time into vector
              * */
@@ -112,18 +110,24 @@ namespace GraderApplication
       return "Grade went wrong";
    }
 
+
    void Grader::outputFinal(void)
    {
       /* use setw and left, right for nice tabular aligned output
        * of data
        * */
       for (StudentVector::iterator i = studentContainer.begin();
-            i != studentContainer.end(); ++i)
-      {
-         std::cout << std::setw(15) << std::left << i->getName()
-            << std::setw(10) << std::left << i->getFinalGrade()
-            << std::setw(5)  << std::left << i->getLetterGrade()
-            << std::endl;
+            i != studentContainer.end(); ++i) {
+         /* Print out only the computations where no errors were thrown */
+         if (!(i->getIsError())) {
+            std::cout << std::setw(15) << std::left << i->getName()
+               << std::setw(10) << std::left << i->getFinalGrade()
+               << std::setw(5)  << std::left << i->getLetterGrade()
+               << std::endl;
+         }
       }
    }
+
+
+   void Grader::sanitize(void) const { std::system(SANITIZE); }
 };
