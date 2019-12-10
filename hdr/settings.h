@@ -41,26 +41,6 @@ namespace GraderApplication {
       TAB = '\t'
    };
 
-   /* XXX: Documentaion
-    * Colors set by the default constructor, just for better program readabillity 
-    * */
-   struct Colors
-   {
-      const char *RED;
-      const char *GREEN;
-      const char *YELLOW;
-      const char *BLUE;
-      const char *RESET;
-
-      /* Fill in with ANSI color codes later */
-      Colors(void)
-         : RED("")
-           , GREEN("")
-           , YELLOW("")
-           , BLUE("")
-           , RESET("")
-      { }
-   };
 
    /* XXX: Documentaion
     * Stuct for letter grade representation the student will recieve 

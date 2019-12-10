@@ -33,7 +33,7 @@ int main(int argc, char **argv)
       auto end = std::chrono::system_clock::now();
       std::chrono::duration<double> elapsed_seconds = end-start;
       std::time_t end_time = std::chrono::system_clock::to_time_t(end);
-      std::cout << std::ctime(&end_time) << std::endl;
+      std::cout << std::ctime(&end_time);
       grader.makeGrades();
       grader.outputFinal();
       grader.outputError();
@@ -156,31 +156,32 @@ void printUsage()
 /* XXX: Documentation
  * countStudentLines: Is meant to only count lines
  * that include student names
- * it must skip, empty lines, and comments #
- *
- * The returned value will be used to accurately
- * reserve space in the student vector, which will hold
- * all objects, as well as to be used as an accurate reference
- * for size for internal localized temp arrays or vectors that
- * may be used.
+ *  
+ * The function uses a BaseData obj to load
+ * the evaluation data first, so it can accurately
+ * jump to only the student data. thus resulting
+ * in an accurate ammount of students
  * */
 int countStudentLines( const std::string &fileDat )
 {
+   BaseData b;
+   std::streampos jump;
+   b.loadBaseData(fileDat);
+   jump = b.getCurrentFilePosition();
+
+   std::ifstream inFile(fileDat);
+   inFile.seekg(jump);
    int numberOfLines = 0;
-   std::string dummyLine; 
-   std::ifstream inFile( fileDat );
+   std::string dummyLine(""); 
 
    if ( inFile.good() ) {
       while ( std::getline( inFile, dummyLine )) {
          if (! ( dummyLine.empty()) ) {
-            char c = '\0';
-            c = dummyLine[0];
-            if ( ! (std::isupper( c )) && c != WS && c != COMM ) {
-               ++numberOfLines;
-            }
+            ++numberOfLines;
          }
       }
-   } else {
+   }
+   else {
       std::cerr << "Error opening " << fileDat 
          << " to count number of students to be loaded into the program" << std::endl;
       exit(EXIT_FAILURE);

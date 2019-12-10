@@ -166,7 +166,7 @@ namespace GraderApplication {
          /* XXX: Documentation
           * Summ all elements in array
           * */
-         float vecSummation(std::vector<float> &);
+         float vecSummation(std::vector<float>);
    };
 };
 

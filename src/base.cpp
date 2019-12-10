@@ -395,7 +395,7 @@ namespace GraderApplication {
    }
 
 
-   float BaseData::vecSummation(std::vector<float> &s)
+   float BaseData::vecSummation(std::vector<float> s)
    {
       float tempFinalGrade = 0;
       return accumulate(s.begin(), s.end(), tempFinalGrade);

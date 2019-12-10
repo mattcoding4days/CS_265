@@ -11,14 +11,15 @@
 namespace GraderApplication {
    StudentData::StudentData(void)
       : name ("")
-        , finalGrade(0.0)
+        , totalGrade(0.0)
         , letterGrade("")
         , isWDR(false)
         , isError(false)
         , errorDefinition("")
 
    {
-      gradesContainer.reserve(1); 
+      gradesContainer.reserve(1);
+      calculatedGradesContainer.reserve(1);
    }
 
    void StudentData::errorPreserve(std::string &e)
@@ -98,7 +99,8 @@ namespace GraderApplication {
             std::string n_grade = convert_toupper(_grade);
             if (n_grade == WDRN) {
                this->setIsStudentWDR(true);
-            } else {
+            }
+            else {
                throw FailStringFloatConversion(); 
             }
          }
@@ -106,17 +108,26 @@ namespace GraderApplication {
          std::string onError(e.what());
          errorPreserve(onError);
       } catch (StudentMarkExceedsMaxMark &e) {
-         std::cout << "In throw: " << _grade << std::endl;
          std::string onError(e.what());
          errorPreserve(onError);
       }
    }
 
+   float StudentData::getCalculatedGrades(int &itr) { return this->calculatedGradesContainer[itr]; }
 
-   float StudentData::getFinalGrade() const { return this->finalGrade; }
+
+   void StudentData::setCalculatedGrades(std::vector<float> &calcMarks) 
+   {
+      for (std::size_t i = 0; i < calcMarks.size(); ++i) {
+         this->calculatedGradesContainer.emplace_back(calcMarks[i]);
+      }
+   }
 
 
-   void StudentData::setFinalGrade(const float &_finalGrade) { this->finalGrade = _finalGrade; }
+   float StudentData::getTotalGrade() const { return this->totalGrade; }
+
+
+   void StudentData::setTotalGrade(const float _totalGrade) { this->totalGrade += _totalGrade; }
 
 
    std::string StudentData::getLetterGrade() const { return this->letterGrade; }
@@ -150,21 +161,10 @@ namespace GraderApplication {
    } 
 
 
-   void StudentData::printStudentObject()
-   {
-      /* method used mainly for debugging purposes */
-      std::cout << this->getName() << " ";
-      for ( int i = 0; i < this->getDataLength(); ++i ) {
-         std::cout << this->getGrades(i) << " ";
-      }
-      std::cout << std::endl;
-   }
-
-
    bool StudentData::loadStudentFile(const std::string &file,
          const std::streampos &updatedFilePosition,
-            int updateLinePosition, int evalLength,
-               std::vector<float> &tempMaxMark)
+         int updateLinePosition, int evalLength,
+         std::vector<float> &tempMaxMark)
    {
       try {
          std::ifstream datafile(file);
@@ -226,12 +226,12 @@ namespace GraderApplication {
                      return true;
                   }
                }
-                  /* A duplicate student was found, 
-                   * throw for error preserving purposes
-                   * */
-                  this->setCurrentFilePos(datafile);
-                  throw DuplicateFound();
- 
+               /* A duplicate student was found, 
+                * throw for error preserving purposes
+                * */
+               this->setCurrentFilePos(datafile);
+               throw DuplicateFound();
+
             }
          } else { throw std::logic_error("*** File Not Found: "); }
       } catch (std::logic_error &e) {

@@ -16,12 +16,14 @@ namespace GraderApplication {
       private:
          std::string name;
          std::vector <float> gradesContainer;
+         std::vector <float> calculatedGradesContainer;
          int studentDataLength;
-         float finalGrade;
+         float totalGrade;
          std::string letterGrade;
          bool isWDR;
          bool isError;
          std::string errorDefinition;
+
       public:
          /* XXX: Documentation
           * Default Constuctor
@@ -60,11 +62,19 @@ namespace GraderApplication {
          void setGrades(std::string &, std::vector<float> &);
 
          /* XXX: Documentation
-          * getter and setter for the final grade
-          * obtained by the student
+          * getters and setters for the container
+          * that will hold the resulting grades after
+          * calculation (mark * weight) / max mark
           * */
-         float getFinalGrade() const;
-         void setFinalGrade(const float &);
+         float getCalculatedGrades(int &);
+         void setCalculatedGrades(std::vector<float> &);
+
+         /* XXX: Documentation
+          * getter and setter for the final grade
+          * and all subsequent category marks
+          * */
+         float getTotalGrade() const;
+         void setTotalGrade(const float );
 
          /* XXX: Documentation
           * getters and setters for the Letter
@@ -98,14 +108,6 @@ namespace GraderApplication {
           * */
          std::string getErrorDefinition(void) const;
          void setErrorDefinition(const std::string &);
-
-         /* XXX: Documentation
-          * A debug and testing method, prints a
-          * raw student object, meant to be used by
-          * a ranged for loop
-          * */
-         void printStudentObject();
-
 
          /* XXX: Documentation
           * Main method for Student Class, it uses the

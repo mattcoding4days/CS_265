@@ -13,7 +13,6 @@ namespace GraderApplication
       : numberOfStudents(_numberOfStudents)
         , dataFile(_dataFile)
    {
-      subGradeContainer.reserve(this->getDataLength());
       studentContainer.reserve(numberOfStudents);
    }
 
@@ -55,16 +54,6 @@ namespace GraderApplication
    }
 
 
-   void Grader::showStudentVector(void) 
-   {
-      std::cout << "\nStudent Data Before Processing\n";
-      for ( auto &itr: studentContainer)
-      {
-         itr.printStudentObject();
-      }
-   }
-
-
    void Grader::makeGrades(void)
    {
       for ( int i = 0; i < this->getNumOfStudents(); ++i ) {  
@@ -77,7 +66,6 @@ namespace GraderApplication
             studentContainer[i].setLetterGrade("WITHDRAWN");
             continue;
          }
-
          /* create temp vector to hold only the grades
           * so we can work with them easier, use reserve
           * and emplace_back for speed.
@@ -85,25 +73,23 @@ namespace GraderApplication
          std::vector<float> tempGradeContainer;
          tempGradeContainer.reserve(this->getDataLength());
          
-       
          float tempValue = 0.0;
          for ( int j = 0; j < this->getDataLength(); ++j ) {
             /* first calculate singular grades (mark * weight) / maxmark
              * and store one at a time into vector
              * */
             tempValue = this->subGradeComputation(i, j);
-            //tempGradeContainer.emplace_back(tempValue);
             tempGradeContainer.emplace_back(tempValue);
          }
+         studentContainer[i].setCalculatedGrades(tempGradeContainer);
          /* add all subgrades together for our final grade */
          float finalGrade = this->vecSummation(tempGradeContainer);
          /* use precision stream to round to hundreths place after summation
           * to retain as much accuracy as possible
           * */
          std::cout << std::fixed << std::setprecision(2);
-         subGradeContainer = tempGradeContainer;
          /* Use our wonderful getters and setters */
-         studentContainer[i].setFinalGrade(finalGrade);
+         studentContainer[i].setTotalGrade(finalGrade);
          std::string letter = assignLetterGrade(finalGrade);
          studentContainer[i].setLetterGrade(letter);
       }
@@ -112,17 +98,10 @@ namespace GraderApplication
 
    float Grader::subGradeComputation(int i, int j)
    {
-      return ( studentContainer[i].getGrades(j) 
-            * this->getWeightContainer(j) ) / this->getMaxMarkContainer(j);
+      return (( studentContainer[i].getGrades(j) 
+            * this->getWeightContainer(j) ) / this->getMaxMarkContainer(j));
    }
 
-   void Grader::printSubComp(void)
-   {
-      for (auto &i: subGradeContainer) {
-         std::cout << i << "\t\t";
-      }
-      std::cout << std::endl;
-   }
 
    std::string Grader::assignLetterGrade(float grade)
    {
@@ -147,38 +126,32 @@ namespace GraderApplication
    }
 
 
-   //void Grader::outputFinal(void)
-   //{
-   //   /* use setw and left, right for nice tabular aligned output
-   //    * of data
-   //    * */
-   //   for (StudentVector::iterator i = studentContainer.begin();
-   //         i != studentContainer.end(); ++i) {
-   //      /* Print out only the computations where no errors were thrown */
-   //      if (!(i->getIsError())) {
-
-   //         std::cout << std::setw(15) << std::left << i->getName()
-   //            << std::setw(10) << std::left << i->getFinalGrade()
-   //            << std::setw(5)  << std::left << i->getLetterGrade()
-   //            << std::endl;
-   //      }
-   //   }
-   //}
-
    void Grader::outputFinal(void)
    {
-      std::cout << "Student\t\t";
+      std::cout << "Student\t\t\t";
       for (int k = 0; k < this->getDataLength(); ++k) {
-         std::cout << this->getCategoryContainer(k) << '\t';
+         std::cout << this->getCategoryContainer(k) << "\t\t\t";
       }
-      std::cout << std::endl;
-
+      std::cout << "Total\t\t\tGrade" << std::endl;
 
       for (int i = 0; i < this->getNumOfStudents(); ++i) {
-         if (!(studentContainer[i].getIsError())) {
+         if (!(studentContainer[i].getIsError() || (studentContainer[i].getIsStudentWDR()))) {
+            std::cout << studentContainer[i].getName() << "\t\t\t";
             for (int j = 0; j < this->getDataLength(); ++j) {
+               std::cout << studentContainer[i].getCalculatedGrades(j) << "\t\t\t";
             }
+            std::cout << studentContainer[i].getTotalGrade() << "\t\t\t"
+               << studentContainer[i].getLetterGrade() << std::endl;
          }
+      }
+
+      for (StudentVector::iterator i = studentContainer.begin();
+            i != studentContainer.end(); ++i) {
+         if (i->getIsStudentWDR()) {
+            std::cout << i->getName() << "\t\t\t" << i->getLetterGrade()
+               << std::endl;
+         }
+         else { continue; }
       }
    }
 

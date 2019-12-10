@@ -19,7 +19,6 @@ namespace GraderApplication {
       private:
          int numberOfStudents;
          std::string dataFile;
-         std::vector<float> subGradeContainer;
          StudentVector studentContainer;
       public:
          /* XXX: Documentation
@@ -48,12 +47,6 @@ namespace GraderApplication {
          void loadVector(void);
 
          /* XXX: Documentation
-          * A debug method, just shows the students
-          * id and intialize scores read in from the data file
-          * */
-         void showStudentVector(void);
-
-         /* XXX: Documentation
           * the meat of this class, 2 C style for loops.
           * depends on a few helper functions
           * to properly perform computations on the grade data
@@ -70,11 +63,6 @@ namespace GraderApplication {
           * */
          float subGradeComputation(int , int );
          
-         /* XXX: Documentation
-          * Print out the sub computation array
-          * */
-         void printSubComp(void);
-
 
          /* XXX: Documentation
           * makes a call to macro routines in settings.h
@@ -91,7 +79,6 @@ namespace GraderApplication {
           * rounded, and stored in StudentContainer Vector
           * */
          void outputFinal(void);
-         void outputFinal(std::vector<float> &);
 
          /* XXX: Documentation
           * Output all the student error lines that were 
