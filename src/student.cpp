@@ -9,10 +9,6 @@
 #include <sstream>
 
 namespace GraderApplication {
-   /* temp file for storing students that have already
-    * been processed
-    * */
-
    StudentData::StudentData(void)
       : name ("")
         , finalGrade(0.0)
@@ -79,16 +75,26 @@ namespace GraderApplication {
    float StudentData::getGrades(int &itr) { return this->gradesContainer[itr]; }
 
 
-   void StudentData::setGrades(std::string &_grade)
+   void StudentData::setGrades(std::string &_grade, std::vector<float> &tMax)
    {
       try {
+         /* Check if string is infact a digit */
          if (isDigits(_grade)) {
             float temp = stringTofloat(_grade);
             this->gradesContainer.emplace_back(temp);
             /* Check if a mark is larger than max mark */
-
+            int size = this->gradesContainer.size();
+            for (int i = 0; i < size; i++ ) {
+               if (this->gradesContainer[i] > tMax[i] 
+                     && !(this->getIsStudentWDR())) {
+                  throw StudentMarkExceedsMaxMark();
+               }
+            }
          }
          else { 
+            /* if it is not a digit, convert to uppercase and
+             * and check if it is WDR, if not throw error
+             * */
             std::string n_grade = convert_toupper(_grade);
             if (n_grade == WDRN) {
                this->setIsStudentWDR(true);
@@ -100,6 +106,7 @@ namespace GraderApplication {
          std::string onError(e.what());
          errorPreserve(onError);
       } catch (StudentMarkExceedsMaxMark &e) {
+         std::cout << "In throw: " << _grade << std::endl;
          std::string onError(e.what());
          errorPreserve(onError);
       }
@@ -156,7 +163,8 @@ namespace GraderApplication {
 
    bool StudentData::loadStudentFile(const std::string &file,
          const std::streampos &updatedFilePosition,
-            int updateLinePosition, int evalLength)
+            int updateLinePosition, int evalLength,
+               std::vector<float> &tempMaxMark)
    {
       try {
          std::ifstream datafile(file);
@@ -165,7 +173,6 @@ namespace GraderApplication {
             this->incrementFileLineCount(updateLinePosition);
             std::string line("");
             while ( std::getline(datafile, line)) {
-               this->incrementFileLineCount(1);
                /* if the line is empty skip it,
                 * by immediatley restarting the 
                 * control loop with the continue keyword
@@ -187,9 +194,9 @@ namespace GraderApplication {
                    * due to nonNumeric, we need to test that here
                    * so we can end this function and not read in the
                    * grades for the failed id. 
-                   * if the name is still empty after trying to 
-                   * set it, we know it failed. end and update file position
-                   * and total line count
+                   * If the name setter failed it would have reported 
+                   * to errorPreserve which would have switched
+                   * the isError variable to true, check for that here
                    * */
 
                   if (this->getIsError()) {
@@ -199,13 +206,12 @@ namespace GraderApplication {
                   } else {
                      int i = 0;
                      while (ss >> sMarks) {
-                        this->setGrades(sMarks);
+                        this->setGrades(sMarks, tempMaxMark);
                         if (!(this->getIsError())) {
                            i++;
                         } else {
                            /* Setting the grades failed */
                            this->setCurrentFilePos(datafile);
-                           this->incrementFileLineCount(1);
                            datafile.close();
                            return true;
                         }
@@ -216,7 +222,6 @@ namespace GraderApplication {
                      this->setStudentDataLen(i, evalLength);
                      // only process one line at a time, update file position
                      this->setCurrentFilePos(datafile);
-                     this->incrementFileLineCount(1);
                      datafile.close();
                      return true;
                   }
@@ -252,7 +257,6 @@ namespace GraderApplication {
                tempFile.close();
                isProcessed = true;
                return isProcessed;
-
             }
          }
       }

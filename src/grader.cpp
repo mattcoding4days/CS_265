@@ -13,7 +13,8 @@ namespace GraderApplication
       : numberOfStudents(_numberOfStudents)
         , dataFile(_dataFile)
    {
-      studentContainer.reserve(numberOfStudents);    
+      subGradeContainer.reserve(this->getDataLength());
+      studentContainer.reserve(numberOfStudents);
    }
 
 
@@ -30,9 +31,21 @@ namespace GraderApplication
       int lineCount = this->getFileLineCount();
       int evalDataLength = this->getDataLength();
 
-      for ( int i = 0; i < this->getNumOfStudents(); ++i ) {
+      /* Ugly way of maxMarkContainer into 
+       * each new student object, since I cant access it normally
+       * with a getter because student is always a brandnew object,
+       * the maxMarkContainer it has access to will be empty
+       * */
+      std::vector<float> maxMarkCopy;
+      maxMarkCopy.reserve(this->getDataLength());
+      for (int iter = 0; iter < this->getDataLength(); ++iter) {
+         maxMarkCopy.emplace_back(this->getMaxMarkContainer(iter));
+      }
+
+      for ( int i = 1; i <= this->getNumOfStudents(); ++i ) {
          StudentData student;
-         student.loadStudentFile(file, currpos, (lineCount + i), evalDataLength);
+         student.loadStudentFile(file, currpos,
+               (lineCount + i), evalDataLength, maxMarkCopy);
          // Update currpos before student gets store in vector and
          // a new one is created
          currpos = student.getCurrentFilePosition();               
@@ -60,6 +73,10 @@ namespace GraderApplication
           * of the control loop'
           * */
          if (studentContainer[i].getIsError()) { continue; }
+         else if (studentContainer[i].getIsStudentWDR()) {
+            studentContainer[i].setLetterGrade("WITHDRAWN");
+            continue;
+         }
 
          /* create temp vector to hold only the grades
           * so we can work with them easier, use reserve
@@ -67,12 +84,15 @@ namespace GraderApplication
           * */
          std::vector<float> tempGradeContainer;
          tempGradeContainer.reserve(this->getDataLength());
+         
+       
          float tempValue = 0.0;
          for ( int j = 0; j < this->getDataLength(); ++j ) {
             /* first calculate singular grades (mark * weight) / maxmark
              * and store one at a time into vector
              * */
             tempValue = this->subGradeComputation(i, j);
+            //tempGradeContainer.emplace_back(tempValue);
             tempGradeContainer.emplace_back(tempValue);
          }
          /* add all subgrades together for our final grade */
@@ -81,14 +101,11 @@ namespace GraderApplication
           * to retain as much accuracy as possible
           * */
          std::cout << std::fixed << std::setprecision(2);
+         subGradeContainer = tempGradeContainer;
          /* Use our wonderful getters and setters */
-         if (studentContainer[i].getIsStudentWDR()) {
-            studentContainer[i].setLetterGrade("WITHDRAWN");
-         } else {
-            studentContainer[i].setFinalGrade(finalGrade);
-            std::string letter = assignLetterGrade(finalGrade);
-            studentContainer[i].setLetterGrade(letter);
-         }
+         studentContainer[i].setFinalGrade(finalGrade);
+         std::string letter = assignLetterGrade(finalGrade);
+         studentContainer[i].setLetterGrade(letter);
       }
    }
 
@@ -99,6 +116,13 @@ namespace GraderApplication
             * this->getWeightContainer(j) ) / this->getMaxMarkContainer(j);
    }
 
+   void Grader::printSubComp(void)
+   {
+      for (auto &i: subGradeContainer) {
+         std::cout << i << "\t\t";
+      }
+      std::cout << std::endl;
+   }
 
    std::string Grader::assignLetterGrade(float grade)
    {
@@ -123,19 +147,37 @@ namespace GraderApplication
    }
 
 
+   //void Grader::outputFinal(void)
+   //{
+   //   /* use setw and left, right for nice tabular aligned output
+   //    * of data
+   //    * */
+   //   for (StudentVector::iterator i = studentContainer.begin();
+   //         i != studentContainer.end(); ++i) {
+   //      /* Print out only the computations where no errors were thrown */
+   //      if (!(i->getIsError())) {
+
+   //         std::cout << std::setw(15) << std::left << i->getName()
+   //            << std::setw(10) << std::left << i->getFinalGrade()
+   //            << std::setw(5)  << std::left << i->getLetterGrade()
+   //            << std::endl;
+   //      }
+   //   }
+   //}
+
    void Grader::outputFinal(void)
    {
-      /* use setw and left, right for nice tabular aligned output
-       * of data
-       * */
-      for (StudentVector::iterator i = studentContainer.begin();
-            i != studentContainer.end(); ++i) {
-         /* Print out only the computations where no errors were thrown */
-         if (!(i->getIsError())) {
-            std::cout << std::setw(15) << std::left << i->getName()
-               << std::setw(10) << std::left << i->getFinalGrade()
-               << std::setw(5)  << std::left << i->getLetterGrade()
-               << std::endl;
+      std::cout << "Student\t\t";
+      for (int k = 0; k < this->getDataLength(); ++k) {
+         std::cout << this->getCategoryContainer(k) << '\t';
+      }
+      std::cout << std::endl;
+
+
+      for (int i = 0; i < this->getNumOfStudents(); ++i) {
+         if (!(studentContainer[i].getIsError())) {
+            for (int j = 0; j < this->getDataLength(); ++j) {
+            }
          }
       }
    }

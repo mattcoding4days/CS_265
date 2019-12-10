@@ -6,14 +6,11 @@
 #include <vector>
 
 namespace GraderApplication {
-   /* For every occurance of a valid student line
+   /* XXX: Documentation
+    * For every occurance of a valid student line
     * in the given file a student object will be created
     * and stored in a corresponding vector of the same type
     * defined and handled from the grader class. 
-    *
-    * This class is equiped with the proper getters and setters
-    * so all private data can easily be accessed and manipulated
-    * from inheriting classes.
     * */ 
    class StudentData : public BaseData {
       private:
@@ -25,7 +22,6 @@ namespace GraderApplication {
          bool isWDR;
          bool isError;
          std::string errorDefinition;
-
       public:
          /* XXX: Documentation
           * Default Constuctor
@@ -61,7 +57,7 @@ namespace GraderApplication {
           * getters and setters for grades container
           * */
          float getGrades(int &);
-         void setGrades(std::string &);
+         void setGrades(std::string &, std::vector<float> &);
 
          /* XXX: Documentation
           * getter and setter for the final grade
@@ -119,7 +115,8 @@ namespace GraderApplication {
           * The method its self is very similar to how loadBaseData
           * works in the BaseHeader Class
           * */
-         bool loadStudentFile(const std::string &, const std::streampos &, int, int);
+         bool loadStudentFile(const std::string &, const std::streampos &,
+               int, int, std::vector<float> &);
 
          /* XXX: Documentation
           * method to search for just one stutent and 

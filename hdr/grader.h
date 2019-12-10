@@ -19,6 +19,7 @@ namespace GraderApplication {
       private:
          int numberOfStudents;
          std::string dataFile;
+         std::vector<float> subGradeContainer;
          StudentVector studentContainer;
       public:
          /* XXX: Documentation
@@ -68,6 +69,12 @@ namespace GraderApplication {
           * to calculate an array being stored in a vector
           * */
          float subGradeComputation(int , int );
+         
+         /* XXX: Documentation
+          * Print out the sub computation array
+          * */
+         void printSubComp(void);
+
 
          /* XXX: Documentation
           * makes a call to macro routines in settings.h
@@ -84,6 +91,7 @@ namespace GraderApplication {
           * rounded, and stored in StudentContainer Vector
           * */
          void outputFinal(void);
+         void outputFinal(std::vector<float> &);
 
          /* XXX: Documentation
           * Output all the student error lines that were 

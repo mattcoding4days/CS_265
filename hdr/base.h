@@ -155,7 +155,7 @@ namespace GraderApplication {
           * of a number, and return true if there is only
           * digits
           * */
-         virtual bool isDigits(std::string &);
+         bool isDigits(std::string &);
 
          /* XXX: Documentation
           * convert a string to a float with out the 
