@@ -4,7 +4,8 @@
 #include "student.h"
 #include <vector>
 
-namespace GraderApplication {
+namespace GraderApplication
+{
    /* Change template mess, for readabillity */
    using StudentVector = std::vector<StudentData>;
 

@@ -1,18 +1,26 @@
 #ifndef BASE_H
 #define BASE_H
 
-#include "settings.h"
+#include "utillity.h"
 #include <fstream>
 #include <vector>
 
-namespace GraderApplication {
-   /* BaseData is responsible for all prelim data
-    * found before the students themselves.
-    * constisting of mainly getters and setters
-    * so it is easy to access the private members
-    * through the derived class Grader
+namespace GraderApplication
+{
+   /* XXX: Documentation
+    * BaseData is responsible for all prelim data
+    * it also houses alot of base functionality for 
+    * student and grader which derive from it.
+    * BaseData adopts the getter setter strategy
+    * so the derived classes can easily use alot of
+    * the core functionality built in. It also provides
+    * a standardized way to access attributes accross the
+    * program, as well as the setters serving as the funnel
+    * for error checking, which makes domain constraints on 
+    * the methods themselves simple and concise
     * */
-   class BaseData {
+   class BaseData : public Utillity
+   {
       private:
          std::string dataFile;
          int totalHeaderCount;
@@ -132,41 +140,11 @@ namespace GraderApplication {
          void setWeightContainer(std::string &);
 
          /* XXX: Documentation
-          * Mainly for debugging and testing purposes,
-          * prints the entire object after data is parsed
-          * and read in
-          * */
-         void printBaseObject(void);
-
-         /* XXX: Documentation
           * Load only preliminary data from file:
           * reads data based on first character matches
           * from a predefined enumerator in settings.h
           * */
          void loadBaseData(const std::string &);
-
-         /* XXX: Documentation
-          * Strip all comments from the line that is passed
-          * */
-         void stripComments(std::string &);
-
-         /* XXX: Documentation
-          * search whole or decimal string representation
-          * of a number, and return true if there is only
-          * digits
-          * */
-         bool isDigits(std::string &);
-
-         /* XXX: Documentation
-          * convert a string to a float with out the 
-          * truncating limitations of stof
-          * */
-         float stringTofloat(const std::string &);
-
-         /* XXX: Documentation
-          * Summ all elements in array
-          * */
-         float vecSummation(std::vector<float>);
    };
 };
 

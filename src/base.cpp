@@ -2,14 +2,13 @@
  * for corresponding cpp files.
  * */
 #include "../hdr/base.h"
-#include "../hdr/customExceptions.h"
 #include <fstream>
 #include <iostream>
 #include <iterator>
-#include <numeric>
 #include <sstream>
 
-namespace GraderApplication {
+namespace GraderApplication
+{
    BaseData::BaseData(void)
       : dataFile("")
         , totalHeaderCount(0)
@@ -21,7 +20,6 @@ namespace GraderApplication {
         , category("")
         , maxMark("")
         , weight("")
-
    {
       /* Init vectors */
       titleContainer.reserve(1);
@@ -41,7 +39,7 @@ namespace GraderApplication {
       exit (EXIT_FAILURE);
    }
 
-
+   
    int BaseData::getTotalHeaderCount() const { return this->totalHeaderCount; }
 
 
@@ -252,38 +250,6 @@ namespace GraderApplication {
    }
 
 
-   void BaseData::printBaseObject(void)
-   {
-      /* get the title */ 
-      std::cout << this->getTitle() << " : ";
-      for (int i = 0; i < this->getDataLength(); ++i) {
-         std::cout << this->getTitleContainer(i) << " "; 
-      }
-      std::cout << std::endl;
-
-      /* get the category */ 
-      std::cout << this->getCategory() << " : ";
-      for (int i = 0; i < this->getDataLength(); ++i) {
-         std::cout << this->getCategoryContainer(i) << " "; 
-      }
-      std::cout << std::endl;
-
-      /* get the maxMark */ 
-      std::cout << this->getMaxMark() << " : ";
-      for (int i = 0; i < this->getDataLength(); ++i) {
-         std::cout << this->getMaxMarkContainer(i) << " "; 
-      }
-      std::cout << std::endl;
-
-      /* get the weight */ 
-      std::cout << this->getWeight() << " : ";
-      for (int i = 0; i < this->getDataLength(); ++i) {
-         std::cout << this->getWeightContainer(i) << " "; 
-      }
-      std::cout << std::endl;
-   }
-
-
    void BaseData::loadBaseData(const std::string &file)
    {
       try {
@@ -360,44 +326,5 @@ namespace GraderApplication {
       } catch (std::logic_error &e) {
          std::cerr << e.what() << file << std::endl;
       }
-   }
-
-
-   void BaseData::stripComments(std::string &line)
-   {
-      std::size_t found = line.find(COMM);
-      if (found != std::string::npos) {
-         line.erase(found, std::string::npos);
-      }
-   }
-
-
-   bool BaseData::isDigits(std::string &s)
-   {
-      return s.find_first_not_of("0123456789.") == std::string::npos; 
-   }
-
-
-   float BaseData::stringTofloat(const std::string &s)
-   {
-      float tempconvert = 0;
-      std::stringstream streamVar(s);
-      try {
-         streamVar >> tempconvert;
-         if (streamVar.fail()) {
-            throw StreamConversionFailure();
-         }
-      } catch (StreamConversionFailure &e) {
-         errorPrint(e.what());
-      }
-      // will only return upon success
-      return tempconvert;
-   }
-
-
-   float BaseData::vecSummation(std::vector<float> s)
-   {
-      float tempFinalGrade = 0;
-      return accumulate(s.begin(), s.end(), tempFinalGrade);
    }
 };

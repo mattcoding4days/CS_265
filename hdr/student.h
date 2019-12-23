@@ -1,18 +1,19 @@
 #ifndef STUDENT_H
 #define STUDENT_H
 
-#include "base.h"
-#include "settings.h"
+#include "utillity.h"
 #include <vector>
 
-namespace GraderApplication {
+namespace GraderApplication
+{
    /* XXX: Documentation
     * For every occurance of a valid student line
     * in the given file a student object will be created
     * and stored in a corresponding vector of the same type
     * defined and handled from the grader class. 
     * */ 
-   class StudentData : public BaseData {
+   class StudentData : public Utillity
+   {
       private:
          std::string name;
          std::vector <float> gradesContainer;
@@ -121,17 +122,10 @@ namespace GraderApplication {
                int, int, std::vector<float> &);
 
          /* XXX: Documentation
-          * method to search for just one stutent and 
-          * compute the grade if the -s flag is given
-          * */
-         bool loadStudent(const std::string &, std::string &);
-
-         /* XXX: Documentation
           * Helper method for loadDataFile, checks if student is found
           * in temp file by string comparison, returns true or false
           * */
          bool isStudentProcessed(const std::string &);
-
 
          /* XXX: Documentation
           * first test for tempfile existence, if it doesnt we havnt
@@ -147,18 +141,6 @@ namespace GraderApplication {
           * written data.
           * */
          void processStudent(const std::string &);
-
-         /* XXX: Documentation
-          * check if string is only alpha numeric
-          * */
-         bool isAlphaNumeric(std::string &);
-
-         /* XXX: Documentation
-          * Convert a string to upper case 
-          * using transform, code comes from 
-          * cpp preference transform Documentation
-          */
-         std::string convert_toupper(std::string);
    };
 };
 #endif

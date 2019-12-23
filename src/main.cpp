@@ -16,9 +16,14 @@ int parseArguments(int argc, char **argv, std::string &inputFile, std::string &n
 
 
 /* XXX: Documentation
+ * Initialize main routine,
+ * uses a combination of 3 internallu
+ * robust classes, to make the implementaion
+ * code alot more simple
  * */
 int main(int argc, char **argv)
 {
+
    auto start = std::chrono::system_clock::now();
    std::string inputFile("");
    std::string name("");
@@ -27,13 +32,23 @@ int main(int argc, char **argv)
 
    if (numargsfilled == 1) {
       int numStudents = countStudentLines(inputFile);
+      /* Load and prepare the data */
       Grader grader(numStudents, inputFile);
       grader.loadBaseData(inputFile);
       grader.loadVector();
+      
+      /* Start the system clock so we can get an accurate reading for actual 
+       * calculation time
+       * */
       auto end = std::chrono::system_clock::now();
       std::chrono::duration<double> elapsed_seconds = end-start;
       std::time_t end_time = std::chrono::system_clock::to_time_t(end);
       std::cout << std::ctime(&end_time);
+
+      /* As per the beauty of OOP, object grader will just call a few
+       * methods that under the hood are quite complicated, but simplify
+       * the main routine code
+       * */
       grader.makeGrades();
       grader.outputFinal();
       grader.outputError();
@@ -64,7 +79,7 @@ int main(int argc, char **argv)
  *  Domain for parseArguments [1, 3] anything > 3 will be ignored 
  * */
 int parseArguments(int argc, char **argv,
-      std::string &inputFile, std::string &name)
+                   std::string &inputFile, std::string &name)
 {
    int retVal = 0; // will never return 0
    if (argc < 2) {
@@ -183,7 +198,7 @@ int countStudentLines( const std::string &fileDat )
    }
    else {
       std::cerr << "Error opening " << fileDat 
-         << " to count number of students to be loaded into the program" << std::endl;
+                << " to count number of students to be loaded into the program" << std::endl;
       exit(EXIT_FAILURE);
    }
    inFile.close();

@@ -1,14 +1,14 @@
 /* All  main documentaion is in header files
  * for corresponding cpp files.
  * */
-#include "../hdr/customExceptions.h"
+//#include "../hdr/customExceptions.h"
 #include "../hdr/student.h"
-#include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 
-namespace GraderApplication {
+namespace GraderApplication
+{
    StudentData::StudentData(void)
       : name ("")
         , totalGrade(0.0)
@@ -16,11 +16,12 @@ namespace GraderApplication {
         , isWDR(false)
         , isError(false)
         , errorDefinition("")
-
    {
+      /* Initialize the vectors */
       gradesContainer.reserve(1);
       calculatedGradesContainer.reserve(1);
    }
+
 
    void StudentData::errorPreserve(std::string &e)
    {
@@ -49,6 +50,7 @@ namespace GraderApplication {
          this->errorPreserve(onError);
       } 
    }
+
 
    int StudentData::getStudentDataLen() const { return this->studentDataLength; }
 
@@ -106,12 +108,13 @@ namespace GraderApplication {
          }
       } catch (FailStringFloatConversion &e) {
          std::string onError(e.what());
-         errorPreserve(onError);
+         this->errorPreserve(onError);
       } catch (StudentMarkExceedsMaxMark &e) {
          std::string onError(e.what());
-         errorPreserve(onError);
+         this->errorPreserve(onError);
       }
    }
+
 
    float StudentData::getCalculatedGrades(int &itr) { return this->calculatedGradesContainer[itr]; }
 
@@ -293,27 +296,5 @@ namespace GraderApplication {
       else {
          std::cerr << "Debug MSG: Could not open file to process student" << std::endl;
       }
-   }
-
-
-   bool StudentData::isAlphaNumeric(std::string &s)
-   {
-      std::string::size_type i = 0;
-      while ( (i < s.length()) ) {
-         if (! (std::isalnum(s[i])) ) {
-            return false;
-         } 
-         ++i;
-      }
-      return true;
-   }
-
-
-   std::string StudentData::convert_toupper(std::string s)
-   {
-      std::transform(s.begin(), s.end(), s.begin(),
-            [](unsigned char c) { return std::toupper(c); }
-            );
-      return s;
    }
 };

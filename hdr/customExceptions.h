@@ -4,7 +4,8 @@
 #include <exception>
 #include <string>
 
-namespace GraderApplication {
+namespace GraderApplication
+{
 
    class DuplicateFound : public std::exception {
       public:

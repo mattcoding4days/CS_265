@@ -34,6 +34,7 @@ namespace GraderApplication
        * each new student object, since I cant access it normally
        * with a getter because student is always a brandnew object,
        * the maxMarkContainer it has access to will be empty
+       * as the data will not persist across new student objects
        * */
       std::vector<float> maxMarkCopy;
       maxMarkCopy.reserve(this->getDataLength());
@@ -61,7 +62,13 @@ namespace GraderApplication
           * with continue, 'skip remaing code and jump to the top 
           * of the control loop'
           * */
-         if (studentContainer[i].getIsError()) { continue; }
+         if (studentContainer[i].getIsError()) { 
+            continue; 
+         }
+         /* If a students WDR flag is set, set the letter grader 
+          * to reflect WITHDRAWN, and skip to the beginning,
+          * do not attempt to calculate grades for given student
+          * */
          else if (studentContainer[i].getIsStudentWDR()) {
             studentContainer[i].setLetterGrade("WITHDRAWN");
             continue;
@@ -72,7 +79,7 @@ namespace GraderApplication
           * */
          std::vector<float> tempGradeContainer;
          tempGradeContainer.reserve(this->getDataLength());
-         
+
          float tempValue = 0.0;
          for ( int j = 0; j < this->getDataLength(); ++j ) {
             /* first calculate singular grades (mark * weight) / maxmark
@@ -99,7 +106,7 @@ namespace GraderApplication
    float Grader::subGradeComputation(int i, int j)
    {
       return (( studentContainer[i].getGrades(j) 
-            * this->getWeightContainer(j) ) / this->getMaxMarkContainer(j));
+               * this->getWeightContainer(j) ) / this->getMaxMarkContainer(j));
    }
 
 
@@ -151,7 +158,6 @@ namespace GraderApplication
             std::cout << i->getName() << "\t\t\t" << i->getLetterGrade()
                << std::endl;
          }
-         else { continue; }
       }
    }
 
@@ -164,8 +170,8 @@ namespace GraderApplication
          if (i->getIsError()) {
             std::cerr << "\n\nOffending line: " << i->getFileLineCount()
                << "\nOffending content: " << i->getCurrentLine()
-                  << "\nError message: " << i->getErrorDefinition()
-                     << std::endl;
+               << "\nError message: " << i->getErrorDefinition()
+               << std::endl;
          }
       }
    }
