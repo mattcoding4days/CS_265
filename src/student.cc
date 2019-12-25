@@ -1,8 +1,7 @@
 /* All  main documentaion is in header files
  * for corresponding cpp files.
  * */
-//#include "../hdr/customExceptions.h"
-#include "../hdr/student.h"
+#include "../hdr/student.hpp"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -11,11 +10,11 @@ namespace GraderApplication
 {
    StudentData::StudentData(void)
       : name ("")
-        , totalGrade(0.0)
-        , letterGrade("")
-        , isWDR(false)
-        , isError(false)
-        , errorDefinition("")
+      , totalGrade(0.0)
+      , letterGrade("")
+      , isWDR(false)
+      , isError(false)
+      , errorDefinition("")
    {
       /* Initialize the vectors */
       gradesContainer.reserve(1);
@@ -89,7 +88,7 @@ namespace GraderApplication
             int size = this->gradesContainer.size();
             for (int i = 0; i < size; i++ ) {
                if (this->gradesContainer[i] > tMax[i] 
-                     && !(this->getIsStudentWDR())) {
+                   && !(this->getIsStudentWDR())) {
                   throw StudentMarkExceedsMaxMark();
                }
             }
@@ -165,9 +164,9 @@ namespace GraderApplication
 
 
    bool StudentData::loadStudentFile(const std::string &file,
-         const std::streampos &updatedFilePosition,
-         int updateLinePosition, int evalLength,
-         std::vector<float> &tempMaxMark)
+                                     const std::streampos &updatedFilePosition,
+                                     int updateLinePosition, int evalLength,
+                                     std::vector<float> &tempMaxMark)
    {
       try {
          std::ifstream datafile(file);

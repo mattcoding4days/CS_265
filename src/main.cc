@@ -1,6 +1,6 @@
-#include "../hdr/base.h"
-#include "../hdr/grader.h"
-#include "../hdr/student.h"
+#include "../hdr/evaluation.hpp"
+#include "../hdr/grader.hpp"
+#include "../hdr/student.hpp"
 #include <chrono>
 #include <ctime>
 #include <iostream>
@@ -15,7 +15,7 @@ void printUsage();
 int parseArguments(int argc, char **argv, std::string &inputFile, std::string &name);
 
 
-/* XXX: Documentation
+/* NOTE: Documentation
  * Initialize main routine,
  * uses a combination of 3 internallu
  * robust classes, to make the implementaion
@@ -34,7 +34,7 @@ int main(int argc, char **argv)
       int numStudents = countStudentLines(inputFile);
       /* Load and prepare the data */
       Grader grader(numStudents, inputFile);
-      grader.loadBaseData(inputFile);
+      grader.loadEvaluationData(inputFile);
       grader.loadVector();
       
       /* Start the system clock so we can get an accurate reading for actual 
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 }
 
 
-/* XXX: Documentation
+/* NOTE: Documentation
  *  Argument parser
  *  return range [1, 2]
  *  return 1 = only file was passed
@@ -143,7 +143,7 @@ int parseArguments(int argc, char **argv,
 }
 
 
-/* XXX: Documentation
+/* NOTE: Documentation
  * Get userinput for file 
  * */
 void manualFileInput(std::string &input)
@@ -152,7 +152,7 @@ void manualFileInput(std::string &input)
    std::getline(std::cin, input);
 }
 
-/* XXX: Documentation
+/* NOTE: Documentation
  * printUsage()
  * Explain proper usage to the user 
  * */
@@ -168,7 +168,7 @@ void printUsage()
    exit(EXIT_FAILURE);
 }
 
-/* XXX: Documentation
+/* NOTE: Documentation
  * countStudentLines: Is meant to only count lines
  * that include student names
  *  

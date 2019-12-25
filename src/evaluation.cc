@@ -1,7 +1,7 @@
 /* All  main documentaion is in header files
  * for corresponding cpp files.
  * */
-#include "../hdr/base.h"
+#include "../hdr/evaluation.hpp"
 #include <fstream>
 #include <iostream>
 #include <iterator>
@@ -9,17 +9,17 @@
 
 namespace GraderApplication
 {
-   BaseData::BaseData(void)
+   EvaluationData::EvaluationData(void)
       : dataFile("")
-        , totalHeaderCount(0)
-        , dataLineLength(0)
-        , totalLineCount(0)
-        , currentLine("")
-        , currentFilePos(0)
-        , title("")
-        , category("")
-        , maxMark("")
-        , weight("")
+      , totalHeaderCount(0)
+      , dataLineLength(0)
+      , totalLineCount(0)
+      , currentLine("")
+      , currentFilePos(0)
+      , title("")
+      , category("")
+      , maxMark("")
+      , weight("")
    {
       /* Init vectors */
       titleContainer.reserve(1);
@@ -28,28 +28,28 @@ namespace GraderApplication
       weightContainer.reserve(1);
    }
 
-   void BaseData::errorPrint(const char *a)
+   void EvaluationData::errorPrint(const char *a)
    {
       std::cerr << "\nERROR: " << a << std::endl;
       std::cerr << "\nOffending line number: "
-         << this->getFileLineCount() << std::endl;
+                << this->getFileLineCount() << std::endl;
       std::cerr << "Offending content: " 
-         << this->getCurrentLine() << std::endl;
+                << this->getCurrentLine() << std::endl;
 
       exit (EXIT_FAILURE);
    }
 
    
-   int BaseData::getTotalHeaderCount() const { return this->totalHeaderCount; }
+   int EvaluationData::totalEvaluationCount() const { return this->totalHeaderCount; }
 
 
-   void BaseData::incrementHeaderCount() { (this->totalHeaderCount)++; }
+   void EvaluationData::incrementHeaderCount() { (this->totalHeaderCount)++; }
 
 
-   int BaseData::getDataLength() const { return this->dataLineLength; }
+   int EvaluationData::evaluationDataLength() const { return this->dataLineLength; }
 
 
-   void BaseData::setDataLength(int _length)
+   void EvaluationData::setEvaluationDataLength(int _length)
    {
       try {
          if (this->dataLineLength == 0) {
@@ -71,10 +71,10 @@ namespace GraderApplication
    }
 
 
-   std::string BaseData::getCurrentLine() const { return this->currentLine; }
+   std::string EvaluationData::currentReadLine() const { return this->currentLine; }
 
 
-   void BaseData::setCurrentLine(const std::string _currentLine)
+   void EvaluationData::setCurrentReadLine(const std::string _currentLine)
    {
       if (!(_currentLine.empty())) {
          this->currentLine = _currentLine;
@@ -82,25 +82,25 @@ namespace GraderApplication
    }
 
 
-   int BaseData::getFileLineCount() const { return this->totalLineCount; }
+   int EvaluationData::fileLineCount() const { return this->totalLineCount; }
 
 
-   void BaseData::incrementFileLineCount(int _x)
+   void EvaluationData::incrementFileLineCount(int _x)
    {
       this->totalLineCount += _x;
    }
 
 
-   std::streampos BaseData::getCurrentFilePosition() const { return this->currentFilePos; }
+   std::streampos EvaluationData::currentFilePosition() const { return this->currentFilePos; }
 
 
-   void BaseData::setCurrentFilePos(std::ifstream &f) { this->currentFilePos = f.tellg(); }
+   void EvaluationData::setCurrentFilePos(std::ifstream &f) { this->currentFilePos = f.tellg(); }
 
 
-   std::string BaseData::getTitle() const { return this->title; }
+   std::string EvaluationData::evaluationTitle() const { return this->title; }
 
 
-   void BaseData::setTitle(const std::string &_title) 
+   void EvaluationData::setEvaluationTitle(const std::string &_title)
    {
       try {
          if ( this->title.empty() ) { 
@@ -115,10 +115,10 @@ namespace GraderApplication
    }
 
 
-   std::string BaseData::getTitleContainer(int &itr) const { return this->titleContainer[itr]; }
+   std::string EvaluationData::evaluationTitleContainer(int &itr) const { return this->titleContainer[itr]; }
 
 
-   void BaseData::setTitleContainer(const std::string &_sub)
+   void EvaluationData::setEvaluationTitleContainer(const std::string &_sub)
    {
       try {
          for (int i = 0; i < this->getDataLength(); ++i) {
@@ -134,10 +134,10 @@ namespace GraderApplication
    } 
 
 
-   std::string BaseData::getCategory() const { return this->category; }
+   std::string EvaluationData::getCategory() const { return this->category; }
 
 
-   void BaseData::setCategory(const std::string &_category) 
+   void EvaluationData::setCategory(const std::string &_category)
    { 
       try {
          if ( this->category.empty() ) { 
@@ -152,10 +152,10 @@ namespace GraderApplication
    }
 
 
-   std::string BaseData::getCategoryContainer(int &itr) { return this->categoryContainer[itr]; }
+   std::string EvaluationData::getCategoryContainer(int &itr) { return this->categoryContainer[itr]; }
 
 
-   void BaseData::setCategoryContainer(const std::string &_sub)
+   void EvaluationData::setCategoryContainer(const std::string &_sub)
    {
       /* Nothing much to check here */
       this->categoryContainer.emplace_back(_sub);
@@ -163,10 +163,10 @@ namespace GraderApplication
    }
 
 
-   std::string BaseData::getMaxMark() const { return this->maxMark; }
+   std::string EvaluationData::getMaxMark() const { return this->maxMark; }
 
 
-   void BaseData::setMaxMark(const std::string &_maxMark)
+   void EvaluationData::setMaxMark(const std::string &_maxMark)
    {
       try {
          if ( this->maxMark.empty() ) { 
@@ -181,10 +181,10 @@ namespace GraderApplication
    }
 
 
-   float BaseData::getMaxMarkContainer(std::size_t itr) { return this->maxMarkContainer[itr]; }
+   float EvaluationData::getMaxMarkContainer(std::size_t itr) { return this->maxMarkContainer[itr]; }
 
 
-   void BaseData::setMaxMarkContainer(std::string &_sub)
+   void EvaluationData::setMaxMarkContainer(std::string &_sub)
    {
       try {
          if (isDigits(_sub)) {
@@ -199,10 +199,10 @@ namespace GraderApplication
    }
 
 
-   std::string BaseData::getWeight() const { return this->weight; }
+   std::string EvaluationData::getWeight() const { return this->weight; }
 
 
-   void BaseData::setWeight(const std::string &_weight)
+   void EvaluationData::setWeight(const std::string &_weight)
    {
       try {
          if ( this->weight.empty() ) { 
@@ -217,10 +217,10 @@ namespace GraderApplication
    }
 
 
-   float BaseData::getWeightContainer(int &itr) { return this->weightContainer[itr]; }
+   float EvaluationData::getWeightContainer(int &itr) { return this->weightContainer[itr]; }
 
 
-   void BaseData::setWeightContainer(std::string &_sub)
+   void EvaluationData::setWeightContainer(std::string &_sub)
    {
       float total;
       try {
@@ -250,7 +250,7 @@ namespace GraderApplication
    }
 
 
-   void BaseData::loadBaseData(const std::string &file)
+   void EvaluationData::loadEvaluationData(const std::string &file)
    {
       try {
          std::ifstream inFile(file);

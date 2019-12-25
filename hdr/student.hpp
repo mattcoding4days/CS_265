@@ -1,7 +1,7 @@
-#ifndef STUDENT_H
-#define STUDENT_H
+#ifndef STUDENT_HPP
+#define STUDENT_HPP
 
-#include "utillity.h"
+#include "utillity.hpp"
 #include <vector>
 
 namespace GraderApplication

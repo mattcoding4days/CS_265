@@ -1,5 +1,5 @@
-#ifndef CUSTOMEXCEPTIONS_H
-#define CUSTOMEXCEPTIONS_H
+#ifndef CUSTOMEXCEPTIONS_HPP
+#define CUSTOMEXCEPTIONS_HPP
 
 #include <exception>
 #include <string>

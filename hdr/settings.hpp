@@ -1,6 +1,5 @@
-#ifndef SETTINGS_H
-#define SETTINGS_H
-
+#ifndef SETTINGS_HPP
+#define SETTINGS_HPP
 
 namespace GraderApplication
 {
@@ -40,7 +39,7 @@ namespace GraderApplication
 #define WEIGHT "WEIGHT"
 #define WDRN "WDR"
 
-   /* XXX: Documentaion
+   /* NOTE: Documentaion
     * File delimiters, or characters we want to ignore, or look for 
     * when parsing the file 
     * */
@@ -95,7 +94,7 @@ namespace GraderApplication
    };
 
 
-   /* XXX: Documentaion
+   /* NOTE: Documentaion
     * Stuct for letter grade representation the student will recieve 
     * */
     struct Echelon

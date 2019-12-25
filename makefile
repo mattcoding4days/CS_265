@@ -18,48 +18,48 @@ VERSION=2.0
 
 all: $(TARGET) $(TARGET_DEBUG)
 
-$(TARGET): obj/main.o obj/utillity.o obj/base.o obj/student.o obj/grader.o
-	 $(RELEASE) bin/grader $(OBJFILES)
+$(TARGET): obj/main.o obj/utillity.o obj/evaluation.o obj/student.o obj/grader.o
+	$(RELEASE) bin/grader $(OBJFILES)
 
-$(TARGET_DEBUG): objd/main.o objd/utillity.o objd/base.o objd/student.o objd/grader.o
+$(TARGET_DEBUG): objd/main.o objd/utillity.o objd/evaluation.o objd/student.o objd/grader.o
 	$(DEBUG) bin/graderdebug $(OBJFILESDEBUG)
 
 # Release
-obj/main.o: src/main.cpp hdr/base.h hdr/grader.h hdr/student.h
+obj/main.o: src/main.cc hdr/evaluation.hpp hdr/grader.hpp hdr/student.hpp
 	@echo
 	@echo "Building Grader Release Version: $(VERSION)"
 	@echo "===================================="
 	$(CXX) $(WARNINGS) $(BUILD_FLG) $< $(OUT_FLG) $@
 
-obj/utillity.o: src/utillity.cpp hdr/utillity.h
+obj/utillity.o: src/utillity.cc hdr/utillity.hpp
 	$(CXX) $(WARNINGS) $(BUILD_FLG) $< $(OUT_FLG) $@
 
-obj/base.o: src/base.cpp hdr/base.h
+obj/evaluation.o: src/evaluation.cc hdr/evaluation.hpp
 	$(CXX) $(WARNINGS) $(BUILD_FLG) $< $(OUT_FLG) $@
 
-obj/student.o: src/student.cpp hdr/student.h
+obj/student.o: src/student.cc hdr/student.hpp
 	$(CXX) $(WARNINGS) $(BUILD_FLG) $< $(OUT_FLG) $@
 
-obj/grader.o: src/grader.cpp hdr/grader.h
+obj/grader.o: src/grader.cc hdr/grader.hpp
 	$(CXX) $(WARNINGS) $(BUILD_FLG) $< $(OUT_FLG) $@
 
 # Debug
-objd/main.o: src/main.cpp hdr/base.h hdr/student.h hdr/grader.h
+objd/main.o: src/main.cc hdr/evaluation.hpp hdr/student.hpp hdr/grader.hpp
 	@echo
 	@echo "Building Grader Debug Version: $(VERSION)"
 	@echo "=================================="
 	$(CXX) $(WARNINGS) $(BUILD_FLG) $(DEBUG_FLG) $< $(OUT_FLG) $@
 
-objd/utillity.o: src/utillity.cpp hdr/utillity.h
+objd/utillity.o: src/utillity.cc hdr/utillity.hpp
 	$(CXX) $(WARNINGS) $(BUILD_FLG) $(DEBUG_FLG) $< $(OUT_FLG) $@
 
-objd/base.o: src/base.cpp hdr/base.h
+objd/evaluation.o: src/evaluation.cc hdr/evaluation.hpp
 	$(CXX) $(WARNINGS) $(BUILD_FLG) $(DEBUG_FLG) $< $(OUT_FLG) $@
 
-objd/student.o: src/student.cpp hdr/student.h
+objd/student.o: src/student.cc hdr/student.hpp
 	$(CXX) $(WARNINGS) $(BUILD_FLG) $(DEBUG_FLG) $< $(OUT_FLG) $@
 
-objd/grader.o: src/grader.cpp hdr/grader.h
+objd/grader.o: src/grader.cc hdr/grader.hpp
 	$(CXX) $(WARNINGS) $(BUILD_FLG) $(DEBUG_FLG) $< $(OUT_FLG) $@
 
 clean:

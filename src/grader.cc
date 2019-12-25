@@ -1,7 +1,7 @@
 /* All  main documentaion is in header files
  * for corresponding cpp files.
  * */
-#include "../hdr/grader.h"
+#include "../hdr/grader.hpp"
 #include <iostream>
 #include <iomanip>
 #include <numeric>
@@ -11,7 +11,7 @@ namespace GraderApplication
 {
    Grader::Grader(int _numberOfStudents, const std::string &_dataFile)
       : numberOfStudents(_numberOfStudents)
-        , dataFile(_dataFile)
+      , dataFile(_dataFile)
    {
       studentContainer.reserve(numberOfStudents);
    }
@@ -45,7 +45,7 @@ namespace GraderApplication
       for ( int i = 1; i <= this->getNumOfStudents(); ++i ) {
          StudentData student;
          student.loadStudentFile(file, currpos,
-               (lineCount + i), evalDataLength, maxMarkCopy);
+                                 (lineCount + i), evalDataLength, maxMarkCopy);
          // Update currpos before student gets store in vector and
          // a new one is created
          currpos = student.getCurrentFilePosition();               
@@ -106,7 +106,7 @@ namespace GraderApplication
    float Grader::subGradeComputation(int i, int j)
    {
       return (( studentContainer[i].getGrades(j) 
-               * this->getWeightContainer(j) ) / this->getMaxMarkContainer(j));
+                * this->getWeightContainer(j) ) / this->getMaxMarkContainer(j));
    }
 
 
@@ -148,15 +148,15 @@ namespace GraderApplication
                std::cout << studentContainer[i].getCalculatedGrades(j) << "\t\t\t";
             }
             std::cout << studentContainer[i].getTotalGrade() << "\t\t\t"
-               << studentContainer[i].getLetterGrade() << std::endl;
+                      << studentContainer[i].getLetterGrade() << std::endl;
          }
       }
 
       for (StudentVector::iterator i = studentContainer.begin();
-            i != studentContainer.end(); ++i) {
+           i != studentContainer.end(); ++i) {
          if (i->getIsStudentWDR()) {
             std::cout << i->getName() << "\t\t\t" << i->getLetterGrade()
-               << std::endl;
+                      << std::endl;
          }
       }
    }
@@ -165,13 +165,13 @@ namespace GraderApplication
    void Grader::outputError(void)
    {
       for (StudentVector::iterator i = studentContainer.begin();
-            i != studentContainer.end(); ++i) {
+           i != studentContainer.end(); ++i) {
          /* Print out only the errors that were caught */
          if (i->getIsError()) {
             std::cerr << "\n\nOffending line: " << i->getFileLineCount()
-               << "\nOffending content: " << i->getCurrentLine()
-               << "\nError message: " << i->getErrorDefinition()
-               << std::endl;
+                      << "\nOffending content: " << i->getCurrentLine()
+                      << "\nError message: " << i->getErrorDefinition()
+                      << std::endl;
          }
       }
    }

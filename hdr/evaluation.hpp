@@ -1,17 +1,17 @@
-#ifndef BASE_H
-#define BASE_H
+#ifndef EVALUATION_HPP
+#define EVALUATION_HPP
 
-#include "utillity.h"
+#include "utillity.hpp"
 #include <fstream>
 #include <vector>
 
 namespace GraderApplication
 {
-   /* XXX: Documentation
-    * BaseData is responsible for all prelim data
+   /* NOTE: Documentation
+    * EvaluationData is responsible for all prelim data
     * it also houses alot of base functionality for 
     * student and grader which derive from it.
-    * BaseData adopts the getter setter strategy
+    * EvaluationData adopts the getter setter strategy
     * so the derived classes can easily use alot of
     * the core functionality built in. It also provides
     * a standardized way to access attributes accross the
@@ -19,7 +19,7 @@ namespace GraderApplication
     * for error checking, which makes domain constraints on 
     * the methods themselves simple and concise
     * */
-   class BaseData : public Utillity
+   class EvaluationData: public Utillity
    {
       private:
          std::string dataFile;
@@ -38,113 +38,113 @@ namespace GraderApplication
          std::vector <float> weightContainer;
 
       public:
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * Default constructor
           * */
-         BaseData(void);
+         EvaluationData(void);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * error print will in all output from 
           * exceptions for BaseData class only
           * */
          void errorPrint (const char *);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * Return the total header count
           * This will be used to compare against
           * the HEADER_MAX macro of 4 so we know
           * when the max has been read in
           * */
-         int getTotalHeaderCount() const;
+         int totalEvaluationCount() const;
          void incrementHeaderCount();
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * Accessor: getter and setter
           * For the actual length of the evaluation data
           * This is only what is stored in the vector
           * not the datas associated Key
           * */
-         int getDataLength() const; 
-         void setDataLength(int);
+         int evaluationDataLength() const;
+         void setEvaluationDataLength(int);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * Accessor: getter and setter
           * stores the current line we read in,
           * this is mainly for the error reporing
           * */
-         std::string getCurrentLine() const;
-         void setCurrentLine(const std::string);
+         std::string currentReadLine() const;
+         void setCurrentReadLine(const std::string);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * Accessor: getter and setter
           * This is to track line errors
           * */
-         int getFileLineCount() const;
+         int fileLineCount() const;
          void incrementFileLineCount(int);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * Accessor: getter and setter
           * This is so the file position can be remembered
           * so the file can be closed and reopended by different
           * methods without have to read from the beginning of the file
           * */
-         std::streampos getCurrentFilePosition() const;
+         std::streampos currentFilePosition() const;
          void setCurrentFilePos(std::ifstream &);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * Accessor: getter and setter for title
           * */
-         std::string getTitle() const; 
-         void setTitle(const std::string &); 
+         std::string evaluationTitle() const;
+         void setEvaluationTitle(const std::string &);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * Accessor: getter and setter for title container
           * */
-         std::string getTitleContainer(int &) const;
-         void setTitleContainer(const std::string &);
+         std::string evaluationTitleContainer(int &) const;
+         void setEvaluationTitleContainer(const std::string &);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * Accessor: getter and setter for category
           * */
          std::string getCategory() const;
          void setCategory(const std::string &);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * Accessor: getter and setter for category container
           * */
          std::string getCategoryContainer(int &);
          void setCategoryContainer(const std::string &);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * Accessor: getter and setter for maxmark 
           * */
          std::string getMaxMark() const;
          void setMaxMark(const std::string &);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * Accessor:  getter and setter for maxmark container
           * */
          float getMaxMarkContainer(std::size_t);
          void setMaxMarkContainer(std::string &);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * Accessor: getter and setter for weight
           * */
          std::string getWeight() const;
          void setWeight(const std::string &);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * Accessor: getter and setter for weight container
           * */
          float getWeightContainer(int &);
          void setWeightContainer(std::string &);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * Load only preliminary data from file:
           * reads data based on first character matches
           * from a predefined enumerator in settings.h
           * */
-         void loadBaseData(const std::string &);
+         void loadEvaluationData(const std::string &);
    };
 };
 

@@ -1,8 +1,8 @@
-#ifndef UTILLITY_H
-#define UTILLITY_H
+#ifndef UTILLITY_HPP
+#define UTILLITY_HPP
 
-#include "customExceptions.h"
-#include "settings.h"
+#include "customExceptions.hpp"
+#include "settings.hpp"
 #include <string>
 #include <vector>
 
