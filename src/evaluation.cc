@@ -32,9 +32,9 @@ namespace GraderApplication
    {
       std::cerr << "\nERROR: " << a << std::endl;
       std::cerr << "\nOffending line number: "
-                << this->getFileLineCount() << std::endl;
+                << this->fileLineCount() << std::endl;
       std::cerr << "Offending content: " 
-                << this->getCurrentLine() << std::endl;
+                << this->currentLineContent() << std::endl;
 
       exit (EXIT_FAILURE);
    }
@@ -43,7 +43,10 @@ namespace GraderApplication
    int EvaluationData::totalEvaluationCount() const { return this->totalHeaderCount; }
 
 
-   void EvaluationData::incrementHeaderCount() { (this->totalHeaderCount)++; }
+   void EvaluationData::setTotalEvaluationCount(int _x)
+   {
+      this->totalHeaderCount += _x;
+   }
 
 
    int EvaluationData::evaluationDataLength() const { return this->dataLineLength; }
@@ -71,10 +74,10 @@ namespace GraderApplication
    }
 
 
-   std::string EvaluationData::currentReadLine() const { return this->currentLine; }
+   std::string EvaluationData::currentLineContent() const { return this->currentLine; }
 
 
-   void EvaluationData::setCurrentReadLine(const std::string _currentLine)
+   void EvaluationData::setCurrentLineContent(const std::string _currentLine)
    {
       if (!(_currentLine.empty())) {
          this->currentLine = _currentLine;
@@ -85,7 +88,7 @@ namespace GraderApplication
    int EvaluationData::fileLineCount() const { return this->totalLineCount; }
 
 
-   void EvaluationData::incrementFileLineCount(int _x)
+   void EvaluationData::setFileLineCount(int _x)
    {
       this->totalLineCount += _x;
    }
@@ -115,13 +118,20 @@ namespace GraderApplication
    }
 
 
-   std::string EvaluationData::evaluationTitleContainer(int &itr) const { return this->titleContainer[itr]; }
+   std::string EvaluationData::evaluationTitleContainer(int itr) const
+   {
+      if (itr < 0 || itr > this->evaluationDataLength()) {
+         std::cerr << "Iterator found out of bounds for eval data length" << std::endl;
+         exit(EXIT_FAILURE);
+      }
+      return this->titleContainer[itr];
+   }
 
 
    void EvaluationData::setEvaluationTitleContainer(const std::string &_sub)
    {
       try {
-         for (int i = 0; i < this->getDataLength(); ++i) {
+         for (int i = 0; i < this->evaluationDataLength(); ++i) {
             if (this->titleContainer[i] == _sub) {
                throw DuplicateFound();
             }
@@ -134,14 +144,14 @@ namespace GraderApplication
    } 
 
 
-   std::string EvaluationData::getCategory() const { return this->category; }
+   std::string EvaluationData::evaluationCategory() const { return this->category; }
 
 
-   void EvaluationData::setCategory(const std::string &_category)
+   void EvaluationData::setEvaluationCategory(const std::string &_category)
    { 
       try {
-         if ( this->category.empty() ) { 
-            this->category = _category; 
+         if ( this->category.empty() ) {
+            this->category = _category;
          }
          else {
             throw DuplicateFound();
@@ -152,10 +162,17 @@ namespace GraderApplication
    }
 
 
-   std::string EvaluationData::getCategoryContainer(int &itr) { return this->categoryContainer[itr]; }
+   std::string EvaluationData::evaluationCategoryContainer(int itr)
+   {
+      if (itr < 0 || itr > this->evaluationDataLength()) {
+         std::cerr << "Iterator found out of bounds for eval data length" << std::endl;
+         exit(EXIT_FAILURE);
+      }
+      return this->categoryContainer[itr];
+   }
 
 
-   void EvaluationData::setCategoryContainer(const std::string &_sub)
+   void EvaluationData::setEvaluationCategoryContainer(const std::string &_sub)
    {
       /* Nothing much to check here */
       this->categoryContainer.emplace_back(_sub);
@@ -163,10 +180,10 @@ namespace GraderApplication
    }
 
 
-   std::string EvaluationData::getMaxMark() const { return this->maxMark; }
+   std::string EvaluationData::evaluationMaxMark() const { return this->maxMark; }
 
 
-   void EvaluationData::setMaxMark(const std::string &_maxMark)
+   void EvaluationData::setEvaluationMaxMark(const std::string &_maxMark)
    {
       try {
          if ( this->maxMark.empty() ) { 
@@ -181,10 +198,17 @@ namespace GraderApplication
    }
 
 
-   float EvaluationData::getMaxMarkContainer(std::size_t itr) { return this->maxMarkContainer[itr]; }
+   float EvaluationData::evaluationMaxMarkContainer(int itr)
+   {
+      if (itr < 0 || itr > this->evaluationDataLength()) {
+         std::cerr << "Iterator found out of bounds for eval data length" << std::endl;
+         exit(EXIT_FAILURE);
+      }
+      return this->maxMarkContainer[itr];
+   }
 
 
-   void EvaluationData::setMaxMarkContainer(std::string &_sub)
+   void EvaluationData::setEvaluationMaxMarkContainer(std::string &_sub)
    {
       try {
          if (isDigits(_sub)) {
@@ -199,10 +223,10 @@ namespace GraderApplication
    }
 
 
-   std::string EvaluationData::getWeight() const { return this->weight; }
+   std::string EvaluationData::evaluationWeight() const { return this->weight; }
 
 
-   void EvaluationData::setWeight(const std::string &_weight)
+   void EvaluationData::setEvaluationWeight(const std::string &_weight)
    {
       try {
          if ( this->weight.empty() ) { 
@@ -217,10 +241,10 @@ namespace GraderApplication
    }
 
 
-   float EvaluationData::getWeightContainer(int &itr) { return this->weightContainer[itr]; }
+   float EvaluationData::evaluationWeightContainer(int itr) { return this->weightContainer[itr]; }
 
 
-   void EvaluationData::setWeightContainer(std::string &_sub)
+   void EvaluationData::setEvaluationWeightContainer(std::string &_sub)
    {
       float total;
       try {
@@ -230,7 +254,7 @@ namespace GraderApplication
          }
          else { throw FailStringFloatConversion(); }
 
-         std::size_t tempCompare = this->getDataLength();
+         std::size_t tempCompare = this->evaluationDataLength();
          if (this->weightContainer.size() == tempCompare) {
             /* if the container size is equal to the line length
              * we know all grades have been read in, which means
@@ -258,7 +282,7 @@ namespace GraderApplication
          if (inFile.good()) {
             while (std::getline(inFile, line)) {
                /* record the current line for error purposes */
-               this->setCurrentLine(line);
+               this->setCurrentLineContent(line);
                this->stripComments(line);
 
                std::string keyword("");
@@ -267,57 +291,57 @@ namespace GraderApplication
 
                ss >> keyword;
                if (keyword == TITLE) {
-                  this->setTitle(keyword);
-                  this->incrementHeaderCount();
+                  this->setEvaluationTitle(keyword);
+                  this->setTotalEvaluationCount(1);
                   int i = 0;
                   while(ss >> sTemp) {
-                     this->setTitleContainer(sTemp);
+                     this->setEvaluationTitleContainer(sTemp);
                      i++;
                   }
                   /* set our evaluation data length */
-                  this->setDataLength(i);
+                  this->setEvaluationDataLength(i);
                }
 
                else if (keyword == CATEGORY) {
-                  this->setCategory(keyword);
-                  this->incrementHeaderCount();
+                  this->setEvaluationCategory(keyword);
+                  this->setTotalEvaluationCount(1);
                   int i = 0;
                   while(ss >> sTemp) {
-                     this->setCategoryContainer(sTemp);
+                     this->setEvaluationCategoryContainer(sTemp);
                      i++;
                   }
                   /* set our evaluation data length */
-                  this->setDataLength(i);
+                  this->setEvaluationDataLength(i);
                }
 
                else if (keyword == MAXMARK) {
-                  this->setMaxMark(keyword);
-                  this->incrementHeaderCount();
+                  this->setEvaluationMaxMark(keyword);
+                  this->setTotalEvaluationCount(1);
                   int i = 0;
                   while(ss >> sTemp) {
-                     this->setMaxMarkContainer(sTemp);
+                     this->setEvaluationMaxMarkContainer(sTemp);
                      i++;
                   }
                   /* set our evaluation data length */
-                  this->setDataLength(i);
+                  this->setEvaluationDataLength(i);
                }
 
                else if (keyword == WEIGHT) {
-                  this->setWeight(keyword);
-                  this->incrementHeaderCount();
+                  this->setEvaluationWeight(keyword);
+                  this->setTotalEvaluationCount(1);
                   int i = 0;
                   while(ss >> sTemp) {
-                     this->setWeightContainer(sTemp);
+                     this->setEvaluationWeightContainer(sTemp);
                      i++;
                   }
                   /* set our evaluation data length */
-                  this->setDataLength(i);
+                  this->setEvaluationDataLength(i);
                }
 
                /* we read a line so increment the count */
-               this->incrementFileLineCount(1);
+               this->setFileLineCount(1);
 
-               if (this->getTotalHeaderCount() == HEADER_MAX) {
+               if (this->totalEvaluationCount() == HEADER_MAX) {
                   this->setCurrentFilePos(inFile);
                   inFile.close();
                }

@@ -47,7 +47,7 @@ namespace GraderApplication
           * error print will in all output from 
           * exceptions for BaseData class only
           * */
-         void errorPrint (const char *);
+         void errorPrint(const char *);
 
          /* NOTE: Documentation
           * Return the total header count
@@ -56,7 +56,7 @@ namespace GraderApplication
           * when the max has been read in
           * */
          int totalEvaluationCount() const;
-         void incrementHeaderCount();
+         void setTotalEvaluationCount(int);
 
          /* NOTE: Documentation
           * Accessor: getter and setter
@@ -72,15 +72,15 @@ namespace GraderApplication
           * stores the current line we read in,
           * this is mainly for the error reporing
           * */
-         std::string currentReadLine() const;
-         void setCurrentReadLine(const std::string);
+         std::string currentLineContent() const;
+         void setCurrentLineContent(const std::string);
 
          /* NOTE: Documentation
           * Accessor: getter and setter
           * This is to track line errors
           * */
          int fileLineCount() const;
-         void incrementFileLineCount(int);
+         void setFileLineCount(int);
 
          /* NOTE: Documentation
           * Accessor: getter and setter
@@ -100,44 +100,44 @@ namespace GraderApplication
          /* NOTE: Documentation
           * Accessor: getter and setter for title container
           * */
-         std::string evaluationTitleContainer(int &) const;
+         std::string evaluationTitleContainer(int) const;
          void setEvaluationTitleContainer(const std::string &);
 
          /* NOTE: Documentation
           * Accessor: getter and setter for category
           * */
-         std::string getCategory() const;
-         void setCategory(const std::string &);
+         std::string evaluationCategory() const;
+         void setEvaluationCategory(const std::string &);
 
          /* NOTE: Documentation
           * Accessor: getter and setter for category container
           * */
-         std::string getCategoryContainer(int &);
-         void setCategoryContainer(const std::string &);
+         std::string evaluationCategoryContainer(int);
+         void setEvaluationCategoryContainer(const std::string &);
 
          /* NOTE: Documentation
           * Accessor: getter and setter for maxmark 
           * */
-         std::string getMaxMark() const;
-         void setMaxMark(const std::string &);
+         std::string evaluationMaxMark() const;
+         void setEvaluationMaxMark(const std::string &);
 
          /* NOTE: Documentation
           * Accessor:  getter and setter for maxmark container
           * */
-         float getMaxMarkContainer(std::size_t);
-         void setMaxMarkContainer(std::string &);
+         float evaluationMaxMarkContainer(int);
+         void setEvaluationMaxMarkContainer(std::string &);
 
          /* NOTE: Documentation
           * Accessor: getter and setter for weight
           * */
-         std::string getWeight() const;
-         void setWeight(const std::string &);
+         std::string evaluationWeight() const;
+         void setEvaluationWeight(const std::string &);
 
          /* NOTE: Documentation
           * Accessor: getter and setter for weight container
           * */
-         float getWeightContainer(int &);
-         void setWeightContainer(std::string &);
+         float evaluationWeightContainer(int);
+         void setEvaluationWeightContainer(std::string &);
 
          /* NOTE: Documentation
           * Load only preliminary data from file:
