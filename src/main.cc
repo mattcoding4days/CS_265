@@ -1,5 +1,4 @@
 #include "../hdr/evaluation.hpp"
-#include "../hdr/grader.hpp"
 #include "../hdr/student.hpp"
 #include <chrono>
 #include <ctime>
@@ -32,27 +31,16 @@ int main(int argc, char **argv)
 
    if (numargsfilled == 1) {
       int numStudents = countStudentLines(inputFile);
-      /* Load and prepare the data */
-      Grader grader(numStudents, inputFile);
-      grader.loadEvaluationData(inputFile);
-      grader.loadVector();
-      
-      /* Start the system clock so we can get an accurate reading for actual 
-       * calculation time
-       * */
-      auto end = std::chrono::system_clock::now();
-      std::chrono::duration<double> elapsed_seconds = end-start;
-      std::time_t end_time = std::chrono::system_clock::to_time_t(end);
-      std::cout << std::ctime(&end_time);
+
+      //auto end = std::chrono::system_clock::now();
+      //std::chrono::duration<double> elapsed_seconds = end-start;
+      //std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+      //std::cout << std::ctime(&end_time);
 
       /* As per the beauty of OOP, object grader will just call a few
        * methods that under the hood are quite complicated, but simplify
        * the main routine code
        * */
-      grader.makeGrades();
-      grader.outputFinal();
-      grader.outputError();
-      grader.sanitize();
    }
 
    else if (numargsfilled == 2) {

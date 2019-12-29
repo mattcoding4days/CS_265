@@ -1,6 +1,7 @@
 /* All  main documentaion is in header files
  * for corresponding cpp files.
  * */
+#include "../hdr/evaluation.hpp"
 #include "../hdr/student.hpp"
 #include <iostream>
 #include <fstream>
@@ -10,11 +11,15 @@ namespace GraderApplication
 {
    StudentData::StudentData(void)
       : name ("")
-      , totalGrade(0.0)
-      , letterGrade("")
-      , isWDR(false)
-      , isError(false)
-      , errorDef("")
+      , labScore (0.0)
+      , assignScore (0.0)
+      , midtermScore (0.0)
+      , finalScore (0.0)
+      , totalGrade (0.0)
+      , letterGrade ("")
+      , isWDR (false)
+      , isError (false)
+      , errorDef ("")
    {
       /* Initialize the vectors */
       gradesContainer.reserve(1);
@@ -32,7 +37,7 @@ namespace GraderApplication
    }
 
 
-   std::string StudentData::studentName() const { return this->name; }
+   std::string StudentData::studentName(void) const { return this->name; }
 
 
    void StudentData::setStudentName(std::string &_name)
@@ -51,33 +56,10 @@ namespace GraderApplication
    }
 
 
-   int StudentData::studentDataLength() const { return this->studentDataLen; }
+   float StudentData::studentGradesContainer(int &itr) { return this->gradesContainer[itr]; }
 
 
-   void StudentData::setStudentDataLength(int _length, int eval)
-   {
-      try {
-         if (_length == eval) {
-            this->studentDataLen = _length;
-         }
-         else {
-            /* Our lengths do not match, cannot compute data correctly
-             * throw and end program
-             * */
-            throw StudentDataLengthError();
-         }
-
-      } catch (StudentDataLengthError &e) {
-         std::string onError(e.what());
-         this->errorPreserve(onError);
-      }
-   }
-
-
-   float StudentData::studentGrades(int &itr) { return this->gradesContainer[itr]; }
-
-
-   void StudentData::setStudentGrades(std::string &_grade, std::vector<float> &tMax)
+   void StudentData::setStudentGradesContainer(std::string &_grade, std::vector<float> &tMax)
    {
       try {
          /* Check if string is infact a digit */
@@ -115,7 +97,7 @@ namespace GraderApplication
    }
 
 
-   float StudentData::calculatedGrades(int &itr) { return this->calculatedGradesContainer[itr]; }
+   float StudentData::calculatedGrades(int itr) { return this->calculatedGradesContainer[itr]; }
 
 
    void StudentData::setCalculatedGrades(std::vector<float> &calcMarks) 
@@ -126,25 +108,107 @@ namespace GraderApplication
    }
 
 
-   float StudentData::studentTotalGrade() const { return this->totalGrade; }
+   int StudentData::studentDataLength(void) const { return this->studentDataLen; }
+
+
+   void StudentData::setStudentDataLength(int _length, int eval)
+   {
+      try {
+         if (_length == eval) {
+            this->studentDataLen = _length;
+         }
+         else {
+            /* Our lengths do not match, cannot compute data correctly
+             * throw and end program
+             * */
+            throw StudentDataLengthError();
+         }
+
+      } catch (StudentDataLengthError &e) {
+         std::string onError(e.what());
+         this->errorPreserve(onError);
+      }
+   }
+
+
+   float StudentData::studentLabScore(void) const { return this->labScore; }
+
+   void StudentData::setStudentLabScore(float score)
+   {
+      /* bound check */
+      if (score < 0) {
+         std::cerr << "Score: " << score << " is out of bounds" << std::endl;
+      }
+      else {
+         this->labScore += score;
+      }
+   }
+
+
+   float StudentData::studentAssignScore(void) const { return this->assignScore; }
+
+
+   void StudentData::setStudentAssignScore(float score)
+   {
+      /* bound check */
+      if (score < 0) {
+         std::cerr << "Score: " << score << " is out of bounds" << std::endl;
+      }
+      else {
+         this->assignScore += score;
+      }
+   }
+
+
+   float StudentData::studentMidtermScore(void) const { return this->midtermScore; }
+
+
+   void StudentData::setstudentMidtermScore(float score)
+   {
+      /* bound check */
+      if (score < 0) {
+         std::cerr << "Score: " << score << " is out of bounds" << std::endl;
+      }
+      else {
+         this->midtermScore += score;
+      }
+   }
+
+
+   float StudentData::studentFinalScore(void) const { return this->finalScore; }
+
+
+   void StudentData::setStudentFinalScore(float score)
+   {
+      /* bound check */
+      if (score < 0) {
+         std::cerr << "Score: " << score << " is out of bounds" << std::endl;
+      }
+      else {
+         this-> finalScore += score;
+      }
+   }
+
+
+   float StudentData::studentTotalGrade(void) const { return this->totalGrade; }
 
 
    void StudentData::setStudentTotalGrade(const float _totalGrade) { this->totalGrade += _totalGrade; }
 
 
-   std::string StudentData::studentLetterGrade() const { return this->letterGrade; }
+   std::string StudentData::studentLetterGrade(void) const { return this->letterGrade; }
 
 
    void StudentData::setStudentLetterGrade(const std::string &_letterGrade) { this->letterGrade = _letterGrade; }
 
 
-   bool StudentData::studentWDR() const { return this->isWDR; }
+   bool StudentData::studentWDR(void) const { return this->isWDR; }
 
 
    void StudentData::setStudentWDR(bool _isWDR) { this->isWDR = _isWDR; }
 
 
-   bool StudentData::studentError() const { return this->isError; }
+   bool StudentData::studentError(void) const { return this->isError; }
 
 
    void StudentData::setStudentError(bool _isError) { this->isError = _isError; }
@@ -208,7 +272,7 @@ namespace GraderApplication
                   } else {
                      int i = 0;
                      while (ss >> sMarks) {
-                        this->setStudentGrades(sMarks, tempMaxMark);
+                        this->setStudentGradesContainer(sMarks, tempMaxMark);
                         // TODO: Not sure if this second check to studentError
                         // needs to be here, look into this later
                         if (!(this->studentError())) {

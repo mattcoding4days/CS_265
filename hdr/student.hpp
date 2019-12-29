@@ -24,6 +24,10 @@ namespace GraderApplication
          std::vector <float> gradesContainer;
          std::vector <float> calculatedGradesContainer;
          int studentDataLen;
+         float labScore;
+         float assignScore;
+         float midtermScore;
+         float finalScore;
          float totalGrade;
          std::string letterGrade;
          bool isWDR;
@@ -31,11 +35,11 @@ namespace GraderApplication
          std::string errorDef;
 
       public:
-
          /* NOTE: Documentation
           * Default Constuctor
           * */
          StudentData(void);
+
 
          /* NOTE: Documentation
           * Error preserve will be called whenever something
@@ -47,55 +51,100 @@ namespace GraderApplication
           */
          void errorPreserve(std::string &);
 
+
          /* NOTE: Documentation
           * getters and setters for name
           * */
-         std::string studentName() const;
+         std::string studentName(void) const;
          void setStudentName(std::string &);
 
-         /* NOTE: Documentation
-          * getters and setters for length of student
-          * data, wich also takes the length from 
-          * the evaluation data for comparison
-          * purposes
-          * */
-         int studentDataLength() const;
-         void setStudentDataLength(int, int);
 
          /* NOTE: Documentation
           * getters and setters for grades container
           * */
-         float studentGrades(int &);
-         void setStudentGrades(std::string &, std::vector<float> &);
+         float studentGradesContainer(int &);
+         void setStudentGradesContainer(std::string &, std::vector<float> &);
+
 
          /* NOTE: Documentation
           * getters and setters for the container
           * that will hold the resulting grades after
           * calculation (mark * weight) / max mark
           * */
-         float calculatedGrades(int &);
+         float calculatedGrades(int);
          void setCalculatedGrades(std::vector<float> &);
+
+
+         /* NOTE: Documentation
+          * getters and setters for length of student
+          * data, wich also takes the length from
+          * the evaluation data for comparison
+          * purposes
+          * */
+         int studentDataLength(void) const;
+         void setStudentDataLength(int, int);
+
+
+         /* NOTE: Documentation
+          * Accessor methods for
+          * the students accumulated
+          * total lab scores
+          * */
+         float studentLabScore(void) const;
+         void setStudentLabScore(float score);
+
+
+         /* NOTE: Documentation
+          * Accessor methods for
+          * the students accumulated
+          * assignment scores
+          * */
+         float studentAssignScore(void) const;
+         void setStudentAssignScore(float score);
+
+
+         /* NOTE: Documentation
+          * Accessor methods for
+          * the students accumulated
+          * midterm scores
+          * */
+         float studentMidtermScore(void) const;
+         void setstudentMidtermScore(float score);
+
+
+         /* NOTE: Documentation
+          * Accessor methods for
+          * the students accumulated
+          * final (test) score this should
+          * only be one
+          * */
+         float studentFinalScore(void) const;
+         void setStudentFinalScore(float score);
+
 
          /* NOTE: Documentation
           * getter and setter for the final grade
           * and all subsequent category marks
           * */
-         float studentTotalGrade() const;
+         float studentTotalGrade(void) const;
          void setStudentTotalGrade(const float );
+
 
          /* NOTE: Documentation
           * getters and setters for the Letter
           * grader obtained by the student
           * */
-         std::string studentLetterGrade() const;
+         std::string studentLetterGrade(void) const;
          void setStudentLetterGrade(const std::string &);
 
+
          /* NOTE: Documentation
-          * getters and setters to switch 
-          * WDR to true
+          * getters and setters to
+          * set error flag
           * */
-         bool studentWDR() const;
+         bool studentWDR(void) const;
          void setStudentWDR(bool);
+
 
          /* NOTE: Documentation
           * getters and setters to record
@@ -106,8 +155,9 @@ namespace GraderApplication
           * used went computing the final grades and 
           * printing to stdout
           * */
-         bool studentError() const;
+         bool studentError(void) const;
          void setStudentError(bool);
+
 
          /* NOTE: Documentation
           * Store the error definition
@@ -115,6 +165,7 @@ namespace GraderApplication
           * */
          std::string errorDefinition(void) const;
          void setErrorDefinition(const std::string &);
+
 
          /* NOTE: Documentation
           * Main method for Student Class, it uses the
@@ -127,17 +178,20 @@ namespace GraderApplication
          bool loadStudentFile(const std::string &, const std::streampos &,
                int, int, std::vector<float> &);
 
+
          /* NOTE: Documentation
           * Helper method for loadDataFile, checks if student is found
           * in temp file by string comparison, returns true or false
           * */
          bool isStudentProcessed(const std::string &);
 
+
          /* NOTE: Documentation
           * first test for tempfile existence, if it doesnt we havnt
           * read the file at all yet
           * */
          bool testForFileExistence(const std::string &);
+
 
          /* NOTE: Documentation
           * after a student is read in to the studentvector, this

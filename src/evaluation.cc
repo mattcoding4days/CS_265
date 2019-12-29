@@ -40,7 +40,7 @@ namespace GraderApplication
    }
 
    
-   int EvaluationData::totalEvaluationCount() const { return this->totalHeaderCount; }
+   int EvaluationData::totalEvaluationCount(void) const { return this->totalHeaderCount; }
 
 
    void EvaluationData::setTotalEvaluationCount(int _x)
@@ -49,14 +49,14 @@ namespace GraderApplication
    }
 
 
-   int EvaluationData::evaluationDataLength() const { return this->dataLineLength; }
+   int EvaluationData::evaluationDataLength(void) const { return this->dataLineLength; }
 
 
    void EvaluationData::setEvaluationDataLength(int _length)
    {
       try {
          if (this->dataLineLength == 0) {
-            /* This is the first time we are setting the data */
+            /* This is the first time we are setting the length*/
             this->dataLineLength = _length;
          }
          else if (this->dataLineLength == _length) {
@@ -74,7 +74,7 @@ namespace GraderApplication
    }
 
 
-   std::string EvaluationData::currentLineContent() const { return this->currentLine; }
+   std::string EvaluationData::currentLineContent(void) const { return this->currentLine; }
 
 
    void EvaluationData::setCurrentLineContent(const std::string _currentLine)
@@ -85,7 +85,7 @@ namespace GraderApplication
    }
 
 
-   int EvaluationData::fileLineCount() const { return this->totalLineCount; }
+   int EvaluationData::fileLineCount(void) const { return this->totalLineCount; }
 
 
    void EvaluationData::setFileLineCount(int _x)
@@ -94,13 +94,13 @@ namespace GraderApplication
    }
 
 
-   std::streampos EvaluationData::currentFilePosition() const { return this->currentFilePos; }
+   std::streampos EvaluationData::currentFilePosition(void) const { return this->currentFilePos; }
 
 
    void EvaluationData::setCurrentFilePos(std::ifstream &f) { this->currentFilePos = f.tellg(); }
 
 
-   std::string EvaluationData::evaluationTitle() const { return this->title; }
+   std::string EvaluationData::evaluationTitle(void) const { return this->title; }
 
 
    void EvaluationData::setEvaluationTitle(const std::string &_title)
@@ -144,7 +144,7 @@ namespace GraderApplication
    } 
 
 
-   std::string EvaluationData::evaluationCategory() const { return this->category; }
+   std::string EvaluationData::evaluationCategory(void) const { return this->category; }
 
 
    void EvaluationData::setEvaluationCategory(const std::string &_category)
@@ -223,7 +223,7 @@ namespace GraderApplication
    }
 
 
-   std::string EvaluationData::evaluationWeight() const { return this->weight; }
+   std::string EvaluationData::evaluationWeight(void) const { return this->weight; }
 
 
    void EvaluationData::setEvaluationWeight(const std::string &_weight)

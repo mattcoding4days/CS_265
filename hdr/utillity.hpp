@@ -22,6 +22,7 @@ namespace GraderApplication
          * */
         void stripComments(std::string &);
 
+
         /* NOTE: Documentation
          * search whole or decimal string representation
          * of a number, and return true if there is only
@@ -29,21 +30,25 @@ namespace GraderApplication
          * */
         bool isDigits(std::string &);
 
+
         /* NOTE: Documentation
          * convert a string to a float with out the
          * truncating limitations of stof
          * */
         float stringTofloat(const std::string &);
 
+
         /* NOTE: Documentation
          * Summ all elements in array
          * */
         float vecSummation(std::vector<float> &);
 
+
         /* XXX: Documentation
         * check if string is only alpha numeric
         * */
         bool isAlphaNumeric(std::string &);
+
 
         /* XXX: Documentation
         * Convert a string to upper case

@@ -43,11 +43,13 @@ namespace GraderApplication
           * */
          EvaluationData(void);
 
+
          /* NOTE: Documentation
           * error print will in all output from 
           * exceptions for BaseData class only
           * */
          void errorPrint(const char *);
+
 
          /* NOTE: Documentation
           * Return the total header count
@@ -55,8 +57,9 @@ namespace GraderApplication
           * the HEADER_MAX macro of 4 so we know
           * when the max has been read in
           * */
-         int totalEvaluationCount() const;
+         int totalEvaluationCount(void) const;
          void setTotalEvaluationCount(int);
+
 
          /* NOTE: Documentation
           * Accessor: getter and setter
@@ -64,23 +67,26 @@ namespace GraderApplication
           * This is only what is stored in the vector
           * not the datas associated Key
           * */
-         int evaluationDataLength() const;
+         int evaluationDataLength(void) const;
          void setEvaluationDataLength(int);
+
 
          /* NOTE: Documentation
           * Accessor: getter and setter
           * stores the current line we read in,
           * this is mainly for the error reporing
           * */
-         std::string currentLineContent() const;
+         std::string currentLineContent(void) const;
          void setCurrentLineContent(const std::string);
+
 
          /* NOTE: Documentation
           * Accessor: getter and setter
           * This is to track line errors
           * */
-         int fileLineCount() const;
+         int fileLineCount(void) const;
          void setFileLineCount(int);
+
 
          /* NOTE: Documentation
           * Accessor: getter and setter
@@ -88,14 +94,16 @@ namespace GraderApplication
           * so the file can be closed and reopended by different
           * methods without have to read from the beginning of the file
           * */
-         std::streampos currentFilePosition() const;
+         std::streampos currentFilePosition(void) const;
          void setCurrentFilePos(std::ifstream &);
+
 
          /* NOTE: Documentation
           * Accessor: getter and setter for title
           * */
-         std::string evaluationTitle() const;
+         std::string evaluationTitle(void) const;
          void setEvaluationTitle(const std::string &);
+
 
          /* NOTE: Documentation
           * Accessor: getter and setter for title container
@@ -103,11 +111,13 @@ namespace GraderApplication
          std::string evaluationTitleContainer(int) const;
          void setEvaluationTitleContainer(const std::string &);
 
+
          /* NOTE: Documentation
           * Accessor: getter and setter for category
           * */
-         std::string evaluationCategory() const;
+         std::string evaluationCategory(void) const;
          void setEvaluationCategory(const std::string &);
+
 
          /* NOTE: Documentation
           * Accessor: getter and setter for category container
@@ -115,11 +125,13 @@ namespace GraderApplication
          std::string evaluationCategoryContainer(int);
          void setEvaluationCategoryContainer(const std::string &);
 
+
          /* NOTE: Documentation
           * Accessor: getter and setter for maxmark 
           * */
-         std::string evaluationMaxMark() const;
+         std::string evaluationMaxMark(void) const;
          void setEvaluationMaxMark(const std::string &);
+
 
          /* NOTE: Documentation
           * Accessor:  getter and setter for maxmark container
@@ -127,17 +139,20 @@ namespace GraderApplication
          float evaluationMaxMarkContainer(int);
          void setEvaluationMaxMarkContainer(std::string &);
 
+
          /* NOTE: Documentation
           * Accessor: getter and setter for weight
           * */
-         std::string evaluationWeight() const;
+         std::string evaluationWeight(void) const;
          void setEvaluationWeight(const std::string &);
+
 
          /* NOTE: Documentation
           * Accessor: getter and setter for weight container
           * */
          float evaluationWeightContainer(int);
          void setEvaluationWeightContainer(std::string &);
+
 
          /* NOTE: Documentation
           * Load only preliminary data from file:
