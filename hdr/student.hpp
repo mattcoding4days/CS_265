@@ -6,7 +6,7 @@
 
 namespace GraderApplication
 {
-   /* XXX: Documentation
+   /* NOTE: Documentation
     * For every occurance of a valid student line
     * in the given file a student object will be created
     * and stored in a corresponding vector of the same type
@@ -18,20 +18,21 @@ namespace GraderApplication
          std::string name;
          std::vector <float> gradesContainer;
          std::vector <float> calculatedGradesContainer;
-         int studentDataLength;
+         int studentDataLen;
          float totalGrade;
          std::string letterGrade;
          bool isWDR;
          bool isError;
-         std::string errorDefinition;
+         std::string errorDef;
 
       public:
-         /* XXX: Documentation
+
+         /* NOTE: Documentation
           * Default Constuctor
           * */
          StudentData(void);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * Error preserve will be called whenever something
           * fails for any StudentData evaluations.
           * Instead of printing out and closing the program,
@@ -41,57 +42,57 @@ namespace GraderApplication
           */
          void errorPreserve(std::string &);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * getters and setters for name
           * */
-         std::string getName() const;
-         void setName(std::string &);
+         std::string studentName() const;
+         void setStudentName(std::string &);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * getters and setters for length of student
           * data, wich also takes the length from 
           * the evaluation data for comparison
           * purposes
           * */
-         int getStudentDataLen() const;
-         void setStudentDataLen(int, int);
+         int studentDataLength() const;
+         void setStudentDataLength(int, int);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * getters and setters for grades container
           * */
-         float getGrades(int &);
-         void setGrades(std::string &, std::vector<float> &);
+         float studentGrades(int &);
+         void setStudentGrades(std::string &, std::vector<float> &);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * getters and setters for the container
           * that will hold the resulting grades after
           * calculation (mark * weight) / max mark
           * */
-         float getCalculatedGrades(int &);
+         float calculatedGrades(int &);
          void setCalculatedGrades(std::vector<float> &);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * getter and setter for the final grade
           * and all subsequent category marks
           * */
-         float getTotalGrade() const;
-         void setTotalGrade(const float );
+         float studentTotalGrade() const;
+         void setStudentTotalGrade(const float );
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * getters and setters for the Letter
           * grader obtained by the student
           * */
-         std::string getLetterGrade() const;
-         void setLetterGrade(const std::string &);
+         std::string studentLetterGrade() const;
+         void setStudentLetterGrade(const std::string &);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * getters and setters to switch 
           * WDR to true
           * */
-         bool getIsStudentWDR() const;
-         void setIsStudentWDR(bool);
+         bool studentWDR() const;
+         void setStudentWDR(bool);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * getters and setters to record
           * whether something went wrong with
           * parsing a certain student.
@@ -100,17 +101,17 @@ namespace GraderApplication
           * used went computing the final grades and 
           * printing to stdout
           * */
-         bool getIsError() const;
-         void setIsError(bool);
+         bool studentError() const;
+         void setStudentError(bool);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * Store the error definition
           * from out custom exceptions 
           * */
-         std::string getErrorDefinition(void) const;
+         std::string errorDefinition(void) const;
          void setErrorDefinition(const std::string &);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * Main method for Student Class, it uses the
           * file position set from BaseHeader class, 
           * to skip right to where the students section is.
@@ -121,19 +122,19 @@ namespace GraderApplication
          bool loadStudentFile(const std::string &, const std::streampos &,
                int, int, std::vector<float> &);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * Helper method for loadDataFile, checks if student is found
           * in temp file by string comparison, returns true or false
           * */
          bool isStudentProcessed(const std::string &);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * first test for tempfile existence, if it doesnt we havnt
           * read the file at all yet
           * */
          bool testForFileExistence(const std::string &);
 
-         /* XXX: Documentation
+         /* NOTE: Documentation
           * after a student is read in to the studentvector, this
           * method writes said processed student to the temp file
           * then closes it, if the file doesnt exist yet it creates it.

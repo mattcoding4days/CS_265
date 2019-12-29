@@ -32,10 +32,10 @@ namespace GraderApplication
    }
 
 
-   std::string StudentData::getName() const { return this->name; }
+   std::string StudentData::studentName() const { return this->name; }
 
 
-   void StudentData::setName(std::string &_name)
+   void StudentData::setStudentName(std::string &_name)
    {
       try {
          if (isAlphaNumeric(_name)) {
@@ -51,14 +51,14 @@ namespace GraderApplication
    }
 
 
-   int StudentData::getStudentDataLen() const { return this->studentDataLength; }
+   int StudentData::studentDataLength() const { return this->studentDataLen; }
 
 
-   void StudentData::setStudentDataLen(int _length, int eval)
+   void StudentData::setStudentDataLength(int _length, int eval)
    {
       try {
          if (_length == eval) {
-            this->studentDataLength = _length;
+            this->studentDataLen = _length;
          }
          else {
             /* Our lengths do not match, cannot compute data correctly
@@ -74,10 +74,10 @@ namespace GraderApplication
    }
 
 
-   float StudentData::getGrades(int &itr) { return this->gradesContainer[itr]; }
+   float StudentData::studentGrades(int &itr) { return this->gradesContainer[itr]; }
 
 
-   void StudentData::setGrades(std::string &_grade, std::vector<float> &tMax)
+   void StudentData::setStudentGrades(std::string &_grade, std::vector<float> &tMax)
    {
       try {
          /* Check if string is infact a digit */
@@ -115,7 +115,7 @@ namespace GraderApplication
    }
 
 
-   float StudentData::getCalculatedGrades(int &itr) { return this->calculatedGradesContainer[itr]; }
+   float StudentData::calculatedGrades(int &itr) { return this->calculatedGradesContainer[itr]; }
 
 
    void StudentData::setCalculatedGrades(std::vector<float> &calcMarks) 
@@ -126,37 +126,37 @@ namespace GraderApplication
    }
 
 
-   float StudentData::getTotalGrade() const { return this->totalGrade; }
+   float StudentData::studentTotalGrade() const { return this->totalGrade; }
 
 
-   void StudentData::setTotalGrade(const float _totalGrade) { this->totalGrade += _totalGrade; }
+   void StudentData::setStudentTotalGrade(const float _totalGrade) { this->totalGrade += _totalGrade; }
 
 
-   std::string StudentData::getLetterGrade() const { return this->letterGrade; }
+   std::string StudentData::studentLetterGrade() const { return this->letterGrade; }
 
 
-   void StudentData::setLetterGrade(const std::string &_letterGrade) { this->letterGrade = _letterGrade; }
+   void StudentData::setStudentLetterGrade(const std::string &_letterGrade) { this->letterGrade = _letterGrade; }
 
 
-   bool StudentData::getIsStudentWDR() const { return this->isWDR; }
+   bool StudentData::studentWDR() const { return this->isWDR; }
 
 
-   void StudentData::setIsStudentWDR(bool _isWDR) { this->isWDR = _isWDR; }
+   void StudentData::setStudentWDR(bool _isWDR) { this->isWDR = _isWDR; }
 
 
-   bool StudentData::getIsError() const { return this->isError; }
+   bool StudentData::studentError() const { return this->isError; }
 
 
-   void StudentData::setIsError(bool _isError) { this->isError = _isError; }
+   void StudentData::setStudentError(bool _isError) { this->isError = _isError; }
 
 
-   std::string StudentData::getErrorDefinition(void) const { return this->errorDefinition; }
+   std::string StudentData::errorDefinition(void) const { return this->errorDef; }
 
 
    void StudentData::setErrorDefinition(const std::string &e)
    {
-      if (!e.empty()) {
-         this->errorDefinition = e;
+      if (! (e.empty()) ) {
+         this->errorDef = e;
       } else {
          std::cerr << "\nError Definition is empty!\n" << std::endl;
       }
