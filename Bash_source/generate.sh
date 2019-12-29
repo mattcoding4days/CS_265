@@ -19,7 +19,8 @@ function generateExpOut() {
   # test for temp dir existence
   if [[ ! -d $tempDir ]]; then
     # if it does not exist create it
-    printf "\n${Red}Directory does not exist ${Reset} ${BWhite}==> ${Reset} ${BCyan} $tempDir ${Reset} ${BGreen} creating it for you..${Reset}\n\n"
+    
+    printf "\n${Red}Directory does not exist ${Reset} ${BWhite} ➜ ${Reset} ${BCyan} $tempDir ${Reset} ${BGreen} creating it for you..${Reset}\n\n"
     mkdir $tempDir
   fi
   
@@ -28,14 +29,14 @@ function generateExpOut() {
     if [[ -f $file && -r $file ]]; then
       # scalpel just the file name away from the path
       fileName=$(basename $file)
-      $grader $file >& $tempDir/$fileName
+      $grader "$file" >& "$tempDir/$fileName"
       # hold graders return value
       graderRet=$?
       # test return value of grader
       if [[ $graderRet ]]; then
-        printf "\n$BBlue+ -- -- [ Test out file$Rest $BWhite=>$Reset $Yellow $fileName $Reset $BPurple succesfully generated $Reset\n\n"
+        printf "\n$BBlue+ -- -- [ Test out file$Reset $BWhite ➜ $Reset $Yellow $fileName $Reset $BPurple succesfully generated $Reset [$BGreen✔$Reset] \n\n"
       else
-        printf "\n$Red+ -- -- [ Test out file$Reset $BWhite=>$Reset $Yellow $fileName $Reset failed\n\n"
+        printf "\n$Red+ -- -- [ Test out file$Reset $BWhite ➜ $Reset $Yellow $fileName $Reset failed\n\n"
       fi
     fi
   done
@@ -51,8 +52,6 @@ function testFiles() {
 # apporpriate function
 if [[ $# -eq 1 ]]; then
   generateExpOut $1
-elif [[ $# -eq 2 ]]; then
-  testFiles $1 $2
 else
   usage
 fi

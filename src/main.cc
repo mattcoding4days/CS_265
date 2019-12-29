@@ -179,10 +179,10 @@ void printUsage()
  * */
 int countStudentLines( const std::string &fileDat )
 {
-   BaseData b;
+   EvaluationData b;
    std::streampos jump;
-   b.loadBaseData(fileDat);
-   jump = b.getCurrentFilePosition();
+   b.loadEvaluationData(fileDat);
+   jump = b.currentFilePosition();
 
    std::ifstream inFile(fileDat);
    inFile.seekg(jump);
