@@ -14,7 +14,7 @@ namespace GraderApplication
       , letterGrade("")
       , isWDR(false)
       , isError(false)
-      , errorDefinition("")
+      , errorDef("")
    {
       /* Initialize the vectors */
       gradesContainer.reserve(1);
@@ -27,7 +27,7 @@ namespace GraderApplication
       /* The offending line data will have already been set 
        * in the loadStudent method with currentLine
        * */
-      this->setIsError(true);
+      this->setStudentError(true);
       this->setErrorDefinition(e);
    }
 
@@ -88,7 +88,7 @@ namespace GraderApplication
             int size = this->gradesContainer.size();
             for (int i = 0; i < size; i++ ) {
                if (this->gradesContainer[i] > tMax[i] 
-                   && !(this->getIsStudentWDR())) {
+                   && !(this->studentWDR())) {
                   throw StudentMarkExceedsMaxMark();
                }
             }
@@ -99,7 +99,7 @@ namespace GraderApplication
              * */
             std::string n_grade = convert_toupper(_grade);
             if (n_grade == WDRN) {
-               this->setIsStudentWDR(true);
+               this->setStudentWDR(true);
             }
             else {
                throw FailStringFloatConversion(); 
@@ -172,7 +172,7 @@ namespace GraderApplication
          std::ifstream datafile(file);
          if ( datafile.is_open() ) {
             datafile.seekg(updatedFilePosition);
-            this->incrementFileLineCount(updateLinePosition);
+            //this->incrementFileLineCount(updateLinePosition); TODO: from Evaluation
             std::string line("");
             while ( std::getline(datafile, line)) {
                /* if the line is empty skip it,
@@ -180,7 +180,7 @@ namespace GraderApplication
                 * control loop with the continue keyword
                 * */
                if (line.empty()) { continue; }
-               this->setCurrentLine(line);
+               // this->setCurrentLine(line); TODO: from Evauluation
                this->stripComments(line);
 
                if ( ! (this->isStudentProcessed(line)) ) {
@@ -191,7 +191,7 @@ namespace GraderApplication
 
                   std::stringstream ss(line);
                   ss >> sId;
-                  this->setName(sId);
+                  this->setStudentName(sId);
                   /* After trying to set the name, if it fails
                    * due to nonNumeric, we need to test that here
                    * so we can end this function and not read in the
@@ -201,19 +201,21 @@ namespace GraderApplication
                    * the isError variable to true, check for that here
                    * */
 
-                  if (this->getIsError()) {
-                     this->setCurrentFilePos(datafile);
+                  if (this->studentError()) {
+                     // this->setCurrentFilePos(datafile); TODO: From Evaluation
                      datafile.close();
                      return true;
                   } else {
                      int i = 0;
                      while (ss >> sMarks) {
-                        this->setGrades(sMarks, tempMaxMark);
-                        if (!(this->getIsError())) {
+                        this->setStudentGrades(sMarks, tempMaxMark);
+                        // TODO: Not sure if this second check to studentError
+                        // needs to be here, look into this later
+                        if (!(this->studentError())) {
                            i++;
                         } else {
                            /* Setting the grades failed */
-                           this->setCurrentFilePos(datafile);
+                           //this->setCurrentFilePos(datafile); TODO: From Evaluation
                            datafile.close();
                            return true;
                         }
@@ -221,9 +223,9 @@ namespace GraderApplication
 
                      /* Set datalength checks if the length is the
                       * same as the evaluation data length */
-                     this->setStudentDataLen(i, evalLength);
+                     this->setStudentDataLength(i, evalLength);
                      // only process one line at a time, update file position
-                     this->setCurrentFilePos(datafile);
+                     //this->setCurrentFilePos(datafile); TODO: From Evaluation
                      datafile.close();
                      return true;
                   }
@@ -231,7 +233,7 @@ namespace GraderApplication
                /* A duplicate student was found, 
                 * throw for error preserving purposes
                 * */
-               this->setCurrentFilePos(datafile);
+               //this->setCurrentFilePos(datafile);
                throw DuplicateFound();
 
             }

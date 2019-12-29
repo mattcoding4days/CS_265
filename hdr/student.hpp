@@ -4,6 +4,11 @@
 #include "utillity.hpp"
 #include <vector>
 
+/* TODO: Make variables with matching accessor
+ * methods to handle, Lab, Assign, Final,
+ * accumulated grades
+ */
+
 namespace GraderApplication
 {
    /* NOTE: Documentation
