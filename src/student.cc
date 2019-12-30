@@ -1,11 +1,10 @@
 /* All  main documentaion is in header files
  * for corresponding cpp files.
  * */
-#include "../hdr/evaluation.hpp"
-#include "../hdr/student.hpp"
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include "../hdr/student.hpp"
 
 namespace GraderApplication
 {
@@ -42,14 +41,19 @@ namespace GraderApplication
 
    void StudentData::setStudentName(std::string &_name)
    {
-      try {
-         if (isAlphaNumeric(_name)) {
+      try
+      {
+         if (isAlphaNumeric(_name))
+         {
             this->name = _name; 
          }
-         else {
+         else
+         {
             throw StudentIDNonAlphaNumeric();
          }
-      } catch (StudentIDNonAlphaNumeric &e) {
+      }
+      catch (StudentIDNonAlphaNumeric &e)
+      {
          std::string onError(e.what());
          this->errorPreserve(onError);
       } 
@@ -59,18 +63,22 @@ namespace GraderApplication
    float StudentData::studentGradesContainer(int &itr) { return this->gradesContainer[itr]; }
 
 
-   void StudentData::setStudentGradesContainer(std::string &_grade, std::vector<float> &tMax)
+   void StudentData::setStudentGradesContainer(std::string &_grade, EvaluationData &eval)
    {
-      try {
+      try
+      {
          /* Check if string is infact a digit */
-         if (isDigits(_grade)) {
+         if (isDigits(_grade))
+         {
             float temp = stringTofloat(_grade);
             this->gradesContainer.emplace_back(temp);
             /* Check if a mark is larger than max mark */
             int size = this->gradesContainer.size();
-            for (int i = 0; i < size; i++ ) {
-               if (this->gradesContainer[i] > tMax[i] 
-                   && !(this->studentWDR())) {
+            for (int i = 0; i < size; i++ )
+            {
+               if (this->gradesContainer[i] > eval.evaluationMaxMarkContainer(i)
+                   && !(this->studentWDR()))
+               {
                   throw StudentMarkExceedsMaxMark();
                }
             }
@@ -80,17 +88,23 @@ namespace GraderApplication
              * and check if it is WDR, if not throw error
              * */
             std::string n_grade = convert_toupper(_grade);
-            if (n_grade == WDRN) {
+            if (n_grade == WDRN)
+            {
                this->setStudentWDR(true);
             }
-            else {
+            else
+            {
                throw FailStringFloatConversion(); 
             }
          }
-      } catch (FailStringFloatConversion &e) {
+      }
+      catch (FailStringFloatConversion &e)
+      {
          std::string onError(e.what());
          this->errorPreserve(onError);
-      } catch (StudentMarkExceedsMaxMark &e) {
+      }
+      catch (StudentMarkExceedsMaxMark &e)
+      {
          std::string onError(e.what());
          this->errorPreserve(onError);
       }
@@ -102,7 +116,8 @@ namespace GraderApplication
 
    void StudentData::setCalculatedGrades(std::vector<float> &calcMarks) 
    {
-      for (std::size_t i = 0; i < calcMarks.size(); ++i) {
+      for (std::size_t i = 0; i < calcMarks.size(); ++i)
+      {
          this->calculatedGradesContainer.emplace_back(calcMarks[i]);
       }
    }
@@ -113,18 +128,23 @@ namespace GraderApplication
 
    void StudentData::setStudentDataLength(int _length, int eval)
    {
-      try {
-         if (_length == eval) {
+      try
+      {
+         if (_length == eval)
+         {
             this->studentDataLen = _length;
          }
-         else {
+         else
+         {
             /* Our lengths do not match, cannot compute data correctly
              * throw and end program
              * */
             throw StudentDataLengthError();
          }
 
-      } catch (StudentDataLengthError &e) {
+      }
+      catch (StudentDataLengthError &e)
+      {
          std::string onError(e.what());
          this->errorPreserve(onError);
       }
@@ -136,10 +156,12 @@ namespace GraderApplication
    void StudentData::setStudentLabScore(float score)
    {
       /* bound check */
-      if (score < 0) {
+      if (score < 0)
+      {
          std::cerr << "Score: " << score << " is out of bounds" << std::endl;
       }
-      else {
+      else
+      {
          this->labScore += score;
       }
    }
@@ -151,10 +173,12 @@ namespace GraderApplication
    void StudentData::setStudentAssignScore(float score)
    {
       /* bound check */
-      if (score < 0) {
+      if (score < 0)
+      {
          std::cerr << "Score: " << score << " is out of bounds" << std::endl;
       }
-      else {
+      else
+      {
          this->assignScore += score;
       }
    }
@@ -166,10 +190,12 @@ namespace GraderApplication
    void StudentData::setstudentMidtermScore(float score)
    {
       /* bound check */
-      if (score < 0) {
+      if (score < 0)
+      {
          std::cerr << "Score: " << score << " is out of bounds" << std::endl;
       }
-      else {
+      else
+      {
          this->midtermScore += score;
       }
    }
@@ -181,10 +207,12 @@ namespace GraderApplication
    void StudentData::setStudentFinalScore(float score)
    {
       /* bound check */
-      if (score < 0) {
+      if (score < 0)
+      {
          std::cerr << "Score: " << score << " is out of bounds" << std::endl;
       }
-      else {
+      else
+      {
          this-> finalScore += score;
       }
    }
@@ -219,35 +247,46 @@ namespace GraderApplication
 
    void StudentData::setErrorDefinition(const std::string &e)
    {
-      if (! (e.empty()) ) {
+      if (! (e.empty()) )
+      {
          this->errorDef = e;
-      } else {
+      }
+      else
+      {
          std::cerr << "\nError Definition is empty!\n" << std::endl;
       }
    } 
 
 
-   bool StudentData::loadStudentFile(const std::string &file,
-                                     const std::streampos &updatedFilePosition,
-                                     int updateLinePosition, int evalLength,
-                                     std::vector<float> &tempMaxMark)
+   bool StudentData::loadStudents(EvaluationData &eval)
    {
-      try {
-         std::ifstream datafile(file);
-         if ( datafile.is_open() ) {
-            datafile.seekg(updatedFilePosition);
-            //this->incrementFileLineCount(updateLinePosition); TODO: from Evaluation
+      //const std::string &file,
+      //const std::streampos &updatedFilePosition,
+      //int updateLinePosition, int evalLength,
+      //std::vector<float> &tempMaxMark
+      try
+      {
+         std::ifstream datafile(eval.evaluationFile());
+         if ( datafile.is_open() )
+         {
+            datafile.seekg(eval.currentFilePosition());
+            eval.setFileLineCount(1); // increment line count
             std::string line("");
-            while ( std::getline(datafile, line)) {
+            while ( std::getline(datafile, line))
+            {
                /* if the line is empty skip it,
                 * by immediatley restarting the 
                 * control loop with the continue keyword
                 * */
                if (line.empty()) { continue; }
-               // this->setCurrentLine(line); TODO: from Evauluation
+               // TODO: Need to replace this with a student
+               //       defined method to track current line
+               //       or move it to utility class
+               eval.setCurrentLineContent(line);
                this->stripComments(line);
 
-               if ( ! (this->isStudentProcessed(line)) ) {
+               if (! (this->isStudentProcessed(line)) )
+               {
                   this->processStudent(line);
 
                   std::string sId("");
@@ -265,21 +304,28 @@ namespace GraderApplication
                    * the isError variable to true, check for that here
                    * */
 
-                  if (this->studentError()) {
-                     // this->setCurrentFilePos(datafile); TODO: From Evaluation
+                  if (this->studentError())
+                  {
+                     eval.setCurrentFilePosition(datafile);
                      datafile.close();
                      return true;
-                  } else {
+                  }
+                  else
+                  {
                      int i = 0;
-                     while (ss >> sMarks) {
-                        this->setStudentGradesContainer(sMarks, tempMaxMark);
+                     while (ss >> sMarks)
+                     {
+                        this->setStudentGradesContainer(sMarks, eval);
                         // TODO: Not sure if this second check to studentError
                         // needs to be here, look into this later
-                        if (!(this->studentError())) {
+                        if (! (this->studentError()) )
+                        {
                            i++;
-                        } else {
+                        }
+                        else
+                        {
                            /* Setting the grades failed */
-                           //this->setCurrentFilePos(datafile); TODO: From Evaluation
+                           eval.setCurrentFilePosition(datafile);
                            datafile.close();
                            return true;
                         }
@@ -287,9 +333,9 @@ namespace GraderApplication
 
                      /* Set datalength checks if the length is the
                       * same as the evaluation data length */
-                     this->setStudentDataLength(i, evalLength);
+                     this->setStudentDataLength(i, eval.evaluationDataLength());
                      // only process one line at a time, update file position
-                     //this->setCurrentFilePos(datafile); TODO: From Evaluation
+                     eval.setCurrentFilePosition(datafile);
                      datafile.close();
                      return true;
                   }
@@ -301,11 +347,19 @@ namespace GraderApplication
                throw DuplicateFound();
 
             }
-         } else { throw std::logic_error("*** File Not Found: "); }
-      } catch (std::logic_error &e) {
-         std::cerr << e.what() << file << std::endl;
+         }
+         else
+         {
+            throw std::logic_error("*** File Not Found: ");
+         }
+      }
+      catch (std::logic_error &e)
+      {
+         std::cerr << e.what() << eval.evaluationFile() << std::endl;
          exit(EXIT_FAILURE);
-      } catch (DuplicateFound &e) {
+      }
+      catch (DuplicateFound &e)
+      {
          std::string onError(e.what());
          this->errorPreserve(onError);
       }
@@ -318,10 +372,13 @@ namespace GraderApplication
       bool isProcessed = false;
       std::string tempLine("");
       // test if the file exists
-      if ( this->testForFileExistence(TEMPFILE) ) {
+      if ( this->testForFileExistence(TEMPFILE) )
+      {
          std::ifstream tempFile(TEMPFILE);
-         while ( std::getline(tempFile, tempLine) ) {
-            if ( lineToCompare == tempLine ) {
+         while ( std::getline(tempFile, tempLine) )
+         {
+            if ( lineToCompare == tempLine )
+            {
                tempFile.close();
                isProcessed = true;
                return isProcessed;
@@ -339,7 +396,8 @@ namespace GraderApplication
       /* Test if grader has already created or temp file */
       bool doesExist = false;
       std::ifstream infile(file);
-      if ( infile.good() ) {
+      if ( infile.good() )
+      {
          infile.close();
          doesExist = true;
          return doesExist;
@@ -352,13 +410,15 @@ namespace GraderApplication
    {
       /* only append to the file, dont trample over old data */
       std::ofstream outFile(TEMPFILE, std::fstream::app);
-      if ( outFile.good() ) {
+      if ( outFile.good() )
+      {
          // write only the student id, which should be the first
          // index of the line
          outFile << process << std::endl;
          outFile.close();
       }
-      else {
+      else
+      {
          std::cerr << "Debug MSG: Could not open file to process student" << std::endl;
       }
    }

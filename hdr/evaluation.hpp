@@ -1,9 +1,10 @@
 #ifndef EVALUATION_HPP
 #define EVALUATION_HPP
 
-#include "utillity.hpp"
 #include <fstream>
 #include <vector>
+#include "utillity.hpp"
+
 
 namespace GraderApplication
 {
@@ -39,17 +40,17 @@ namespace GraderApplication
 
       public:
          /* NOTE: Documentation
-          * Default constructor
+          * Explicit constructor
+          * takes a filename string
+          * as argument
           * */
-         EvaluationData(void);
+         EvaluationData(const std::string &);
 
 
          /* NOTE: Documentation
-          * error print will in all output from 
-          * exceptions for BaseData class only
+          * Accessor: getter for file name
           * */
-         void errorPrint(const char *);
-
+         std::string evaluationFile(void) const;
 
          /* NOTE: Documentation
           * Return the total header count
@@ -95,7 +96,7 @@ namespace GraderApplication
           * methods without have to read from the beginning of the file
           * */
          std::streampos currentFilePosition(void) const;
-         void setCurrentFilePos(std::ifstream &);
+         void setCurrentFilePosition(std::ifstream &);
 
 
          /* NOTE: Documentation
@@ -159,7 +160,14 @@ namespace GraderApplication
           * reads data based on first character matches
           * from a predefined enumerator in settings.h
           * */
-         void loadEvaluationData(const std::string &);
+         void loadEvaluationData(void);
+
+
+         /* NOTE: Documentation
+          * error print will in all output from
+          * exceptions for BaseData class only
+          * */
+         void errorPrint(const char *);
    };
 };
 

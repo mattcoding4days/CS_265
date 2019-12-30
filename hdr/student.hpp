@@ -1,8 +1,9 @@
 #ifndef STUDENT_HPP
 #define STUDENT_HPP
 
-#include "utillity.hpp"
 #include <vector>
+#include "evaluation.hpp"
+#include "utillity.hpp"
 
 /* TODO: Make variables with matching accessor
  * methods to handle, Lab, Assign, Final,
@@ -63,7 +64,7 @@ namespace GraderApplication
           * getters and setters for grades container
           * */
          float studentGradesContainer(int &);
-         void setStudentGradesContainer(std::string &, std::vector<float> &);
+         void setStudentGradesContainer(std::string &, EvaluationData &);
 
 
          /* NOTE: Documentation
@@ -175,9 +176,7 @@ namespace GraderApplication
           * The method its self is very similar to how loadBaseData
           * works in the BaseHeader Class
           * */
-         bool loadStudentFile(const std::string &, const std::streampos &,
-               int, int, std::vector<float> &);
-
+         bool loadStudents(EvaluationData &);
 
          /* NOTE: Documentation
           * Helper method for loadDataFile, checks if student is found
