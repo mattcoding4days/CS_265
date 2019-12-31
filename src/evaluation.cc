@@ -1,6 +1,4 @@
-/* All  main documentaion is in header files
- * for corresponding cpp files.
- * */
+/* All  main documentaion is in header files * for corresponding cpp files. * */
 #include <iostream>
 #include <iterator>
 #include <sstream>
@@ -14,7 +12,6 @@ namespace GraderApplication
       , totalHeaderCount(0)
       , dataLineLength(0)
       , totalLineCount(0)
-      , currentLine("")
       , currentFilePos(0)
       , title("")
       , category("")
@@ -65,18 +62,6 @@ namespace GraderApplication
       catch (DataLength &e)
       {
          errorPrint(e.what());
-      }
-   }
-
-
-   std::string EvaluationData::currentLineContent(void) const { return this->currentLine; }
-
-
-   void EvaluationData::setCurrentLineContent(const std::string _currentLine)
-   {
-      if (!(_currentLine.empty()))
-      {
-         this->currentLine = _currentLine;
       }
    }
 

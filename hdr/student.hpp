@@ -5,10 +5,6 @@
 #include "evaluation.hpp"
 #include "utillity.hpp"
 
-/* TODO: Make variables with matching accessor
- * methods to handle, Lab, Assign, Final,
- * accumulated grades
- */
 
 namespace GraderApplication
 {

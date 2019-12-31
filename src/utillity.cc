@@ -6,6 +6,23 @@
 
 namespace GraderApplication
 {
+
+   Utillity::Utillity(void)
+      : currentLine("")
+   { }
+
+   std::string Utillity::currentLineContent(void) const { return this->currentLine; }
+
+
+   void Utillity::setCurrentLineContent(const std::string &_currentLine)
+   {
+      if (!(_currentLine.empty()))
+      {
+         this->currentLine = _currentLine;
+      }
+   }
+
+
    void Utillity::stripComments(std::string &line)
    {
       std::size_t found = line.find(COMM);

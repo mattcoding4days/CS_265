@@ -32,10 +32,10 @@ int countStudentLines(EvaluationData &e)
 int main(int argc, char **argv)
 {
     // auto start = std::chrono::system_clock::now();
+
     std::string inputFile("");
     std::string name("");
     ArgParse parser("-s");
-
     int numargsfilled = parser.parseArguments(argc, argv, inputFile, name);
 
     if (numargsfilled == 1)
@@ -43,6 +43,13 @@ int main(int argc, char **argv)
         EvaluationData eval(inputFile);
         eval.loadEvaluationData();
         int numStudents = countStudentLines(eval);
+
+        Containers container(numStudents);
+        StudentData stu;
+        container.student.emplace_back(stu);
+
+
+
         std::cout << "Number of students: " << numStudents << std::endl;
 
         //auto end = std::chrono::system_clock::now();

@@ -27,7 +27,6 @@ namespace GraderApplication
          int totalHeaderCount;
          int dataLineLength;
          int totalLineCount;
-         std::string currentLine;
          std::streampos currentFilePos;
          std::string title;
          std::vector <std::string> titleContainer;
@@ -70,15 +69,6 @@ namespace GraderApplication
           * */
          int evaluationDataLength(void) const;
          void setEvaluationDataLength(int);
-
-
-         /* NOTE: Documentation
-          * Accessor: getter and setter
-          * stores the current line we read in,
-          * this is mainly for the error reporing
-          * */
-         std::string currentLineContent(void) const;
-         void setCurrentLineContent(const std::string);
 
 
          /* NOTE: Documentation

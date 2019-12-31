@@ -6,6 +6,7 @@
 #include <sstream>
 #include "../hdr/student.hpp"
 
+
 namespace GraderApplication
 {
    StudentData::StudentData(void)
@@ -43,7 +44,7 @@ namespace GraderApplication
    {
       try
       {
-         if (isAlphaNumeric(_name))
+         if (this->isAlphaNumeric(_name))
          {
             this->name = _name; 
          }
@@ -68,7 +69,7 @@ namespace GraderApplication
       try
       {
          /* Check if string is infact a digit */
-         if (isDigits(_grade))
+         if (this->isDigits(_grade))
          {
             float temp = stringTofloat(_grade);
             this->gradesContainer.emplace_back(temp);
@@ -260,29 +261,27 @@ namespace GraderApplication
 
    bool StudentData::loadStudents(EvaluationData &eval)
    {
-      //const std::string &file,
-      //const std::streampos &updatedFilePosition,
-      //int updateLinePosition, int evalLength,
-      //std::vector<float> &tempMaxMark
       try
       {
          std::ifstream datafile(eval.evaluationFile());
          if ( datafile.is_open() )
          {
             datafile.seekg(eval.currentFilePosition());
-            eval.setFileLineCount(1); // increment line count
             std::string line("");
             while ( std::getline(datafile, line))
             {
+               eval.setFileLineCount(1); // increment line count
+
                /* if the line is empty skip it,
-                * by immediatley restarting the 
+                * by immediatley restarting the
                 * control loop with the continue keyword
                 * */
-               if (line.empty()) { continue; }
-               // TODO: Need to replace this with a student
-               //       defined method to track current line
-               //       or move it to utility class
-               eval.setCurrentLineContent(line);
+               if (line.empty())
+               {
+                  continue;
+               }
+
+               this->setCurrentLineContent(line);
                this->stripComments(line);
 
                if (! (this->isStudentProcessed(line)) )
@@ -343,7 +342,7 @@ namespace GraderApplication
                /* A duplicate student was found, 
                 * throw for error preserving purposes
                 * */
-               //this->setCurrentFilePos(datafile);
+               eval.setCurrentFilePosition(datafile);
                throw DuplicateFound();
 
             }

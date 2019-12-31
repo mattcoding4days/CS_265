@@ -18,7 +18,25 @@ namespace GraderApplication
      * */
     class Utillity
     {
+        protected:
+            std::string currentLine;
+
         public:
+
+            /* NOTE: Documentation
+            *  Default Constructor
+            * */
+            Utillity(void);
+
+            /* NOTE: Documentation
+            * Accessor: getter and setter
+            * stores the current line we read in,
+            * this is mainly for the error reporing
+            * */
+            std::string currentLineContent(void) const;
+            void setCurrentLineContent(const std::string &);
+
+
             /* NOTE: Documentation
              * Strip all comments from the line that is passed
              * */
