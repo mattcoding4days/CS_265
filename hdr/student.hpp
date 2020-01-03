@@ -30,6 +30,7 @@ namespace GraderApplication
          bool isWDR;
          bool isError;
          std::string errorDef;
+         int mlineCount;
 
       public:
          /* NOTE: Documentation
@@ -106,7 +107,7 @@ namespace GraderApplication
           * midterm scores
           * */
          float studentMidtermScore(void) const;
-         void setstudentMidtermScore(float score);
+         void setStudentMidtermScore(float score);
 
 
          /* NOTE: Documentation
@@ -162,6 +163,14 @@ namespace GraderApplication
           * */
          std::string errorDefinition(void) const;
          void setErrorDefinition(const std::string &);
+
+
+         /* NOTE: Documentation
+          * Update line count from evaluation
+          * object
+          * */
+         int lineCount(void) const;
+         void setLineCount(int _count);
 
 
          /* NOTE: Documentation

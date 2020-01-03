@@ -20,6 +20,7 @@ namespace GraderApplication
       , isWDR (false)
       , isError (false)
       , errorDef ("")
+      , mlineCount(0)
    {
       /* Initialize the vectors */
       gradesContainer.reserve(1);
@@ -84,6 +85,7 @@ namespace GraderApplication
                }
             }
          }
+
          else { 
             /* if it is not a digit, convert to uppercase and
              * and check if it is WDR, if not throw error
@@ -188,7 +190,7 @@ namespace GraderApplication
    float StudentData::studentMidtermScore(void) const { return this->midtermScore; }
 
 
-   void StudentData::setstudentMidtermScore(float score)
+   void StudentData::setStudentMidtermScore(float score)
    {
       /* bound check */
       if (score < 0)
@@ -259,6 +261,21 @@ namespace GraderApplication
    } 
 
 
+   int StudentData::lineCount(void) const { return this->mlineCount; }
+
+
+   void StudentData::setLineCount(int _count)
+   {
+      if (_count > 0) {
+         this->mlineCount = _count;
+      }
+      else
+      {
+         std::cerr << "\nLine count is less than 1" << std::endl;
+      }
+   }
+
+
    bool StudentData::loadStudents(EvaluationData &eval)
    {
       try
@@ -270,7 +287,8 @@ namespace GraderApplication
             std::string line("");
             while ( std::getline(datafile, line))
             {
-               eval.setFileLineCount(1); // increment line count
+               // increment line count
+               this->setLineCount(eval.fileLineCount() + 1);
 
                /* if the line is empty skip it,
                 * by immediatley restarting the
