@@ -266,7 +266,8 @@ namespace GraderApplication
 
    void StudentData::setLineCount(int _count)
    {
-      if (_count > 0) {
+      if (_count > 0)
+      {
          this->mlineCount = _count;
       }
       else
@@ -288,7 +289,8 @@ namespace GraderApplication
             while ( std::getline(datafile, line))
             {
                // increment line count
-               this->setLineCount(eval.fileLineCount() + 1);
+               eval.setFileLineCount(1);
+               this->setLineCount(eval.fileLineCount());
 
                /* if the line is empty skip it,
                 * by immediatley restarting the
@@ -333,8 +335,6 @@ namespace GraderApplication
                      while (ss >> sMarks)
                      {
                         this->setStudentGradesContainer(sMarks, eval);
-                        // TODO: Not sure if this second check to studentError
-                        // needs to be here, look into this later
                         if (! (this->studentError()) )
                         {
                            i++;

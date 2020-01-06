@@ -4,6 +4,14 @@
 #include "../hdr/grader.hpp"
 
 
+/* Define container explicit constructor */
+Container::Container(int _x) : numStudents(_x)
+{
+    student.reserve(numStudents);
+    error.reserve(1);
+    wdr.reserve(1);
+}
+
 
 /* NOTE: Documentation
  * Initialize main routine,
@@ -17,43 +25,47 @@ int main(int argc, char **argv)
     ArgParse parser("-s");
     int numargsfilled = parser.parseArguments(argc, argv, inputFile, name);
 
-    if (numargsfilled == 1)
+    if (numargsfilled > 0)
     {
         EvaluationData eval(inputFile);
         eval.loadEvaluationData();
         int numStudents = countStudentLines(eval);
-
         Container container(numStudents);
+
         loadStudentContainers(eval, container);
         makeGrades(eval, container);
 
+        if (numargsfilled == 1)
+        {
+            if (container.student.size() > 0) { outputStudent(container); }
 
-        outputFinal(container);
+            if (container.wdr.size() > 0) { outputWDR(container); }
+
+            if (container.error.size() > 0) { outputError(container); }
 
 
-        //outputWDR(container);
-        //outputError(container);
+            //auto end = std::chrono::system_clock::now();
+            //std::chrono::duration<double> elapsed_seconds = end-start;
+            //std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+            //std::cout << std::ctime(&end_time);
 
-
-        sanitize();
-
-        //auto end = std::chrono::system_clock::now();
-        //std::chrono::duration<double> elapsed_seconds = end-start;
-        //std::time_t end_time = std::chrono::system_clock::to_time_t(end);
-        //std::cout << std::ctime(&end_time);
-
-    }
-    else if (numargsfilled == 2)
-    {
-        std::cout << "Name: " << name << std::endl;
-        std::cout << "File: " << inputFile << std::endl;
+        }
+        /* Both arguments were filled */
+        else if (numargsfilled == 2)
+        {
+            StudentData stu = searchStudent(container, name);
+            outputStudent(stu);
+        }
     }
     else
     {
-        std::cout << "numargsfilled: " << numargsfilled << std::endl;
-        std::cerr << "Something happened" << std::endl;
+        std::cerr << "Error parsing arguments" << std::endl;
+        sanitize();
+        exit (EXIT_FAILURE);
     }
 
+    /* clean up the temp file  */
+    sanitize();
     exit(EXIT_SUCCESS);
 }
 
@@ -75,6 +87,7 @@ int countStudentLines(EvaluationData &e)
             if (! ( dummyLine.empty()) ) { ++numberOfLines; }
         }
     }
+
     inFile.close();
     return numberOfLines;
 }
@@ -104,14 +117,56 @@ void loadStudentContainers(EvaluationData &e, Container &c)
 }
 
 
-/* NOTE: Documentation
- * the meat of this class, 2 C style for loops.
- * depends on a few helper functions
- * to properly perform computations on the grade data
+/* TODO: This function needs refactoring, there are better ways to acheive this
  * */
+StudentData searchStudent(Container &c, const std::string &name)
+{
+    /* Check each container for the student name */
+    bool found = false;
+    for (int i = 0; i < c.numStudents; i++) {
+        if (c.student.size() > 0 && c.student[i].studentName() == name)
+        {
+            return c.student[i];
+        }
+
+        else if (c.wdr.size() > 0 && c.wdr[i].studentName() == name)
+        {
+            return c.wdr[i];
+        }
+
+        else if (c.error.size() > 0 && c.error[i].studentName() == name)
+        {
+            return c.error[i];
+        }
+    }
+
+
+    try
+    {
+        if (! (found) )
+        {
+            sanitize();
+            throw StudentNotFound();
+        }
+    }
+    catch (StudentNotFound &e)
+    {
+        std::cout << e.what() << name << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    /* Return the first student just to keep the compiler from
+     * complaining, albeit it should not actually ever reach here
+     * because will have thrown and exited program if student is not
+     * found
+     * */
+    return c.student[0];
+}
+
+
 void makeGrades(EvaluationData &e, Container &c)
 {
-    for ( int i = 0; i < c.numStudents; i++ )
+    int stuSize = c.student.size();
+    for ( int i = 0; i < stuSize; i++ )
     {
         // create temp vector
         std::vector<float> tempGradeContainer;
@@ -217,16 +272,16 @@ std::string assignLetterGrade(float grade)
 }
 
 
-void outputFinal(Container &c)
+void outputStudent(Container &c)
 {
     std::cout << std::left << std::setw(10) << "Name"
-                << std::left << std::setw(10) << "Lab"
-                << std::left << std::setw(10) << "Assign"
-                << std::left << std::setw(10) << "Midterm"
-                << std::left << std::setw(10) << "Final"
-                << std::left << std::setw(10) << "Total"
-                << std::left << std::setw(10) << "Letter"
-                << std::endl;
+              << std::left << std::setw(10) << "Lab"
+              << std::left << std::setw(10) << "Assign"
+              << std::left << std::setw(10) << "Midterm"
+              << std::left << std::setw(10) << "Final"
+              << std::left << std::setw(10) << "Total"
+              << std::left << std::setw(10) << "Letter"
+              << std::endl;
 
 
     for (c.i = c.student.begin(); c.i != c.student.end(); c.i++ )
@@ -243,15 +298,56 @@ void outputFinal(Container &c)
 }
 
 
+void outputStudent(StudentData &s)
+{
+    if (s.studentError())
+    {
+        std::cerr << "\n\nOffending line: " << s.lineCount()
+                  << "\nOffending content: " << s.currentLineContent()
+                  << "\nError message: " << s.errorDefinition()
+                  << std::endl;
+    }
+
+    else
+    {
+        std::cout << std::left << std::setw(10) << "Name"
+                  << std::left << std::setw(10) << "Lab"
+                  << std::left << std::setw(10) << "Assign"
+                  << std::left << std::setw(10) << "Midterm"
+                  << std::left << std::setw(10) << "Final"
+                  << std::left << std::setw(10) << "Total"
+                  << std::left << std::setw(10) << "Letter"
+                  << std::endl;
+
+        if (s.studentWDR())
+        {
+            std::cout << std::left << std::setw(10) << s.studentName()
+                      << s.studentLetterGrade()
+                      << std::endl;
+        }
+
+        else
+        {
+            std::cout << std::left << std::setw(10) << s.studentName()
+                      << std::left << std::setw(10) << s.studentLabScore()
+                      << std::left << std::setw(10) << s.studentAssignScore()
+                      << std::left << std::setw(10) << s.studentMidtermScore()
+                      << std::left << std::setw(10) << s.studentFinalScore()
+                      << std::left << std::setw(10) << s.studentTotalGrade()
+                      << std::left << std::setw(10) << s.studentLetterGrade()
+                      << std::endl;
+        }
+    }
+}
+
+
 void outputWDR(Container &c)
 {
-    for (c.i = c.error.begin(); c.i != c.error.end(); c.i++ )
+    for (c.i = c.wdr.begin(); c.i != c.wdr.end(); c.i++ )
     {
-        if (c.i->studentWDR())
-        {
-            std::cout << c.i->studentName() << std::left << std::setw(5)
-                      << c.i->studentLetterGrade() << std::endl;
-        }
+        std::cout << std::left << std::setw(10) << c.i->studentName()
+                    << c.i->studentLetterGrade()
+                    << std::endl;
     }
 }
 
@@ -260,13 +356,10 @@ void outputError(Container &c)
 {
     for (c.i = c.error.begin(); c.i != c.error.end(); c.i++ )
     {
-        if (c.i->studentError())
-        {
-            std::cerr << "\n\nOffending line: " << c.i->lineCount()
-                      << "\nOffending content: " << c.i->currentLineContent()
-                      << "\nError message: " << c.i->errorDefinition()
-                      << std::endl;
-        }
+        std::cerr << "\n\nOffending line: " << c.i->lineCount()
+                  << "\nOffending content: " << c.i->currentLineContent()
+                  << "\nError message: " << c.i->errorDefinition()
+                  << std::endl;
     }
 }
 

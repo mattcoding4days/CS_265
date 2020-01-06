@@ -73,7 +73,7 @@ namespace GraderApplication
       public:
          const char *what() const throw()
          {
-            return "*** Student-id was not found: ";
+            return "*** Student ID was not found: ";
          }
    };
 

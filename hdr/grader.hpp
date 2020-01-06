@@ -36,12 +36,7 @@ struct Container
          * the correct amount of space required to hold
          * all students
          */
-        Container(int _x) : numStudents (_x)
-        {
-            student.reserve(numStudents);
-            error.reserve(1);
-            wdr.reserve(1);
-        }
+        Container(int _x);
 
         ~Container(void) { /* Uneeded */ }
 };
@@ -63,6 +58,12 @@ int countStudentLines(EvaluationData &);
 * load our vector of student objects
 * */
 void loadStudentContainers(EvaluationData &, Container &);
+
+
+/* NOTE: Documentation
+* Search for student by specified name
+* */
+StudentData searchStudent(Container &, const std::string &);
 
 
 /* NOTE: Documentation
@@ -98,8 +99,11 @@ std::string assignLetterGrade(float);
 /* NOTE: Documentation
 * Final output method after all grades, are computed,
 * rounded, and stored in StudentContainer Vector
+*
+* Overloaded to output single student
 * */
-void outputFinal(Container &);
+void outputStudent(Container &);
+void outputStudent(StudentData &);
 
 
 /* NOTE: Documentation
