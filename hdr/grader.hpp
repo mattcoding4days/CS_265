@@ -23,22 +23,23 @@ using StudentVector = std::vector<StudentData>;
  */
 struct Container
 {
-    public:
-        int numStudents;
-        StudentVector student;
-        StudentVector error;
-        StudentVector wdr;
-        StudentVector::iterator i;
+   public:
+      int numStudents;
+      StudentVector student;
+      StudentVector error;
+      StudentVector wdr;
+      StudentVector::iterator i;
+      StudentVector::iterator j;
 
-        /* NOTE: Documentation
-         * Explicit Constructor
-         * Only takes one argument to reserve
-         * the correct amount of space required to hold
-         * all students
-         */
-        Container(int _x);
+      /* NOTE: Documentation
+       * Explicit Constructor
+       * Only takes one argument to reserve
+       * the correct amount of space required to hold
+       * all students
+       */
+      Container(int _x);
 
-        ~Container(void) { /* Uneeded */ }
+      ~Container(void) { /* Uneeded */ }
 };
 
 
@@ -55,74 +56,74 @@ int countStudentLines(EvaluationData &);
 
 
 /* NOTE: Documentation
-* load our vector of student objects
-* */
+ * load our vector of student objects
+ * */
 void loadStudentContainers(EvaluationData &, Container &);
 
 
 /* NOTE: Documentation
-* Search for student by specified name
-* */
+ * Search for student by specified name
+ * */
 StudentData searchStudent(Container &, const std::string &);
 
 
 /* NOTE: Documentation
-* the meat of this class, 2 C style for loops.
-* depends on a few helper functions
-* to properly perform computations on the grade data
-* */
+ * the meat of this class, 2 C style for loops.
+ * depends on a few helper functions
+ * to properly perform computations on the grade data
+ * */
 void makeGrades(EvaluationData &e, Container &c);
 
 
 /* NOTE: Documentation
-* Helper method of makeGrades, takes in standard i, j
-* C style for loop integers, so it can calculate all grades
-* for each student, against the weight and maxmark
-*
-* Called from within makeGrades inner for loop since it needs
-* to calculate an array being stored in a vector
-* */
+ * Helper method of makeGrades, takes in standard i, j
+ * C style for loop integers, so it can calculate all grades
+ * for each student, against the weight and maxmark
+ *
+ * Called from within makeGrades inner for loop since it needs
+ * to calculate an array being stored in a vector
+ * */
 float subGradeComputation(EvaluationData &, Container &, int , int );
 
 
 /* NOTE: Documentation
-* makes a call to macro routines in settings.h
-* to decide the range of the grade to match it to
-* a lettergrade representation held in the Echelon
-* struct also defined in settings.h
-*
-* called from makeGrades outer forloop
-* */
+ * makes a call to macro routines in settings.h
+ * to decide the range of the grade to match it to
+ * a lettergrade representation held in the Echelon
+ * struct also defined in settings.h
+ *
+ * called from makeGrades outer forloop
+ * */
 std::string assignLetterGrade(float);
 
 
 /* NOTE: Documentation
-* Final output method after all grades, are computed,
-* rounded, and stored in StudentContainer Vector
-*
-* Overloaded to output single student
-* */
+ * Final output method after all grades, are computed,
+ * rounded, and stored in StudentContainer Vector
+ *
+ * Overloaded to output single student
+ * */
 void outputStudent(Container &);
 void outputStudent(StudentData &);
 
 
 /* NOTE: Documentation
-* Output all students who are withdrawn
-* */
+ * Output all students who are withdrawn
+ * */
 void outputWDR(Container &);
 
 
 /* NOTE: Documentation
-* Output all the student error lines that were
-* perserved allong the way
-* */
+ * Output all the student error lines that were
+ * perserved allong the way
+ * */
 void outputError(Container &);
 
 
 /* NOTE: Documentation
-* Clean up the temp file
-* we have been operating on
-*/
+ * Clean up the temp file
+ * we have been operating on
+ */
 void sanitize(void);
 
 

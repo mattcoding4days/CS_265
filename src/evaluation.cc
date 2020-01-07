@@ -393,18 +393,22 @@ namespace GraderApplication
       }
       catch (std::logic_error &e)
       {
-         std::cerr << e.what() << this->evaluationFile() << std::endl;
+         Colors c;
+         std::cerr << c.BRed << e.what() << c.Reset << c.BWhite <<
+            this->evaluationFile() << c.Reset << std::endl;
       }
    }
 
 
    void EvaluationData::errorPrint(const char *a)
    {
-      std::cerr << "\nERROR: " << a << std::endl;
-      std::cerr << "\nOffending line number: "
-                << this->fileLineCount() << std::endl;
-      std::cerr << "Offending content: "
-                << this->currentLineContent() << std::endl;
+      Colors c;
+      std::cerr << c.BYellow << "\nERROR: " << c.Reset
+                << c.BRed << a << c.Reset <<  std::endl;
+      std::cerr << c.BGreen << "\nOffending line number: " << c.Reset
+                << c.BWhite << this->fileLineCount() << c.Reset << std::endl;
+      std::cerr << c.BGreen << "Offending content: " << c.Reset
+                << c.BWhite << this->currentLineContent() << c.Reset << std::endl;
 
       exit (EXIT_FAILURE);
    }
