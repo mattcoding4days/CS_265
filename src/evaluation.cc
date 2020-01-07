@@ -403,12 +403,12 @@ namespace GraderApplication
    void EvaluationData::errorPrint(const char *a)
    {
       Colors c;
-      std::cerr << c.BYellow << "\nERROR: " << c.Reset
-                << c.BRed << a << c.Reset <<  std::endl;
-      std::cerr << c.BGreen << "\nOffending line number: " << c.Reset
-                << c.BWhite << this->fileLineCount() << c.Reset << std::endl;
-      std::cerr << c.BGreen << "Offending content: " << c.Reset
-                << c.BWhite << this->currentLineContent() << c.Reset << std::endl;
+      std::cerr << c.BRed << "ERROR: " << c.Reset
+         << c.BWhite << a << c.Reset <<  std::endl;
+      std::cerr << c.BYellow << "Offending line number: " << c.Reset
+         << c.BWhite << this->fileLineCount() << c.Reset << std::endl;
+      std::cerr << c.BYellow << "Offending content: " << c.Reset
+         << c.BWhite << this->currentLineContent() << c.Reset << std::endl;
 
       exit (EXIT_FAILURE);
    }
