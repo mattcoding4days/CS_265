@@ -37,6 +37,12 @@ namespace GraderApplication
       this->setErrorDefinition(e);
    }
 
+   StudentData::~StudentData(void)
+   {
+      /* Clean up the vectors */
+      gradesContainer.clear();
+      calculatedGradesContainer.clear();
+   }
 
    std::string StudentData::studentName(void) const { return this->name; }
 
@@ -411,15 +417,13 @@ namespace GraderApplication
    bool StudentData::testForFileExistence(const std::string &file)
    {
       /* Test if grader has already created or temp file */
-      bool doesExist = false;
       std::ifstream infile(file);
       if ( infile.good() )
       {
          infile.close();
-         doesExist = true;
-         return doesExist;
+         return true;
       }
-      return doesExist;
+      return false;
    }
 
 

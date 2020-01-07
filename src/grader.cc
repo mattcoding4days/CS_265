@@ -12,6 +12,19 @@ Container::Container(int _x) : numStudents(_x)
    wdr.reserve(1);
 }
 
+Container::~Container(void)
+{
+   /* Check to see if file exists first
+      if it does, erase it 
+   */
+   std::ifstream temp(TEMPFILE);
+   if (temp.good()) { temp.close(); sanitize(); }
+
+   /* Clean up Vectors */
+   student.clear();
+   error.clear();
+   wdr.clear();
+}
 
 /* NOTE: Documentation
  * Initialize main routine,
@@ -49,8 +62,6 @@ int main(int argc, char **argv)
          //std::time_t end_time = std::chrono::system_clock::to_time_t(end);
          //std::cout << std::ctime(&end_time);
 
-         /* clean up the temp file  */
-         sanitize();
       }
       /* Both arguments were filled */
       else if (numargsfilled == 2)
@@ -58,14 +69,11 @@ int main(int argc, char **argv)
          StudentData stu = searchStudent(container, name);
          outputStudent(stu);
 
-         /* clean up the temp file  */
-         sanitize();
       }
    }
    else
    {
       std::cerr << "Error parsing arguments" << std::endl;
-      sanitize();
       exit (EXIT_FAILURE);
    }
 
@@ -120,49 +128,71 @@ void loadStudentContainers(EvaluationData &e, Container &c)
 }
 
 
-/* TODO: This function needs refactoring, there are better ways to acheive this
- * */
 StudentData searchStudent(Container &c, const std::string &name)
 {
    /* Check each container for the student name */
    bool found = false;
-   for (int i = 0; i < c.numStudents; i++) {
-      if (c.student.size() > 0 && c.student[i].studentName() == name)
-      {
-         return c.student[i];
-      }
+   StudentData targetStudent;
 
-      else if (c.wdr.size() > 0 && c.wdr[i].studentName() == name)
+   int iter = 0;
+   for (c.i = c.student.begin(); c.i != c.student.end(); c.i++)
+   {
+      if (c.i->studentName() == name)
       {
-         return c.wdr[i];
+         found = true;
+         targetStudent = c.student[iter];
       }
+      iter++;
+   }
 
-      else if (c.error.size() > 0 && c.error[i].studentName() == name)
+   /* Search wdr vector, as long as found is false */
+   if (!(found))
+   {
+      iter = 0;
+      for (c.j = c.wdr.begin(); c.j != c.wdr.end(); c.j++)
       {
-         return c.error[i];
+         if (c.j->studentName() == name)
+         {
+            found = true;
+            targetStudent = c.wdr[iter];
+         }
+         iter++;
+      }
+   }
+   
+   /* Search error vector, as long as found is false */
+   if (!(found))
+   {
+      iter = 0;
+      for (c.k = c.error.begin(); c.k != c.error.end(); c.k++)
+      {
+         if (c.k->studentName() == name)
+         {
+            found = true;
+            targetStudent = c.error[iter];
+         }
+         iter++;
       }
    }
 
-
+   /* If found is still false, the student does not exist */
    try
    {
       if (! (found) )
       {
-         sanitize();
          throw StudentNotFound();
       }
    }
    catch (StudentNotFound &e)
    {
-      std::cout << e.what() << name << std::endl;
+      Colors color;
+      std::cout << color.BYellow << e.what() << color.Reset 
+         << color.BWhite << name << color.Reset << std::endl;
+      sanitize();
       exit(EXIT_FAILURE);
    }
-   /* Return the first student just to keep the compiler from
-    * complaining, albeit should not actually ever reach here
-    * because will have thrown and exited program if student is not
-    * found
-    * */
-   return c.student[0];
+
+   return targetStudent;
 }
 
 
@@ -303,24 +333,14 @@ void outputStudent(StudentData &s)
          << std::left << std::setw(10) << "Letter"
          << std::endl;
 
-      if (s.studentWDR())
-      {
-         std::cout << std::left << std::setw(10) << s.studentName()
-            << s.studentLetterGrade()
-            << std::endl;
-      }
-
-      else
-      {
-         std::cout << std::left << std::setw(10) << s.studentName()
-            << std::left << std::setw(10) << s.studentLabScore()
-            << std::left << std::setw(10) << s.studentAssignScore()
-            << std::left << std::setw(10) << s.studentMidtermScore()
-            << std::left << std::setw(10) << s.studentFinalScore()
-            << std::left << std::setw(10) << s.studentTotalGrade()
-            << std::left << std::setw(10) << s.studentLetterGrade()
-            << std::endl;
-      }
+      std::cout << std::left << std::setw(10) << s.studentName()
+         << std::left << std::setw(10) << s.studentLabScore()
+         << std::left << std::setw(10) << s.studentAssignScore()
+         << std::left << std::setw(10) << s.studentMidtermScore()
+         << std::left << std::setw(10) << s.studentFinalScore()
+         << std::left << std::setw(10) << s.studentTotalGrade()
+         << std::left << std::setw(10) << s.studentLetterGrade()
+         << std::endl;
    }
 }
 
@@ -330,7 +350,12 @@ void outputWDR(Container &c)
    for (c.i = c.wdr.begin(); c.i != c.wdr.end(); c.i++ )
    {
       std::cout << std::left << std::setw(10) << c.i->studentName()
-         << c.i->studentLetterGrade()
+         << std::left << std::setw(10) << c.i->studentLabScore()
+         << std::left << std::setw(10) << c.i->studentAssignScore()
+         << std::left << std::setw(10) << c.i->studentMidtermScore()
+         << std::left << std::setw(10) << c.i->studentFinalScore()
+         << std::left << std::setw(10) << c.i->studentTotalGrade()
+         << std::left << std::setw(10) << c.i->studentLetterGrade()
          << std::endl;
    }
 }

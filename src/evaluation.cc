@@ -25,6 +25,17 @@ namespace GraderApplication
       weightContainer.reserve(1);
    }
 
+
+   EvaluationData::~EvaluationData(void)
+   {
+      /* Clear all vectors */
+      titleContainer.clear();
+      categoryContainer.clear();
+      maxMarkContainer.clear();
+      weightContainer.clear();
+   }
+   
+
    std::string EvaluationData::evaluationFile(void) const { return this->dataFile; }
 
 

@@ -45,6 +45,12 @@ namespace GraderApplication
           * */
          EvaluationData(const std::string &);
 
+         /* NOTE: Documentation
+            Deconstructor will be responsible
+            for santizing our temp file.. hopefully
+          * */
+         ~EvaluationData(void);
+
 
          /* NOTE: Documentation
           * Accessor: getter for file name

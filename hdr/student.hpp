@@ -33,10 +33,18 @@ namespace GraderApplication
          int mlineCount;
 
       public:
+
+
          /* NOTE: Documentation
           * Default Constuctor
           * */
          StudentData(void);
+
+
+         /* NOTE: Documentation
+          * Default Deconstructor
+          * */
+         ~StudentData(void);
 
 
          /* NOTE: Documentation

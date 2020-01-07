@@ -30,6 +30,7 @@ struct Container
       StudentVector wdr;
       StudentVector::iterator i;
       StudentVector::iterator j;
+      StudentVector::iterator k;
 
       /* NOTE: Documentation
        * Explicit Constructor
@@ -39,7 +40,7 @@ struct Container
        */
       Container(int _x);
 
-      ~Container(void) { /* Uneeded */ }
+      ~Container(void);
 };
 
 
