@@ -68,7 +68,8 @@ objd/student.o: src/student.cc
 
 
 clean:
-	rm $(OBJFILES)
-	rm $(OBJFILESDEBUG)
-	rm $(TARGET)
-	rm $(TARGET_DEBUG)
+	@rm $(OBJFILES)
+	@rm $(OBJFILESDEBUG)
+	@rm $(TARGET)
+	@rm $(TARGET_DEBUG)
+	@echo cleaned....

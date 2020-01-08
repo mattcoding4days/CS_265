@@ -28,9 +28,6 @@ struct Container
       StudentVector student;
       StudentVector error;
       StudentVector wdr;
-      StudentVector::iterator i;
-      StudentVector::iterator j;
-      StudentVector::iterator k;
 
       /* NOTE: Documentation
        * Explicit Constructor
@@ -53,7 +50,7 @@ struct Container
  * jump to only the student data. thus resulting
  * in an accurate ammount of students
  * */
-int countStudentLines(EvaluationData &);
+int countStudentLines(const EvaluationData &);
 
 
 /* NOTE: Documentation
@@ -65,7 +62,7 @@ void loadStudentContainers(EvaluationData &, Container &);
 /* NOTE: Documentation
  * Search for student by specified name
  * */
-StudentData searchStudent(Container &, const std::string &);
+StudentData searchStudent(const Container &, const std::string &);
 
 
 /* NOTE: Documentation
@@ -104,21 +101,21 @@ std::string assignLetterGrade(float);
  *
  * Overloaded to output single student
  * */
-void outputStudent(Container &);
-void outputStudent(StudentData &);
+void outputStudent(const Container &);
+void outputStudent(const StudentData &);
 
 
 /* NOTE: Documentation
  * Output all students who are withdrawn
  * */
-void outputWDR(Container &);
+void outputWDR(const Container &);
 
 
 /* NOTE: Documentation
  * Output all the student error lines that were
  * perserved allong the way
  * */
-void outputError(Container &);
+void outputError(const Container &);
 
 
 /* NOTE: Documentation

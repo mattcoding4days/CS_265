@@ -15,7 +15,7 @@ Container::Container(int _x) : numStudents(_x)
 Container::~Container(void)
 {
    /* Check to see if file exists first
-      if it does, erase it 
+      if it does, delete it 
    */
    std::ifstream temp(TEMPFILE);
    if (temp.good()) { temp.close(); sanitize(); }
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
 }
 
 
-int countStudentLines(EvaluationData &e)
+int countStudentLines(const EvaluationData &e)
 {
    std::streampos jump;
    jump = e.currentFilePosition();
@@ -128,50 +128,42 @@ void loadStudentContainers(EvaluationData &e, Container &c)
 }
 
 
-StudentData searchStudent(Container &c, const std::string &name)
+StudentData searchStudent(const Container &c, const std::string &name)
 {
    /* Check each container for the student name */
    bool found = false;
    StudentData targetStudent;
 
-   int iter = 0;
-   for (c.i = c.student.begin(); c.i != c.student.end(); c.i++)
+   for (const auto &elem: c.student)
    {
-      if (c.i->studentName() == name)
+      if (elem.studentName() == name)
       {
          found = true;
-         targetStudent = c.student[iter];
+         targetStudent = elem;
       }
-      iter++;
    }
 
-   /* Search wdr vector, as long as found is false */
-   if (!(found))
+   if ( !(found) )
    {
-      iter = 0;
-      for (c.j = c.wdr.begin(); c.j != c.wdr.end(); c.j++)
+      for (const auto &elem: c.wdr)
       {
-         if (c.j->studentName() == name)
+         if (elem.studentName() == name)
          {
             found = true;
-            targetStudent = c.wdr[iter];
+            targetStudent = elem;
          }
-         iter++;
       }
    }
-   
-   /* Search error vector, as long as found is false */
-   if (!(found))
+
+   if ( !(found) )
    {
-      iter = 0;
-      for (c.k = c.error.begin(); c.k != c.error.end(); c.k++)
+      for (const auto &elem: c.error)
       {
-         if (c.k->studentName() == name)
+         if (elem.studentName() == name)
          {
             found = true;
-            targetStudent = c.error[iter];
+            targetStudent = elem;
          }
-         iter++;
       }
    }
 
@@ -205,13 +197,12 @@ void makeGrades(EvaluationData &e, Container &c)
       std::vector<float> tempGradeContainer;
       tempGradeContainer.reserve(e.evaluationDataLength());
 
-      float tempValue = 0;
+      float tempValue = 0.0;
       for ( int j = 0; j < e.evaluationDataLength(); j++ )
       {
          // first calculate single grades (mark * weight) / maxmark
          tempValue = subGradeComputation(e, c, i, j);
          tempGradeContainer.emplace_back(tempValue);
-
       }
 
       /* Accumulate category grades */
@@ -251,7 +242,6 @@ void makeGrades(EvaluationData &e, Container &c)
       c.student[i].setStudentTotalGrade(finalGrade);
       std::string letter = assignLetterGrade(finalGrade);
       c.student[i].setStudentLetterGrade(letter);
-
    }
 }
 
@@ -286,7 +276,7 @@ std::string assignLetterGrade(float grade)
 }
 
 
-void outputStudent(Container &c)
+void outputStudent(const Container &c)
 {
    std::cout << std::left << std::setw(10) << "Name"
       << std::left << std::setw(10) << "Lab"
@@ -298,21 +288,21 @@ void outputStudent(Container &c)
       << std::endl;
 
 
-   for (c.i = c.student.begin(); c.i != c.student.end(); c.i++ )
+   for (const auto &i: c.student)
    {
-      std::cout << std::left << std::setw(10) << c.i->studentName()
-         << std::left << std::setw(10) << c.i->studentLabScore()
-         << std::left << std::setw(10) << c.i->studentAssignScore()
-         << std::left << std::setw(10) << c.i->studentMidtermScore()
-         << std::left << std::setw(10) << c.i->studentFinalScore()
-         << std::left << std::setw(10) << c.i->studentTotalGrade()
-         << std::left << std::setw(10) << c.i->studentLetterGrade()
+      std::cout << std::left << std::setw(10) << i.studentName()
+         << std::left << std::setw(10) << i.studentLabScore()
+         << std::left << std::setw(10) << i.studentAssignScore()
+         << std::left << std::setw(10) << i.studentMidtermScore()
+         << std::left << std::setw(10) << i.studentFinalScore()
+         << std::left << std::setw(10) << i.studentTotalGrade()
+         << std::left << std::setw(10) << i.studentLetterGrade()
          << std::endl;
    }
 }
 
 
-void outputStudent(StudentData &s)
+void outputStudent(const StudentData &s)
 {
    if (s.studentError())
    {
@@ -345,33 +335,33 @@ void outputStudent(StudentData &s)
 }
 
 
-void outputWDR(Container &c)
+void outputWDR(const Container &c)
 {
-   for (c.i = c.wdr.begin(); c.i != c.wdr.end(); c.i++ )
+   for (const auto &i: c.wdr)
    {
-      std::cout << std::left << std::setw(10) << c.i->studentName()
-         << std::left << std::setw(10) << c.i->studentLabScore()
-         << std::left << std::setw(10) << c.i->studentAssignScore()
-         << std::left << std::setw(10) << c.i->studentMidtermScore()
-         << std::left << std::setw(10) << c.i->studentFinalScore()
-         << std::left << std::setw(10) << c.i->studentTotalGrade()
-         << std::left << std::setw(10) << c.i->studentLetterGrade()
+      std::cout << std::left << std::setw(10) << i.studentName()
+         << std::left << std::setw(10) << i.studentLabScore()
+         << std::left << std::setw(10) << i.studentAssignScore()
+         << std::left << std::setw(10) << i.studentMidtermScore()
+         << std::left << std::setw(10) << i.studentFinalScore()
+         << std::left << std::setw(10) << i.studentTotalGrade()
+         << std::left << std::setw(10) << i.studentLetterGrade()
          << std::endl;
    }
 }
 
 
-void outputError(Container &c)
+void outputError(const Container &c)
 {
-   for (c.i = c.error.begin(); c.i != c.error.end(); c.i++ )
+   for (const auto &i: c.error)
    {
       Colors color;
       std::cerr << color.BRed << "\nError message: " << color.Reset
-         << color.BWhite << c.i->errorDefinition() << color.Reset 
+         << color.BWhite << i.errorDefinition() << color.Reset 
          << color.BYellow << "\nOffending line: " << color.Reset 
-         << color.BWhite << c.i->lineCount() << color.Reset
+         << color.BWhite << i.lineCount() << color.Reset
          << color.BYellow << "\nOffending content: " << color.Reset 
-         << color.BWhite << c.i->currentLineContent() << color.Reset
+         << color.BWhite << i.currentLineContent() << color.Reset
          << std::endl;
    }
 }
