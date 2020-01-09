@@ -29,6 +29,7 @@ struct Container
       StudentVector error;
       StudentVector wdr;
 
+
       /* NOTE: Documentation
        * Explicit Constructor
        * Only takes one argument to reserve
@@ -37,7 +38,32 @@ struct Container
        */
       Container(int _x);
 
+
+      /* NOTE: Documentation
+       * Destructor
+       */
       ~Container(void);
+
+
+      /* NOTE: Documentation
+       * Copy Constructor 
+       */
+      Container(const Container &);
+
+      /*NOTE: Documentation
+       * Move Constructor
+       * */
+      Container(Container &&);
+
+      /*NOTE: Documentation
+       * Copy Assignment
+       * */
+      Container& operator=(const Container &);
+
+      /*NOTE: Documentation
+       * Move Assignment
+       * */
+      Container& operator=(Container &&);
 };
 
 

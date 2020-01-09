@@ -11,20 +11,155 @@ namespace GraderApplication
 {
    StudentData::StudentData(void)
       : name ("")
-      , labScore (0.0)
-      , assignScore (0.0)
-      , midtermScore (0.0)
-      , finalScore (0.0)
-      , totalGrade (0.0)
-      , letterGrade ("")
-      , isWDR (false)
-      , isError (false)
-      , errorDef ("")
-      , mlineCount(0)
+        , studentDataLen(0)
+        , labScore (0.0)
+        , assignScore (0.0)
+        , midtermScore (0.0)
+        , finalScore (0.0)
+        , totalGrade (0.0)
+        , letterGrade ("")
+        , isWDR (false)
+        , isError (false)
+        , errorDef ("")
+        , mlineCount(0)
    {
       /* Initialize the vectors */
       gradesContainer.reserve(1);
       calculatedGradesContainer.reserve(1);
+   }
+
+
+   StudentData::~StudentData(void)
+   {
+      gradesContainer.clear();
+      calculatedGradesContainer.clear();
+   }
+
+
+   StudentData::StudentData(StudentData &&src) noexcept
+      : name(src.name)
+      , gradesContainer(std::move(src).gradesContainer)
+      , calculatedGradesContainer(std::move(src).calculatedGradesContainer)
+      , studentDataLen(src.studentDataLen)
+      , labScore(src.labScore)
+      , assignScore(src.assignScore)
+      , midtermScore(src.midtermScore)
+      , finalScore(src.finalScore)
+      , totalGrade(src.totalGrade)
+      , letterGrade(src.letterGrade)
+      , isWDR(src.isWDR)
+      , isError(src.isError)
+      , errorDef(src.errorDef)
+      , mlineCount(src.mlineCount)
+
+      {
+         /* Reset the original object because ownership has moved */
+         std::cout << "StudentData::move constructor\n";
+         src.name = "";
+         src.gradesContainer.empty();
+         src.calculatedGradesContainer.empty();
+         src.studentDataLen = 0;
+         src.labScore = 0.0;
+         src.assignScore = 0.0;
+         src.midtermScore = 0.0;
+         src.finalScore = 0.0;
+         src.totalGrade = 0.0;
+         src.letterGrade = 0.0;
+         src.isWDR = false;
+         src.isError = false;
+         src.errorDef = "";
+         src.mlineCount = 0;
+      }
+
+
+   StudentData::StudentData(const StudentData &src)
+      : name(src.name)
+        , gradesContainer(src.gradesContainer)
+        , calculatedGradesContainer(src.calculatedGradesContainer)
+        , studentDataLen(src.studentDataLen)
+        , labScore(src.labScore)
+        , assignScore(src.assignScore)
+        , midtermScore(src.midtermScore)
+        , finalScore(src.finalScore)
+        , totalGrade(src.totalGrade)
+        , letterGrade(src.letterGrade)
+        , isWDR(src.isWDR)
+        , isError(src.isError)
+        , errorDef(src.errorDef)
+        , mlineCount(src.mlineCount)
+
+   { std::cout << "StudentData::copy\n"; }
+
+
+   StudentData& StudentData::operator=(const StudentData &src)
+   {
+      std::cout << "StudentData::copy assignment\n";
+      /* pessimistic check for self assignment */
+      if (this == &src)
+      {
+         return *this;
+      }
+
+      name = src.name;
+      gradesContainer = src.gradesContainer;
+      calculatedGradesContainer = src.calculatedGradesContainer;
+      studentDataLen = src.studentDataLen;
+      labScore = src.labScore;
+      assignScore = src.labScore;
+      midtermScore = src.midtermScore;
+      finalScore = src.finalScore;
+      totalGrade = src.totalGrade;
+      letterGrade = src.letterGrade;
+      isWDR = src.isWDR;
+      isError = src.isWDR;
+      errorDef = src.errorDef;
+      mlineCount = src.mlineCount;
+
+      return *this;
+   }
+
+
+   StudentData& StudentData::operator=(StudentData&& src) noexcept
+   {
+      std::cout << "StudentData::move assignment\n";
+      /* pessimistic check for self assignment */
+      if (this == &src)
+      {
+         return *this;
+      }
+      /* Init move */
+      name = src.name;
+      gradesContainer = std::move(src).gradesContainer;
+      calculatedGradesContainer = std::move(src).calculatedGradesContainer;
+      studentDataLen = src.studentDataLen;
+      labScore = src.labScore;
+      assignScore = src.labScore;
+      midtermScore = src.midtermScore;
+      finalScore = src.finalScore;
+      totalGrade = src.totalGrade;
+      letterGrade = src.letterGrade;
+      isWDR = src.isWDR;
+      isError = src.isWDR;
+      errorDef = src.errorDef;
+      mlineCount = src.mlineCount;
+
+      /* Reset the original object because ownership has moved */
+      src.name = "";
+      src.gradesContainer.empty();
+      src.calculatedGradesContainer.empty();
+      src.studentDataLen = 0;
+      src.labScore = 0.0;
+      src.assignScore = 0.0;
+      src.midtermScore = 0.0;
+      src.finalScore = 0.0;
+      src.totalGrade = 0.0;
+      src.letterGrade = 0.0;
+      src.isWDR = false;
+      src.isError = false;
+      src.errorDef = "";
+      src.mlineCount = 0;
+
+      return *this;
    }
 
 
@@ -37,12 +172,6 @@ namespace GraderApplication
       this->setErrorDefinition(e);
    }
 
-   StudentData::~StudentData(void)
-   {
-      /* Clean up the vectors */
-      gradesContainer.clear();
-      calculatedGradesContainer.clear();
-   }
 
    std::string StudentData::studentName(void) const { return this->name; }
 

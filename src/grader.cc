@@ -14,9 +14,10 @@ Container::Container(int _x) : numStudents(_x)
 
 Container::~Container(void)
 {
-   /* Check to see if file exists first
+   /* 
+      Check to see if file exists first
       if it does, delete it 
-   */
+      */
    std::ifstream temp(TEMPFILE);
    if (temp.good()) { temp.close(); sanitize(); }
 
@@ -68,7 +69,6 @@ int main(int argc, char **argv)
       {
          StudentData stu = searchStudent(container, name);
          outputStudent(stu);
-
       }
    }
    else
@@ -122,6 +122,7 @@ void loadStudentContainers(EvaluationData &e, Container &c)
       }
       else
       {
+         std::cout << "pushing back" << std::endl;
          c.student.emplace_back(stu);
       }
    }
@@ -134,12 +135,12 @@ StudentData searchStudent(const Container &c, const std::string &name)
    bool found = false;
    StudentData targetStudent;
 
-   for (const auto &elem: c.student)
+   for (auto &elem: c.student)
    {
       if (elem.studentName() == name)
       {
          found = true;
-         targetStudent = elem;
+         targetStudent = std::move(elem);
       }
    }
 
@@ -150,7 +151,7 @@ StudentData searchStudent(const Container &c, const std::string &name)
          if (elem.studentName() == name)
          {
             found = true;
-            targetStudent = elem;
+            targetStudent = std::move(elem);
          }
       }
    }
@@ -162,7 +163,7 @@ StudentData searchStudent(const Container &c, const std::string &name)
          if (elem.studentName() == name)
          {
             found = true;
-            targetStudent = elem;
+            targetStudent = std::move(elem);
          }
       }
    }
@@ -223,7 +224,7 @@ void makeGrades(EvaluationData &e, Container &c)
          {
             t = tempGradeContainer[k];
             c.student[i].setStudentMidtermScore(t);
-        }
+         }
          else if (e.evaluationCategoryContainer(k) == "Final")
          {
             t = tempGradeContainer[k];

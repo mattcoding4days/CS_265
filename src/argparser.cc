@@ -86,6 +86,14 @@ namespace GraderApplication
             }
          }
       }
+
+      // null out the **argv
+      for (int i = 0; i < argc; ++i)
+      {
+         argv[i] = nullptr;
+      }
+      argv = nullptr;
+
       return retVal;
    }
 

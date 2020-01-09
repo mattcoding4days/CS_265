@@ -48,6 +48,34 @@ namespace GraderApplication
 
 
          /* NOTE: Documentation
+          * Copy Constructor 
+          * */
+         StudentData(const StudentData &);
+
+
+         /* NOTE: Documentation
+          * Copy assignment
+          * */
+         StudentData& operator=(const StudentData &);
+
+         
+         /*
+            Note: Documentation
+            Move Constructor
+            use noexcept for compiler optimizations
+         */
+         StudentData(StudentData &&) noexcept;
+
+
+         /*
+            Note: Documentation
+            Overload the move assignment
+            use noexcept for compiler optimizations
+         */
+         StudentData& operator=(StudentData&& ) noexcept;
+
+
+         /* NOTE: Documentation
           * Error preserve will be called whenever something
           * fails for any StudentData evaluations.
           * Instead of printing out and closing the program,
