@@ -157,7 +157,7 @@ StudentData searchStudent(const Container &c, const std::string &name)
 
    if ( !(found) )
    {
-      for (uto elem: c.error)
+      for (const auto &elem: c.error)
       {
          if (elem.studentName() == name)
          {
