@@ -28,7 +28,6 @@ namespace GraderApplication
       calculatedGradesContainer.reserve(1);
    }
 
-
    StudentData::~StudentData(void)
    {
       gradesContainer.clear();

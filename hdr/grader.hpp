@@ -48,7 +48,7 @@ struct Container
       /* NOTE: Documentation
        * Copy Constructor 
        */
-      Container(const Container &);
+      Container(const Container &) = delete;
 
       /*NOTE: Documentation
        * Move Constructor
@@ -58,7 +58,7 @@ struct Container
       /*NOTE: Documentation
        * Copy Assignment
        * */
-      Container& operator=(const Container &);
+      Container& operator=(const Container &) = delete;
 
       /*NOTE: Documentation
        * Move Assignment

@@ -122,7 +122,6 @@ void loadStudentContainers(EvaluationData &e, Container &c)
       }
       else
       {
-         std::cout << "pushing back" << std::endl;
          c.student.emplace_back(stu);
       }
    }
@@ -134,8 +133,8 @@ StudentData searchStudent(const Container &c, const std::string &name)
    /* Check each container for the student name */
    bool found = false;
    StudentData targetStudent;
-
-   for (auto &elem: c.student)
+   
+   for (const auto &elem: c.student)
    {
       if (elem.studentName() == name)
       {
@@ -158,7 +157,7 @@ StudentData searchStudent(const Container &c, const std::string &name)
 
    if ( !(found) )
    {
-      for (const auto &elem: c.error)
+      for (uto elem: c.error)
       {
          if (elem.studentName() == name)
          {
@@ -184,7 +183,8 @@ StudentData searchStudent(const Container &c, const std::string &name)
       sanitize();
       exit(EXIT_FAILURE);
    }
-
+   
+   std::cout << "Returning target student" << std::endl;
    return targetStudent;
 }
 

@@ -34,7 +34,6 @@ namespace GraderApplication
 
       public:
 
-
          /* NOTE: Documentation
           * Default Constuctor
           * */
@@ -45,18 +44,6 @@ namespace GraderApplication
           * Default Deconstructor
           * */
          ~StudentData(void);
-
-
-         /* NOTE: Documentation
-          * Copy Constructor 
-          * */
-         StudentData(const StudentData &);
-
-
-         /* NOTE: Documentation
-          * Copy assignment
-          * */
-         StudentData& operator=(const StudentData &);
 
          
          /*
@@ -73,6 +60,18 @@ namespace GraderApplication
             use noexcept for compiler optimizations
          */
          StudentData& operator=(StudentData&& ) noexcept;
+
+
+         /* NOTE: Documentation
+          * Copy Constructor 
+          * */
+         StudentData(const StudentData &);
+
+
+         /* NOTE: Documentation
+            Copy assignment
+         */
+         StudentData& operator=(const StudentData &);
 
 
          /* NOTE: Documentation
