@@ -243,4 +243,5 @@ namespace GraderApplication
          void processStudent(const std::string &);
    };
 };
+
 #endif
