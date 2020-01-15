@@ -22,6 +22,7 @@ namespace GraderApplication
         , isError (false)
         , errorDef ("")
         , mlineCount(0)
+
    {
       /* Initialize the vectors */
       gradesContainer.reserve(1);
@@ -53,7 +54,6 @@ namespace GraderApplication
 
       {
          /* Reset the original object because ownership has moved */
-         std::cout << "StudentData::move constructor\n";
          src.name = "";
          src.gradesContainer.empty();
          src.calculatedGradesContainer.empty();
@@ -72,27 +72,26 @@ namespace GraderApplication
 
 
    StudentData::StudentData(const StudentData &src)
-      : name(src.name)
-        , gradesContainer(src.gradesContainer)
-        , calculatedGradesContainer(src.calculatedGradesContainer)
-        , studentDataLen(src.studentDataLen)
-        , labScore(src.labScore)
-        , assignScore(src.assignScore)
-        , midtermScore(src.midtermScore)
-        , finalScore(src.finalScore)
-        , totalGrade(src.totalGrade)
-        , letterGrade(src.letterGrade)
-        , isWDR(src.isWDR)
-        , isError(src.isError)
-        , errorDef(src.errorDef)
-        , mlineCount(src.mlineCount)
+      :name(src.name)
+       , gradesContainer(src.gradesContainer)
+       , calculatedGradesContainer(src.calculatedGradesContainer)
+       , studentDataLen(src.studentDataLen)
+       , labScore(src.labScore)
+       , assignScore(src.assignScore)
+       , midtermScore(src.midtermScore)
+       , finalScore(src.finalScore)
+       , totalGrade(src.totalGrade)
+       , letterGrade(src.letterGrade)
+       , isWDR(src.isWDR)
+       , isError(src.isError)
+       , errorDef(src.errorDef)
+       , mlineCount(src.mlineCount)
 
-   { std::cout << "StudentData::copy\n"; }
+   {  }
 
 
    StudentData& StudentData::operator=(const StudentData &src)
    {
-      std::cout << "StudentData::copy assignment\n";
       /* pessimistic check for self assignment */
       if (this == &src)
       {
@@ -120,7 +119,6 @@ namespace GraderApplication
 
    StudentData& StudentData::operator=(StudentData&& src) noexcept
    {
-      std::cout << "StudentData::move assignment\n";
       /* pessimistic check for self assignment */
       if (this == &src)
       {
@@ -350,7 +348,7 @@ namespace GraderApplication
       }
       else
       {
-         this-> finalScore += score;
+         this->finalScore += score;
       }
    }
 

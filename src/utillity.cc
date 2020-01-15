@@ -11,6 +11,52 @@ namespace GraderApplication
       : currentLine("")
    { }
 
+
+   Utillity::Utillity(Utillity &&src) noexcept
+      : currentLine(src.currentLine)
+   {
+      /* Ownership has changed, reset original object */
+      src.currentLine = "";
+   }
+
+
+   Utillity::Utillity(const Utillity &src)
+      : currentLine(src.currentLine)
+   { }
+
+
+   Utillity& Utillity::operator=(Utillity &&src) noexcept
+   {
+      /* Pessimistic self assignment check */
+      if (this == &src)
+      {
+         return *this;
+      }
+
+      /* Move the member */
+      currentLine = src.currentLine;
+
+      /* reset old object, ownership has chaged */
+      src.currentLine = "";
+
+      return *this;
+   }
+
+
+   Utillity& Utillity::operator=(const Utillity &src)
+   {
+      /* Pessimistic self assignment check */
+      if (this == &src)
+      {
+         return *this;
+      }
+
+      currentLine = src.currentLine;
+
+      return *this;
+   }
+
+
    std::string Utillity::currentLineContent(void) const { return this->currentLine; }
 
 

@@ -33,7 +33,7 @@ namespace GraderApplication
          const char *what() const throw()
          {
             return "*** Evaluation data length does not match *** [eg]: "
-               " corrupted or non-standardized data";
+               "corrupted or non-standardized data";
          }
    };
 

@@ -7,6 +7,8 @@ OUT_FLG=-o
 WARNINGS=-Wall -Wextra 
 TARGET=bin/grader
 TARGET_DEBUG=bin/graderdebug
+
+
 OBJ_DIR=obj/
 OBJ_DEBUG_DIR=objd/
 OBJFILES=$(OBJ_DIR)*.o
@@ -19,10 +21,10 @@ VERSION=2.0
 all: $(TARGET) $(TARGET_DEBUG)
 
 $(TARGET): obj/grader.o obj/argparser.o obj/utillity.o obj/evaluation.o obj/student.o obj/grader.o
-	$(RELEASE) bin/grader $(OBJFILES)
+	$(RELEASE) $(TARGET) $(OBJFILES)
 
 $(TARGET_DEBUG): objd/grader.o objd/argparser.o objd/utillity.o objd/evaluation.o objd/student.o objd/grader.o
-	$(DEBUG) bin/graderdebug $(OBJFILESDEBUG)
+	$(DEBUG) $(TARGET_DEBUG) $(OBJFILESDEBUG)
 
 
 

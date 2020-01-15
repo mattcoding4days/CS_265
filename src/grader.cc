@@ -5,7 +5,8 @@
 
 
 /* Define container explicit constructor */
-Container::Container(int _x) : numStudents(_x)
+Container::Container(int _x)
+   : numStudents(_x)
 {
    student.reserve(numStudents);
    error.reserve(1);
@@ -51,6 +52,7 @@ int main(int argc, char **argv)
 
       if (numargsfilled == 1)
       {
+         /* Only output a vector if its size is greater than 0 */
          if (container.student.size() > 0) { outputStudent(container); }
 
          if (container.wdr.size() > 0) { outputWDR(container); }
@@ -184,7 +186,6 @@ StudentData searchStudent(const Container &c, const std::string &name)
       exit(EXIT_FAILURE);
    }
    
-   std::cout << "Returning target student" << std::endl;
    return targetStudent;
 }
 

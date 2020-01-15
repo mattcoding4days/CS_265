@@ -47,7 +47,7 @@ namespace GraderApplication
 
          
          /*
-            Note: Documentation
+            NOTE: Documentation
             Move Constructor
             use noexcept for compiler optimizations
          */
@@ -55,16 +55,17 @@ namespace GraderApplication
 
 
          /*
-            Note: Documentation
+            NOTE: Documentation
             Overload the move assignment
             use noexcept for compiler optimizations
          */
          StudentData& operator=(StudentData&& ) noexcept;
 
 
-         /* NOTE: Documentation
-          * Copy Constructor 
-          * */
+         /*
+            NOTE: Documentation
+            Copy Constructor
+         */
          StudentData(const StudentData &);
 
 
