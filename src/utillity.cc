@@ -14,10 +14,10 @@ namespace GraderApplication
 
    Utillity::Utillity(Utillity &&src) noexcept
       : currentLine(src.currentLine)
-   {
-      /* Ownership has changed, reset original object */
-      src.currentLine = "";
-   }
+      {
+         /* Ownership has changed, reset original object */
+         src.currentLine = "";
+      }
 
 
    Utillity::Utillity(const Utillity &src)

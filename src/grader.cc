@@ -13,6 +13,7 @@ Container::Container(int _x)
    wdr.reserve(1);
 }
 
+
 Container::~Container(void)
 {
    /* 
@@ -27,6 +28,7 @@ Container::~Container(void)
    error.clear();
    wdr.clear();
 }
+
 
 /* NOTE: Documentation
  * Initialize main routine,
@@ -135,7 +137,7 @@ StudentData searchStudent(const Container &c, const std::string &name)
    /* Check each container for the student name */
    bool found = false;
    StudentData targetStudent;
-   
+
    for (const auto &elem: c.student)
    {
       if (elem.studentName() == name)
@@ -185,7 +187,7 @@ StudentData searchStudent(const Container &c, const std::string &name)
       sanitize();
       exit(EXIT_FAILURE);
    }
-   
+
    return targetStudent;
 }
 

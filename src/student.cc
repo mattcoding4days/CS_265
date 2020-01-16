@@ -29,6 +29,7 @@ namespace GraderApplication
       calculatedGradesContainer.reserve(1);
    }
 
+
    StudentData::~StudentData(void)
    {
       gradesContainer.clear();
@@ -38,19 +39,19 @@ namespace GraderApplication
 
    StudentData::StudentData(StudentData &&src) noexcept
       : name(src.name)
-      , gradesContainer(std::move(src).gradesContainer)
-      , calculatedGradesContainer(std::move(src).calculatedGradesContainer)
-      , studentDataLen(src.studentDataLen)
-      , labScore(src.labScore)
-      , assignScore(src.assignScore)
-      , midtermScore(src.midtermScore)
-      , finalScore(src.finalScore)
-      , totalGrade(src.totalGrade)
-      , letterGrade(src.letterGrade)
-      , isWDR(src.isWDR)
-      , isError(src.isError)
-      , errorDef(src.errorDef)
-      , mlineCount(src.mlineCount)
+        , gradesContainer(std::move(src).gradesContainer)
+        , calculatedGradesContainer(std::move(src).calculatedGradesContainer)
+        , studentDataLen(src.studentDataLen)
+        , labScore(src.labScore)
+        , assignScore(src.assignScore)
+        , midtermScore(src.midtermScore)
+        , finalScore(src.finalScore)
+        , totalGrade(src.totalGrade)
+        , letterGrade(src.letterGrade)
+        , isWDR(src.isWDR)
+        , isError(src.isError)
+        , errorDef(src.errorDef)
+        , mlineCount(src.mlineCount)
 
       {
          /* Reset the original object because ownership has moved */
@@ -72,20 +73,20 @@ namespace GraderApplication
 
 
    StudentData::StudentData(const StudentData &src)
-      :name(src.name)
-       , gradesContainer(src.gradesContainer)
-       , calculatedGradesContainer(src.calculatedGradesContainer)
-       , studentDataLen(src.studentDataLen)
-       , labScore(src.labScore)
-       , assignScore(src.assignScore)
-       , midtermScore(src.midtermScore)
-       , finalScore(src.finalScore)
-       , totalGrade(src.totalGrade)
-       , letterGrade(src.letterGrade)
-       , isWDR(src.isWDR)
-       , isError(src.isError)
-       , errorDef(src.errorDef)
-       , mlineCount(src.mlineCount)
+      : name(src.name)
+        , gradesContainer(src.gradesContainer)
+        , calculatedGradesContainer(src.calculatedGradesContainer)
+        , studentDataLen(src.studentDataLen)
+        , labScore(src.labScore)
+        , assignScore(src.assignScore)
+        , midtermScore(src.midtermScore)
+        , finalScore(src.finalScore)
+        , totalGrade(src.totalGrade)
+        , letterGrade(src.letterGrade)
+        , isWDR(src.isWDR)
+        , isError(src.isError)
+        , errorDef(src.errorDef)
+        , mlineCount(src.mlineCount)
 
    {  }
 
