@@ -72,23 +72,25 @@ namespace GraderApplication
       }
 
 
-   StudentData::StudentData(const StudentData &src)
-      : name(src.name)
-        , gradesContainer(src.gradesContainer)
-        , calculatedGradesContainer(src.calculatedGradesContainer)
-        , studentDataLen(src.studentDataLen)
-        , labScore(src.labScore)
-        , assignScore(src.assignScore)
-        , midtermScore(src.midtermScore)
-        , finalScore(src.finalScore)
-        , totalGrade(src.totalGrade)
-        , letterGrade(src.letterGrade)
-        , isWDR(src.isWDR)
-        , isError(src.isError)
-        , errorDef(src.errorDef)
-        , mlineCount(src.mlineCount)
+   StudentData::StudentData(const StudentData &src) : Utillity(src)
+      , name(src.name)
+      , gradesContainer(src.gradesContainer)
+      , calculatedGradesContainer(src.calculatedGradesContainer)
+      , studentDataLen(src.studentDataLen)
+      , labScore(src.labScore)
+      , assignScore(src.assignScore)
+      , midtermScore(src.midtermScore)
+      , finalScore(src.finalScore)
+      , totalGrade(src.totalGrade)
+      , letterGrade(src.letterGrade)
+      , isWDR(src.isWDR)
+      , isError(src.isError)
+      , errorDef(src.errorDef)
+      , mlineCount(src.mlineCount)
 
-   {  }
+   { 
+      currentLine = src.currentLine;
+   }
 
 
    StudentData& StudentData::operator=(const StudentData &src)

@@ -1,4 +1,7 @@
-/* All  main documentaion is in header files * for corresponding cpp files. * */
+/* 
+   All  main documentaion is in header files
+   for corresponding cpp files.
+*/
 #include <iostream>
 #include <iterator>
 #include <sstream>

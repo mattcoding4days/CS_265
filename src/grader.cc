@@ -16,10 +16,9 @@ Container::Container(int _x)
 
 Container::~Container(void)
 {
-   /* 
-      Check to see if file exists first
-      if it does, delete it 
-      */
+   /* Check to see if the temp file
+    * exists, if it does delete it
+    * */
    std::ifstream temp(TEMPFILE);
    if (temp.good()) { temp.close(); sanitize(); }
 
