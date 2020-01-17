@@ -37,39 +37,43 @@ namespace GraderApplication
    }
 
 
-   StudentData::StudentData(StudentData &&src) noexcept
-      : name(src.name)
-        , gradesContainer(std::move(src).gradesContainer)
-        , calculatedGradesContainer(std::move(src).calculatedGradesContainer)
-        , studentDataLen(src.studentDataLen)
-        , labScore(src.labScore)
-        , assignScore(src.assignScore)
-        , midtermScore(src.midtermScore)
-        , finalScore(src.finalScore)
-        , totalGrade(src.totalGrade)
-        , letterGrade(src.letterGrade)
-        , isWDR(src.isWDR)
-        , isError(src.isError)
-        , errorDef(src.errorDef)
-        , mlineCount(src.mlineCount)
+   StudentData::StudentData(StudentData &&src) noexcept : Utillity(src)
+      , name(src.name)
+      , gradesContainer(std::move(src).gradesContainer)
+      , calculatedGradesContainer(std::move(src).calculatedGradesContainer)
+      , studentDataLen(src.studentDataLen)
+      , labScore(src.labScore)
+      , assignScore(src.assignScore)
+      , midtermScore(src.midtermScore)
+      , finalScore(src.finalScore)
+      , totalGrade(src.totalGrade)
+      , letterGrade(src.letterGrade)
+      , isWDR(src.isWDR)
+      , isError(src.isError)
+      , errorDef(src.errorDef)
+      , mlineCount(src.mlineCount)
 
-      {
-         /* Reset the original object because ownership has moved */
-         src.name = "";
-         src.gradesContainer.empty();
-         src.calculatedGradesContainer.empty();
-         src.studentDataLen = 0;
-         src.labScore = 0.0;
-         src.assignScore = 0.0;
-         src.midtermScore = 0.0;
-         src.finalScore = 0.0;
-         src.totalGrade = 0.0;
-         src.letterGrade = 0.0;
-         src.isWDR = false;
-         src.isError = false;
-         src.errorDef = "";
-         src.mlineCount = 0;
-      }
+   {
+      /* Curent line is from derived class*/
+      currentLine = src.currentLine;
+      /* Reset the original object b
+       * ecause ownership has moved */
+      src.currentLine = "";
+      src.name = "";
+      src.gradesContainer.empty();
+      src.calculatedGradesContainer.empty();
+      src.studentDataLen = 0;
+      src.labScore = 0.0;
+      src.assignScore = 0.0;
+      src.midtermScore = 0.0;
+      src.finalScore = 0.0;
+      src.totalGrade = 0.0;
+      src.letterGrade = 0.0;
+      src.isWDR = false;
+      src.isError = false;
+      src.errorDef = "";
+      src.mlineCount = 0;
+   }
 
 
    StudentData::StudentData(const StudentData &src) : Utillity(src)
@@ -100,7 +104,8 @@ namespace GraderApplication
       {
          return *this;
       }
-
+   
+      currentLine = src.currentLine;
       name = src.name;
       gradesContainer = src.gradesContainer;
       calculatedGradesContainer = src.calculatedGradesContainer;
@@ -128,6 +133,7 @@ namespace GraderApplication
          return *this;
       }
       /* Init move */
+      currentLine = src.currentLine;
       name = src.name;
       gradesContainer = std::move(src).gradesContainer;
       calculatedGradesContainer = std::move(src).calculatedGradesContainer;
