@@ -16,9 +16,14 @@ OBJFILESDEBUG=$(OBJ_DEBUG_DIR)*.o
 VERSION=2.0
 
 
-.PHONY: all clean
+.PHONY: all release debug clean
 
 all: $(TARGET) $(TARGET_DEBUG)
+
+release: $(TARGET)
+
+debug: $(TARGET_DEBUG)
+
 
 $(TARGET): obj/grader.o obj/argparser.o obj/utillity.o obj/evaluation.o obj/student.o obj/grader.o
 	$(RELEASE) $(TARGET) $(OBJFILES)
