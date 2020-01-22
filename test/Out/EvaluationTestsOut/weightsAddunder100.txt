@@ -1,5 +1,0 @@
-
-ERROR: *** Weight summation is out of bounds ***
-
-Offending line number: 5
-Offending content: WEIGHT 5 5 10 20 5 5 10 30

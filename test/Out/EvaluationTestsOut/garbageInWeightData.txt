@@ -1,5 +1,0 @@
-
-ERROR: *** Could not convert string to float due to corrupted data ***
-
-Offending line number: 5
-Offending content: WEIGHT 5 5 10 $20 5 5 10 40

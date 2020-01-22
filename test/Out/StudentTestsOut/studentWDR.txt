@@ -1,6 +1,0 @@
-Thu Dec 12 08:00:09 2019
-Student			Lab			Lab			Assign			Midterm			Lab			Lab			Assign			Final			Total			Grade
-tob			5.00			5.00			10.00			15.00			5.00			5.00			9.00			36.89			90.89			A+
-tink			WITHDRAWN
-srira			WITHDRAWN
-chara			WITHDRAWN

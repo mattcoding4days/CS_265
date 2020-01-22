@@ -1,5 +1,0 @@
-
-ERROR: *** Evaluation data length does not match *** [eg]:  corrupted or non-standardized data
-
-Offending line number: 5
-Offending content: WEIGHT 5 5 10 20 5 5 10 

@@ -1,5 +1,0 @@
-
-ERROR: *** Evaluation data length does not match *** [eg]:  corrupted or non-standardized data
-
-Offending line number: 3
-Offending content: CATEGORY Lab Lab Assign Midterm Lab #Lab Assign Final
