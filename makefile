@@ -33,7 +33,8 @@ $(TARGET_DEBUG): objd/grader.o objd/argparser.o objd/utillity.o objd/evaluation.
 
 # Release
 obj/grader.o: src/grader.cc
-	@bash make_scripts/prelim_checks.sh release
+	@echo
+	@bash make_scripts/prelim_checks.sh -r
 	@echo
 	@echo "Building Grader Release Version: $(VERSION)"
 	@echo "===================================="
@@ -55,7 +56,8 @@ obj/student.o: src/student.cc
 
 # Debug
 objd/grader.o: src/grader.cc
-	@bash make_scripts/prelim_checks.sh debug
+	@echo
+	@bash make_scripts/prelim_checks.sh -d
 	@echo
 	@echo "Building Grader Debug Version: $(VERSION)"
 	@echo "=================================="
