@@ -10,10 +10,19 @@
     - Can detect if a student Withdrew from the course if a 'WDR' [in any case] is found in data
     - Can detect if a student came with in 0.5% of a higher letter grade
 
-## To test the program run the following commands
+## To test the program run the following commands [make install option to be added in the future]
 
 
 ```bash
+# There are 3 ways to run the makefile
+
+# Only build the release version
+make release
+
+# Build only debug version
+make debug
+
+# make all
 make
 
 # standard.txt is a test case with no errors
@@ -21,6 +30,9 @@ make
 
 # search for one student
 ./bin/grader -s tob test_files/standard.txt
+
+# when your done clean up
+make clean
 
 ```
 
