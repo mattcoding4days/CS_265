@@ -7,8 +7,6 @@ OUT_FLG=-o
 WARNINGS=-Wall -Wextra 
 TARGET=bin/grader
 TARGET_DEBUG=bin/graderdebug
-
-
 OBJ_DIR=obj/
 OBJ_DEBUG_DIR=objd/
 OBJFILES=$(OBJ_DIR)*.o
@@ -35,6 +33,7 @@ $(TARGET_DEBUG): objd/grader.o objd/argparser.o objd/utillity.o objd/evaluation.
 
 # Release
 obj/grader.o: src/grader.cc
+	@bash make_scripts/prelim_checks.sh release
 	@echo
 	@echo "Building Grader Release Version: $(VERSION)"
 	@echo "===================================="
@@ -56,6 +55,7 @@ obj/student.o: src/student.cc
 
 # Debug
 objd/grader.o: src/grader.cc
+	@bash make_scripts/prelim_checks.sh debug
 	@echo
 	@echo "Building Grader Debug Version: $(VERSION)"
 	@echo "=================================="
@@ -75,8 +75,4 @@ objd/student.o: src/student.cc
 
 
 clean:
-	@rm $(OBJFILES)
-	@rm $(OBJFILESDEBUG)
-	@rm $(TARGET)
-	@rm $(TARGET_DEBUG)
-	@echo cleaned....
+	@bash make_scripts/clean_checks.sh
