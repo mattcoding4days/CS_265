@@ -1,1 +1,4 @@
 .vscode
+obj/
+objd/
+bin/
