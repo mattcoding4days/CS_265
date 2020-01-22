@@ -49,7 +49,7 @@ if [[ "$#" -eq 1 ]]; then
     elif [[ "$arg" == "-d" ]]; then
       trigger_debug
     else
-      printf "%s accepts only one Argument:\n -r : release\n-d : debug\n" "$1"
+      printf "%s accepts only one Argument:\n -r : release\n-d : debug\n" "$0"
     fi
   done
 fi
