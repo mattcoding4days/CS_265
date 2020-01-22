@@ -1,0 +1,5 @@
+
+ERROR: *** Could not convert string to float due to corrupted data ***
+
+Offending line number: 4
+Offending content: MAXMARK 10 10 15 A40 10 10 20 90
