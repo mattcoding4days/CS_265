@@ -14,8 +14,6 @@ OBJFILESDEBUG=$(OBJ_DEBUG_DIR)*.o
 VERSION=2.0
 
 
-.PHONY: all release debug clean
-
 all: $(TARGET) $(TARGET_DEBUG)
 
 release: $(TARGET)
@@ -28,7 +26,6 @@ $(TARGET): obj/grader.o obj/argparser.o obj/utillity.o obj/evaluation.o obj/stud
 
 $(TARGET_DEBUG): objd/grader.o objd/argparser.o objd/utillity.o objd/evaluation.o objd/student.o objd/grader.o
 	$(DEBUG) $(TARGET_DEBUG) $(OBJFILESDEBUG)
-
 
 
 # Release
@@ -51,7 +48,6 @@ obj/evaluation.o: src/evaluation.cc
 
 obj/student.o: src/student.cc
 	$(CXX) $(WARNINGS) $(BUILD_FLG) $< $(OUT_FLG) $@
-
 
 
 # Debug
@@ -78,3 +74,6 @@ objd/student.o: src/student.cc
 
 clean:
 	@bash make_scripts/clean_checks.sh
+
+
+.PHONY: all release debug clean
