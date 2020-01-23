@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # This is a helper build script for the root project makefile
 # A build rule will only be triggered if the script is called with
 # either '-r' for release or '-d' for debug
@@ -19,10 +20,7 @@ function trigger_release() {
   fi
 
   # check if binary directory exits
-  if [[ ! -d "$GRADER_BIN" ]]; then
-    printf "Creating Binary Directory\n"
-    mkdir "$GRADER_BIN"
-  fi
+  trigger_binary
 }
 
 
@@ -34,6 +32,12 @@ function trigger_debug() {
   fi
 
   # check if binary directory exits
+  trigger_binary
+}
+
+
+function trigger_binary() {
+  # build the binary directory
   if [[ ! -d "$GRADER_BIN" ]]; then
     printf "Creating Binary Directory\n"
     mkdir "$GRADER_BIN"
