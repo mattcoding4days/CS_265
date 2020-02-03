@@ -111,20 +111,21 @@ void loadStudentContainers(EvaluationData &e, Container &c)
    for (int i = 0; i < c.numStudents; i++)
    {
       StudentData stu;
-      stu.loadStudents(e);
-
-      if (stu.studentError())
+      if (stu.loadStudents(e))
       {
-         c.error.emplace_back(stu);
-      }
-      else if (stu.studentWDR())
-      {
-         stu.setStudentLetterGrade("WITHDRAWN");
-         c.wdr.emplace_back(stu);
-      }
-      else
-      {
-         c.student.emplace_back(stu);
+         if (stu.studentError())
+         {
+            c.error.emplace_back(stu);
+         }
+         else if (stu.studentWDR())
+         {
+            stu.setStudentLetterGrade("WITHDRAWN");
+            c.wdr.emplace_back(stu);
+         }
+         else
+         {
+            c.student.emplace_back(stu);
+         }
       }
    }
 }
