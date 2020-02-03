@@ -23,6 +23,20 @@ using StudentVector = std::vector<StudentData>;
  */
 struct Container
 {
+   private:
+      /* NOTE: Documentation
+       * Copy Constructor
+       * we dont want this called
+       * force the move constructor to be called
+       */
+      Container(const Container &) = delete;
+
+      /*NOTE: Documentation
+       * Copy Assignment
+       * we also dont want this being called
+       * */
+      Container& operator=(const Container &) = delete;
+
    public:
       int numStudents;
       StudentVector student;
@@ -45,20 +59,11 @@ struct Container
       ~Container(void);
 
 
-      /* NOTE: Documentation
-       * Copy Constructor 
-       */
-      Container(const Container &) = delete;
-
       /*NOTE: Documentation
        * Move Constructor
        * */
       Container(Container &&);
 
-      /*NOTE: Documentation
-       * Copy Assignment
-       * */
-      Container& operator=(const Container &) = delete;
 
       /*NOTE: Documentation
        * Move Assignment
