@@ -92,7 +92,7 @@ namespace GraderApplication
       , errorDef(src.errorDef)
       , mlineCount(src.mlineCount)
 
-   { 
+   {
       currentLine = src.currentLine;
    }
 
@@ -104,7 +104,7 @@ namespace GraderApplication
       {
          return *this;
       }
-   
+
       currentLine = src.currentLine;
       name = src.name;
       gradesContainer = src.gradesContainer;
@@ -171,7 +171,7 @@ namespace GraderApplication
 
    void StudentData::errorPreserve(std::string &e)
    {
-      /* The offending line data will have already been set 
+      /* The offending line data will have already been set
        * in the loadStudent method with currentLine
        * */
       this->setStudentError(true);
@@ -188,7 +188,7 @@ namespace GraderApplication
       {
          if (this->isAlphaNumeric(_name))
          {
-            this->name = _name; 
+            this->name = _name;
          }
          else
          {
@@ -199,7 +199,7 @@ namespace GraderApplication
       {
          std::string onError(e.what());
          this->errorPreserve(onError);
-      } 
+      }
    }
 
 
@@ -227,7 +227,7 @@ namespace GraderApplication
             }
          }
 
-         else { 
+         else {
             /* if it is not a digit, convert to uppercase and
              * and check if it is WDR, if not throw error
              * */
@@ -238,7 +238,7 @@ namespace GraderApplication
             }
             else
             {
-               throw FailStringFloatConversion(); 
+               throw FailStringFloatConversion();
             }
          }
       }
@@ -258,7 +258,7 @@ namespace GraderApplication
    float StudentData::calculatedGrades(int itr) { return this->calculatedGradesContainer[itr]; }
 
 
-   void StudentData::setCalculatedGrades(std::vector<float> &calcMarks) 
+   void StudentData::setCalculatedGrades(std::vector<float> &calcMarks)
    {
       for (std::size_t i = 0; i < calcMarks.size(); ++i)
       {
@@ -399,7 +399,7 @@ namespace GraderApplication
       {
          std::cerr << "\nError Definition is empty!\n" << std::endl;
       }
-   } 
+   }
 
 
    int StudentData::lineCount(void) const { return this->mlineCount; }
@@ -458,8 +458,8 @@ namespace GraderApplication
                   /* After trying to set the name, if it fails
                    * due to nonNumeric, we need to test that here
                    * so we can end this function and not read in the
-                   * grades for the failed id. 
-                   * If the name setter failed it would have reported 
+                   * grades for the failed id.
+                   * If the name setter failed it would have reported
                    * to errorPreserve which would have switched
                    * the isError variable to true, check for that here
                    * */
@@ -498,7 +498,7 @@ namespace GraderApplication
                      return true;
                   }
                }
-               /* A duplicate student was found, 
+               /* A duplicate student was found,
                 * throw for error preserving purposes
                 * */
                eval.setCurrentFilePosition(datafile);

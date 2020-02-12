@@ -12,8 +12,8 @@ namespace GraderApplication
     * For every occurance of a valid student line
     * in the given file a student object will be created
     * and stored in a corresponding vector of the same type
-    * defined and handled from the grader class. 
-    * */ 
+    * defined and handled from the grader class.
+    * */
    class StudentData : public Utillity
    {
       private:
@@ -45,7 +45,7 @@ namespace GraderApplication
           * */
          ~StudentData(void);
 
-         
+
          /*
             NOTE: Documentation
             Move Constructor
@@ -186,7 +186,7 @@ namespace GraderApplication
           * parsing a certain student.
           * This flag will be set to true if
           * any reading errorsa occur, and will be
-          * used went computing the final grades and 
+          * used went computing the final grades and
           * printing to stdout
           * */
          bool studentError(void) const;
@@ -195,7 +195,7 @@ namespace GraderApplication
 
          /* NOTE: Documentation
           * Store the error definition
-          * from out custom exceptions 
+          * from out custom exceptions
           * */
          std::string errorDefinition(void) const;
          void setErrorDefinition(const std::string &);
@@ -211,7 +211,7 @@ namespace GraderApplication
 
          /* NOTE: Documentation
           * Main method for Student Class, it uses the
-          * file position set from BaseHeader class, 
+          * file position set from BaseHeader class,
           * to skip right to where the students section is.
           *
           * The method its self is very similar to how loadBaseData
