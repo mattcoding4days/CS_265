@@ -151,8 +151,8 @@ namespace GraderApplication
 
       /* Reset the original object because ownership has moved */
       src.name = "";
-      src.gradesContainer.empty();
-      src.calculatedGradesContainer.empty();
+      src.gradesContainer.clear();
+      src.calculatedGradesContainer.clear();
       src.studentDataLen = 0;
       src.labScore = 0.0;
       src.assignScore = 0.0;
