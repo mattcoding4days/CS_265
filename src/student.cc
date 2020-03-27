@@ -60,8 +60,8 @@ namespace GraderApplication
        * ecause ownership has moved */
       src.currentLine = "";
       src.name = "";
-      src.gradesContainer.empty();
-      src.calculatedGradesContainer.empty();
+      src.gradesContainer.clear();
+      src.calculatedGradesContainer.clear();
       src.studentDataLen = 0;
       src.labScore = 0.0;
       src.assignScore = 0.0;
