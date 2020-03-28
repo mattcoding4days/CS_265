@@ -211,6 +211,10 @@ void makeGrades(EvaluationData &e, Container &c)
       /* Accumulate category grades */
       for ( int k = 0; k < e.evaluationDataLength(); k++ )
       {
+         /*
+          * These values are hardcoded, there has to be a better
+          * way to do this
+          */
          float t = 0;
          if ( e.evaluationCategoryContainer(k) == "Lab" )
          {
