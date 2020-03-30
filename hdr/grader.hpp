@@ -23,52 +23,52 @@ using StudentVector = std::vector<StudentData>;
  */
 struct Container
 {
-   private:
-      /* NOTE: Documentation
-       * Copy Constructor
-       * we dont want this called
-       * force the move constructor to be called
-       */
-      Container(const Container &) = delete;
+  private:
+    /* NOTE: Documentation
+     * Copy Constructor
+     * we dont want this called
+     * force the move constructor to be called
+     */
+    Container(const Container &) = delete;
 
-      /*NOTE: Documentation
-       * Copy Assignment
-       * we also dont want this being called
-       * */
-      Container& operator=(const Container &) = delete;
+    /*NOTE: Documentation
+     * Copy Assignment
+     * we also dont want this being called
+     * */
+    Container& operator=(const Container &) = delete;
 
-   public:
-      int numStudents;
-      StudentVector student;
-      StudentVector error;
-      StudentVector wdr;
-
-
-      /* NOTE: Documentation
-       * Explicit Constructor
-       * Only takes one argument to reserve
-       * the correct amount of space required to hold
-       * all students
-       */
-      Container(int _x);
+  public:
+    int numStudents;
+    StudentVector student;
+    StudentVector error;
+    StudentVector wdr;
 
 
-      /* NOTE: Documentation
-       * Destructor
-       */
-      ~Container(void);
+    /* NOTE: Documentation
+     * Explicit Constructor
+     * Only takes one argument to reserve
+     * the correct amount of space required to hold
+     * all students
+     */
+    Container(int _x);
 
 
-      /*NOTE: Documentation
-       * Move Constructor
-       * */
-      Container(Container &&);
+    /* NOTE: Documentation
+     * Destructor
+     */
+    ~Container(void);
 
 
-      /*NOTE: Documentation
-       * Move Assignment
-       * */
-      Container& operator=(Container &&);
+    /*NOTE: Documentation
+     * Move Constructor
+     * */
+    Container(Container &&);
+
+
+    /*NOTE: Documentation
+     * Move Assignment
+     * */
+    Container& operator=(Container &&);
 };
 
 
