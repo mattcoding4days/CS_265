@@ -30,7 +30,8 @@ namespace GraderApplication
           break;
         }
       }
-      if (nFlag == 0) { 
+      if (nFlag == 0)
+      { 
         /* No -s flag was given, the argument must be a filename */
         inputFile = argv[nFlag+1];
         return retVal = 1;
@@ -92,7 +93,7 @@ namespace GraderApplication
     {
       argv[i] = nullptr;
     }
-    argv = nullptr;
+    *argv = nullptr;
 
     return retVal;
   }

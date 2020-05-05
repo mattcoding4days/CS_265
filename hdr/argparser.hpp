@@ -20,15 +20,8 @@ namespace GraderApplication
    * */
   class ArgParse
   {
-    private:
-      const char *nameFlag;
-
     public:
-      int argc;
-      char **argv;
-      std::string inputFile;
-      std::string id;
-
+      const char *nameFlag;
 
       /* NOTE: Documentation
        * Explicit constructor

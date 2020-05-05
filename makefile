@@ -21,7 +21,7 @@ release: $(TARGET)
 debug: $(TARGET_DEBUG)
 
 
-$(TARGET): obj/grader.o obj/argparser.o obj/utillity.o obj/evaluation.o obj/student.o obj/grader.o
+$(TARGET): obj/grader.o obj/argparser.o obj/utillity.o obj/evaluation.o obj/student.o
 	$(RELEASE) $(TARGET) $(OBJFILES)
 
 $(TARGET_DEBUG): objd/grader.o objd/argparser.o objd/utillity.o objd/evaluation.o objd/student.o objd/grader.o

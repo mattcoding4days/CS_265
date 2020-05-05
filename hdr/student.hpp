@@ -47,31 +47,32 @@ namespace GraderApplication
 
 
       /*
-NOTE: Documentation
-Move Constructor
-use noexcept for compiler optimizations
-*/
+       * NOTE: Documentation
+       * Move Constructor
+       * use noexcept for compiler optimizations
+       */
       StudentData(StudentData &&) noexcept;
 
 
       /*
-NOTE: Documentation
-Overload the move assignment
-use noexcept for compiler optimizations
-*/
+       * NOTE: Documentation
+       * Overload the move assignment
+       * use noexcept for compiler optimizations
+       */
       StudentData& operator=(StudentData&& ) noexcept;
 
 
       /*
-NOTE: Documentation
-Copy Constructor
-*/
+       * NOTE: Documentation
+       * Copy Constructor
+       */
       StudentData(const StudentData &);
 
 
-      /* NOTE: Documentation
-         Copy assignment
-         */
+      /*
+       * NOTE: Documentation
+       * Copy assignment
+       */
       StudentData& operator=(const StudentData &);
 
 

@@ -37,21 +37,22 @@ namespace GraderApplication
   }
 
 
-  StudentData::StudentData(StudentData &&src) noexcept : Utillity(src)
-    , name(src.name)
-    , gradesContainer(std::move(src).gradesContainer)
-    , calculatedGradesContainer(std::move(src).calculatedGradesContainer)
-    , studentDataLen(src.studentDataLen)
-    , labScore(src.labScore)
-    , assignScore(src.assignScore)
-    , midtermScore(src.midtermScore)
-    , finalScore(src.finalScore)
-    , totalGrade(src.totalGrade)
-    , letterGrade(src.letterGrade)
-    , isWDR(src.isWDR)
-    , isError(src.isError)
-    , errorDef(src.errorDef)
-    , mlineCount(src.mlineCount)
+  StudentData::StudentData(StudentData &&src) noexcept 
+    : Utillity(src)
+      , name(src.name)
+      , gradesContainer(std::move(src).gradesContainer)
+      , calculatedGradesContainer(std::move(src).calculatedGradesContainer)
+      , studentDataLen(src.studentDataLen)
+      , labScore(src.labScore)
+      , assignScore(src.assignScore)
+      , midtermScore(src.midtermScore)
+      , finalScore(src.finalScore)
+      , totalGrade(src.totalGrade)
+      , letterGrade(src.letterGrade)
+      , isWDR(src.isWDR)
+      , isError(src.isError)
+      , errorDef(src.errorDef)
+      , mlineCount(src.mlineCount)
 
     {
       /* Curent line is from derived class*/
